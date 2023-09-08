@@ -1,0 +1,105 @@
+{
+  "name": "Amalgam",
+  "scopeName": "source.amalgam",
+  "comment": "",
+  "fileTypes": [
+    "amlg",
+    "amalgam"
+  ],
+  "foldingStartMarker": "\\(",
+  "foldingStopMarker": "\\)",
+  "keyEquivalent": "^~L",
+  "patterns": [
+    {
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.comment.amalgam"
+        }
+      },
+      "match": "(;.*$)\\n?",
+      "name": "comment.line.semicolon.amalgam"
+    },
+    {
+      "captures": {
+        "1": {
+          "name": "entity.name.function.amalgam"
+        }
+      },
+      "match": "(#+[\\^!]?[\\w\\.]+)",
+      "name": "constant.character.amalgam"
+    },
+    {
+      "match": "(\\@|\\|\\|)",
+      "name": "entity.name.function.amalgam"
+    },
+    {
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.variable.amalgam"
+        },
+        "3": {
+          "name": "punctuation.definition.variable.amalgam"
+        }
+      },
+      "match": "(?<=\\(call\\s+|call_entity\\s+)(\\!?\\w+)",
+      "name": "variable.other.global.amalgam"
+    },
+    {
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.variable.amalgam"
+        },
+        "3": {
+          "name": "punctuation.definition.variable.amalgam"
+        }
+      },
+      "match": "(?<=\\(system\\s+)(\"exit\"|\"readline\"|\"printline\"|\"cwd\"|\"system\"|\"os\"|\"date_time\"|\"version\"|\"est_mem_reserve\"|\"est_mem_used\"|\"mem_diagnostics\"|\"rand\"|\"sign_key_pair\"|\"encrypt_key_pair\"|\"built_in_data\")",
+      "name": "variable.other.global.amalgam"
+    },
+    {
+      "match": "(?<=\\()(abs|accum|accum_entity_roots|accum_to_entities|acos|acosh|and|append|apply|args|asin|asinh|assign|assign_entity_roots|assign_to_entities|assoc|atan|atanh|call|call_container|call_entity|call_entity_get_changes|call_sandboxed|ceil|round|clone_entities|commonality|commonality_entities|compute_on_contained_entities|weighted_rand|compute_entity_group_kl_divergence|compute_entity_distance_contributions|compute_entity_kl_divergences|compute_entity_convictions|concat|conclude|contained_entities|contains_entity|contains_index|contains_label|contains_value|cos|cosh|create_entities|declare|dot_product|deep_set_entity_rand_seed|remove|keep|destroy_entities|difference|difference_entities|direct_assign_to_entities|direct_retrieve_from_entity|edit_distance|edit_distance_entities|entropy|erf|exp|explode|first|flatten_entity|floor|format|generalized_distance|get|get_all_labels|get_comments|get_concurrency|get_defaults|get_entity_comments|get_entity_rand_seed|get_entity_root_permission|get_labels|get_rand_seed|get_type|get_type_string|get_value|if|indices|intersect|intersect_entities|last|let|lgamma|load|load_entity|load_persistent_entity|log|max|min|mix|mix_entities|mix_labels|mod|move_entities|mutate|mutate_entity|not|or|parallel|parse|pow|crypto_sign|crypto_sign_verify|encrypt|decrypt|print|query_among|query_not_among|query_between|query_count|query_equals|query_exists|query_greater_or_equal_to|query_in_entity_list|query_min_difference|query_max_difference|query_value_masses|query_mode|query_median|query_sum|query_less_or_equal_to|query_max|query_min|query_nearest_distance|query_nearest_generalized_distance|query_not_between|query_not_equals|query_not_exists|query_not_in_entity_list|query_sample|query_weighted_sample|query_select|query_within_distance|query_within_generalized_distance|query_generalized_mean|rand|range|retrieve|retrieve_entity_root|retrieve_from_entity|reverse|seq|set|set_comments|set_concurrency|set_entity_rand_seed|set_entity_root_permission|set_labels|set_rand_seed|set_type|set_value|sin|sinh|size|sqrt|split|stack|store|store_entity|substr|system|system_time|tail|tan|tanh|tgamma|total_entity_size|total_size|trunc|union|union_entities|unparse|unzip|values|associate|while|xor|zip_labels|filter|list|map|reduce|replace|rewrite|sort|weave|zip|lambda|null|\\+|\\-|\\*|\\/|=|\\<=|\\>=|\\!=|~|\\!~| \\S+)(?=\\s+)",
+      "name": "keyword.control.amalgam"
+    },
+    {
+      "match": "(\\(assoc\\)|\\(list\\)|\\(conclude\\)|\\(system_time\\)|\\(stack\\)|\\(args\\)|\\(contained_entities\\))",
+      "name": "keyword.control.amalgam"
+    },
+    {
+      "match": "(argv|interpreter|\\.nan|\\.nas|\\.infinity|-\\.infinity|(?<=\\()(null|false|true|rand|query_count))",
+      "name": "constant.language.amalgam"
+    },
+    {
+      "match": "((?<=\\()target_index|target_value|target)",
+      "name": "entity.name.type.amalgam"
+    },
+    {
+      "match": "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)\\b",
+      "name": "constant.numeric.amalgam"
+    },
+    {
+      "match": "\\b[a-z]+([A-Z0-9][a-z0-9]+)+([A-Z])?\\b",
+      "name": "variable.interpolation.amalgam"
+    },
+    {
+      "begin": "\"",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.begin.amalgam"
+        }
+      },
+      "end": "\"",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.end.amalgam"
+        }
+      },
+      "name": "string.quoted.double.amalgam",
+      "patterns": [
+        {
+          "match": "\\\\.",
+          "name": "constant.character.escape.amalgam"
+        }
+      ]
+    }
+  ]
+}

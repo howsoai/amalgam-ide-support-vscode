@@ -1,0 +1,16 @@
+.vscode
+.scripts/
+node_modules
+build/
+bin/
+out/
+src/
+test/
+tmp/
+tsconfig.json
+renovate.json
+webpack.config.js
+.nvmrc
+.envrc
+.prettierrc.json
+.eslintrc.json

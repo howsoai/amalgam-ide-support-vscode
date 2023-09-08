@@ -1,0 +1,138 @@
+{
+	"name": "Amalgam Trace",
+	"scopeName": "source.trace",
+	"fileTypes": [
+		"trace"
+	],
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#directives"
+		}
+	],
+	"repository": {
+		"comments": {
+			"begin": "(^[ ]+)?((?<!\\\\)(\\\\\\\\)*)(?=#(?! RESULT >))",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.whitespace.comment.leading.trace"
+				}
+			},
+			"end": "(?!\\G)",
+			"patterns": [
+				{
+					"begin": "#",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.comment.trace"
+						}
+					},
+					"end": "(?=[^\\\\])$",
+					"name": "comment.line.number-sign.trace",
+					"patterns": [
+						{
+							"match": "\\\\\\n",
+							"name": "constant.character.escape.continuation.trace"
+						}
+					]
+				}
+			]
+		},
+		"directives": {
+			"patterns": [
+				{
+					"match": "^(EXECUTE_ENTITY_JSON) (\\S+) (\\S+) (.*)$",
+					"captures": {
+						"1": {
+							"name": "keyword.control.command.trace"
+						},
+						"2": {
+							"name": "support.constant.command.trace"
+						},
+						"3": {
+							"name": "entity.name.function.trace"
+						},
+						"4": {
+							"contentName": "source.json",
+							"patterns": [
+								{
+									"include": "source.json"
+								}
+							]
+						}
+					}
+				},
+				{
+					"match": "^(LOAD_ENTITY) (\\S+) (\\S+) (\\S+) (\\S+)(?: (\\S+))?(?: (\\S+))?$",
+					"captures": {
+						"1": {
+							"name": "keyword.control.command.trace"
+						},
+						"2": {
+							"name": "support.constant.command.trace"
+						},
+						"3": {
+							"name": "string.quoted.double.trace"
+						},
+						"4": {
+							"name": "constant.language.trace"
+						},
+						"5": {
+							"name": "constant.language.trace"
+						},
+						"6": {
+							"name": "string.quoted.double.trace"
+						},
+						"7": {
+							"name": "string.quoted.double.trace"
+						}
+					}
+				},
+				{
+					"match": "^([A-Z_]+)(?: (\\S+) .*)?$",
+					"captures": {
+						"1": {
+							"name": "keyword.control.command.trace"
+						},
+						"2": {
+							"name": "support.constant.command.trace"
+						}
+					}
+				},
+				{
+					"match": "^(#) (RESULT) ((>).*)$",
+					"captures": {
+						"1": {
+							"name": "punctuation.definition.comment.trace"
+						},
+						"2": {
+							"name": "keyword.control.result.trace"
+						},
+						"3": {
+							"patterns": [
+								{
+									"match": ">b'(.*)'$",
+									"captures": {
+										"1": {
+											"contentName": "source.json",
+											"patterns": [
+												{
+													"include": "source.json"
+												}
+											]
+										}
+									}
+								}
+							]
+						},
+						"4": {
+							"name": "punctuation.separator.trace"
+						}
+					}
+				}
+			]
+		}
+	}
+}

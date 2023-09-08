@@ -1,0 +1,10 @@
+{
+  "eslint.validate": [
+    "javascript",
+    "typescript"
+  ],
+  "editor.tabSize": 2,
+  "search.exclude": {
+    "dist/**": true
+  },
+}

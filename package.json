@@ -1,0 +1,242 @@
+{
+    "name": "amalgam-lang",
+    "version": "0.0.1",
+    "type": "commonjs",
+    "publisher": "howso",
+    "displayName": "Amalgam Language",
+    "description": "Language support for Amalgam",
+    "author": {
+        "name": "Howso Incorporated"
+    },
+    "icon": "images/amalgam.png",
+    "categories": [
+        "Programming Languages",
+        "Debuggers",
+        "Themes",
+        "Data Science",
+        "Machine Learning"
+    ],
+    "license": "Apache-2.0",
+    "main": "./dist/extension.js",
+    "scripts": {
+        "vscode:prepublish": "npm run build",
+        "webpack": "webpack --mode development",
+        "webpack-dev": "webpack --mode development --watch",
+        "build": "webpack --mode production --devtool hidden-source-map",
+        "test-compile": "tsc -p ./",
+        "lint": "eslint src/**"
+    },
+    "devDependencies": {
+        "@types/async": "^3.2.18",
+        "@types/node": "^18.15.11",
+        "@types/vscode": "^1.77.0",
+        "@typescript-eslint/eslint-plugin": "^5.48.1",
+        "@typescript-eslint/parser": "^5.48.1",
+        "@vscode/debugadapter": "^1.59.0",
+        "@vscode/debugprotocol": "^1.59.0",
+        "async": "^3.2.4",
+        "eslint": "^8.38.0",
+        "eslint-config-prettier": "^8.8.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "prettier": "^2.8.7",
+        "ts-loader": "^9.4.2",
+        "typescript": "^5.0.4",
+        "webpack": "^5.78.0",
+        "webpack-cli": "^5.0.1"
+    },
+    "engines": {
+        "vscode": "^1.74.0"
+    },
+    "activationEvents": [
+        "onDebugResolve:amalgam",
+        "onDebugDynamicConfigurations:amalgam",
+        "onCommand:extension.amalgam.chooseAmalgamFile",
+        "onCommand:extension.amalgam.runEditorContents",
+        "onCommand:extension.amalgam.debugEditorContents"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "amalgam",
+                "aliases": [
+                    "Amalgam",
+                    "amalgam"
+                ],
+                "extensions": [
+                    ".amlg",
+                    ".amalgam"
+                ],
+                "configuration": "./configuration/amalgam.config.json"
+            },
+            {
+                "id": "amalgam-trace",
+                "aliases": [
+                    "Amalgam-trace",
+                    "amalgam-trace"
+                ],
+                "extensions": [
+                    ".trace"
+                ],
+                "configuration": "./configuration/trace.config.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "amalgam",
+                "scopeName": "source.amalgam",
+                "path": "./syntaxes/amalgam.tmLanguage.json"
+            },
+            {
+                "language": "amalgam-trace",
+                "scopeName": "source.trace",
+                "path": "./syntaxes/trace.tmLanguage.json",
+                "embeddedLanguages": {
+                    "source.json": "json"
+                }
+            }
+        ],
+        "snippets": [
+            {
+                "language": "amalgam",
+                "path": "./snippets/amalgam.snippets.json"
+            }
+        ],
+        "themes": [
+            {
+                "label": "Amalgam Light",
+                "path": "./themes/amalgamLight.json",
+                "uiTheme": "vs"
+            }
+        ],
+        "menus": {
+            "editor/title/run": [
+                {
+                    "command": "extension.amalgam.runEditorContents",
+                    "when": "resourceLangId == amalgam",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "extension.amalgam.debugEditorContents",
+                    "when": "resourceLangId == amalgam",
+                    "group": "navigation@2"
+                }
+            ],
+            "commandPalette": [
+                {
+                    "command": "extension.amalgam.debugEditorContents",
+                    "when": "resourceLangId == amalgam"
+                },
+                {
+                    "command": "extension.amalgam.runEditorContents",
+                    "when": "resourceLangId == amalgam"
+                }
+            ]
+        },
+        "commands": [
+            {
+                "command": "extension.amalgam.debugEditorContents",
+                "title": "Debug File",
+                "category": "Amalgam Debug",
+                "enablement": "!inDebugMode",
+                "icon": "$(debug-alt)"
+            },
+            {
+                "command": "extension.amalgam.runEditorContents",
+                "title": "Run File",
+                "category": "Amalgam Debug",
+                "enablement": "!inDebugMode",
+                "icon": "$(play)"
+            }
+        ],
+        "breakpoints": [
+            {
+                "language": "amalgam"
+            }
+        ],
+        "debuggers": [
+            {
+                "type": "amalgam",
+                "languages": [
+                    "amalgam"
+                ],
+                "program": "./dist/debugAdapter.js",
+                "label": "Amalgam Debug",
+                "runtime": "node",
+                "configurationAttributes": {
+                    "launch": {
+                        "required": [
+                            "program"
+                        ],
+                        "properties": {
+                            "program": {
+                                "type": "string",
+                                "description": "Path to an amalgam file.",
+                                "default": "${file}"
+                            },
+                            "workingDirectory": {
+                                "type": "string",
+                                "description": "The program working directory."
+                            },
+                            "executable": {
+                                "type": "string",
+                                "description": "The absolute path to the amalgam executable."
+                            },
+                            "tracefile": {
+                                "type": "string",
+                                "description": "A filepath to an amalgam trace file."
+                            },
+                            "args": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "Additional cli arguments to pass to the amalgam executable."
+                            },
+                            "stopOnEntry": {
+                                "type": "boolean",
+                                "description": "Automatically stop after launch.",
+                                "default": false
+                            },
+                            "logging": {
+                                "type": "boolean",
+                                "description": "Enable logging of the Debug Adapter Protocol.",
+                                "default": false
+                            }
+                        }
+                    }
+                },
+                "initialConfigurations": [
+                    {
+                        "name": "Launch Amalgam",
+                        "type": "amalgam",
+                        "request": "launch",
+                        "program": "${file}",
+                        "stopOnEntry": false
+                    }
+                ],
+                "configurationSnippets": [
+                    {
+                        "label": "Amalgam: Launch",
+                        "description": "A new configuration for 'debugging' current amalgam file.",
+                        "body": {
+                            "name": "Launch Amalgam",
+                            "type": "amalgam",
+                            "request": "launch",
+                            "program": "^\"\\${file}\"",
+                            "stopOnEntry": false
+                        }
+                    }
+                ],
+                "variables": {
+                    "ChooseAmalgamFile": "extension.amalgam.chooseAmalgamFile"
+                }
+            }
+        ]
+    },
+    "readmeFilename": "README.md",
+    "__metadata": {
+        "id": "a386158e-90f6-4fd7-bd5e-ef6c122b504g",
+        "publisherId": "939f645d-cc0e-45ac-8946-a6cfbde8f74g",
+        "publisherDisplayName": "Howso Incorporated"
+    }
+}

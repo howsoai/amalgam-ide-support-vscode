@@ -1,0 +1,12 @@
+.DS_Store
+**/node_modules
+build/
+tmp/
+coverage/
+**/.venv*/
+__pycache__
+.pytest_cache
+.python-version
+*.pyc
+npm-debug.log
+.envrc
