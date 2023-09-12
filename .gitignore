@@ -1,6 +1,7 @@
 .DS_Store
 **/node_modules
 build/
+dist/
 tmp/
 coverage/
 **/.venv*/
@@ -10,3 +11,4 @@ __pycache__
 *.pyc
 npm-debug.log
 .envrc
+*.vsix

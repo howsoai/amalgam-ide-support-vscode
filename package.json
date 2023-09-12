@@ -1,12 +1,17 @@
 {
     "name": "amalgam-lang",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "type": "commonjs",
     "publisher": "howso",
     "displayName": "Amalgam Language",
     "description": "Language support for Amalgam",
     "author": {
-        "name": "Howso Incorporated"
+        "name": "Howso Incorporated",
+        "email": "support@howso.com",
+        "url": "https://howso.com"
+    },
+    "repository": {
+        "url": "https://github.com/howsoai/amalgam-ide-support-vscode"
     },
     "icon": "images/amalgam.png",
     "categories": [
@@ -19,22 +24,29 @@
     "license": "Apache-2.0",
     "main": "./dist/extension.js",
     "scripts": {
-        "vscode:prepublish": "npm run build",
+        "vscode:package": "npm run build && vsce package",
+        "vscode:publish": "vsce publish",
         "webpack": "webpack --mode development",
         "webpack-dev": "webpack --mode development --watch",
         "build": "webpack --mode production --devtool hidden-source-map",
         "test-compile": "tsc -p ./",
         "lint": "eslint src/**"
     },
+    "engines": {
+        "vscode": "^1.74.0"
+    },
+    "dependencies": {
+        "@vscode/debugadapter": "^1.59.0",
+        "@vscode/debugprotocol": "^1.59.0",
+        "async": "^3.2.4"
+    },
     "devDependencies": {
         "@types/async": "^3.2.18",
         "@types/node": "^18.15.11",
-        "@types/vscode": "^1.77.0",
+        "@types/vscode": "~1.74.0",
         "@typescript-eslint/eslint-plugin": "^5.48.1",
         "@typescript-eslint/parser": "^5.48.1",
-        "@vscode/debugadapter": "^1.59.0",
-        "@vscode/debugprotocol": "^1.59.0",
-        "async": "^3.2.4",
+        "@vscode/vsce": "^2.21.0",
         "eslint": "^8.38.0",
         "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-prettier": "^4.2.1",
@@ -43,9 +55,6 @@
         "typescript": "^5.0.4",
         "webpack": "^5.78.0",
         "webpack-cli": "^5.0.1"
-    },
-    "engines": {
-        "vscode": "^1.74.0"
     },
     "activationEvents": [
         "onDebugResolve:amalgam",
@@ -233,10 +242,5 @@
             }
         ]
     },
-    "readmeFilename": "README.md",
-    "__metadata": {
-        "id": "a386158e-90f6-4fd7-bd5e-ef6c122b504g",
-        "publisherId": "939f645d-cc0e-45ac-8946-a6cfbde8f74g",
-        "publisherDisplayName": "Howso Incorporated"
-    }
+    "readmeFilename": "README.md"
 }

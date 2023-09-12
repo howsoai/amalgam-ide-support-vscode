@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Build functions for Amalgam vscode extention
+# Development build functions for Amalgam vscode extension
 #
 # usage: ./bin/build.sh <build-function> {params}
 #
