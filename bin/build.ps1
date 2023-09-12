@@ -1,3 +1,8 @@
+# Development build functions for Amalgam vscode extension
+#
+# usage: ./bin/build.ps1 <build-function> {params}
+#####
+
 param(
   [Parameter()]
   [string]$func

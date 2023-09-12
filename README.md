@@ -3,22 +3,6 @@
 The Amalgam VSCode extension provides support for syntax highlighting and debugging for the
 [Amalgam](https://github.com/howsoai/amalgam) language.
 
-## Installation
-
-To install the extension manually, run the build script while in the extension directory.
-
-Bash:
-
- ```bash
- ./bin/build.sh install
- ```
-
-Cmd:
-
- ```cmd
- ./bin/build.ps1 install
- ```
-
 ## Highlighting Theme
 
 To switch highlighting themes: `CTRL-K-T`
