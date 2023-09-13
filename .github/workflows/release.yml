@@ -32,4 +32,4 @@ jobs:
         artifactErrorsFailBuild: true
         generateReleaseNotes: true
         makeLatest: legacy
-        artifacts: "./amalgam-lang-*.vsix"
+        artifacts: "./amalgam-lang-*.vsix/amalgam-lang-*.vsix"
