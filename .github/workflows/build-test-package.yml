@@ -4,8 +4,12 @@ on:
   workflow_call:
     inputs:
       version:
-        required: true
+        required: false
+        default: ''
         type: string
+    outputs:
+      package-version:
+        value: ${{ jobs.build.outputs.package-version }}
 
 defaults:
   run:
@@ -15,5 +19,41 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    outputs:
+      package-version: ${{ steps.get-version.package-version }}
     steps:
-      - run: echo 'Done'
+
+      - uses: actions/checkout@v3
+
+      - name: Install nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/hydrogen'
+
+      - name: Update version for prerelease build
+        if: inputs.version != ''
+        run: |
+          npm version ${{ inputs.version }} --git-tag-version false
+
+      - name: Yoink version tag from package.json
+        id: get-version
+        run: |
+          node -e "console.log('package-version=' + require('./package.json').version)" >> $GITHUB_OUTPUT
+          node -e "console.log('PACKAGE_VERSION=' + require('./package.json').version)" >> $GITHUB_ENV
+          echo "Got version: ${{ env.PACKAGE_VERSION }}"
+
+      - name: Package
+        run: |
+          npm ci
+          npm run vscode:package
+
+      - name: Clean up dir
+        run: |
+          rm -rf dist/
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: amalgam-lang-${{ env.PACKAGE_VERSION }}.vsix
+          path: ./amalgam-lang-${{ env.PACKAGE_VERSION }}.vsix
+          if-no-files-found: error
