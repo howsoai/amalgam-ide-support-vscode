@@ -18,6 +18,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+    - name: Download Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: ./
+
     - name: Create Release
       uses: ncipollo/release-action@v1
       with:
@@ -27,3 +32,4 @@ jobs:
         artifactErrorsFailBuild: true
         generateReleaseNotes: true
         makeLatest: legacy
+        artifacts: "./amalgam-lang-*.vsix"
