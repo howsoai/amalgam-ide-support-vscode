@@ -21,7 +21,7 @@
         "Data Science",
         "Machine Learning"
     ],
-    "license": "Apache-2.0",
+    "license": "AGPL-3.0-only",
     "main": "./dist/extension.js",
     "scripts": {
         "vscode:package": "npm run build && vsce package",
