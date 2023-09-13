@@ -3,7 +3,7 @@ name: Reusable WF - Build
 on:
   workflow_call:
     inputs:
-      prerelease-version:
+      version:
         required: false
         default: ''
         type: string
@@ -23,25 +23,29 @@ jobs:
       package-version: ${{ steps.get-version.package-version }}
     steps:
 
+      - uses: actions/checkout@v3
+
       - name: Install nodejs
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-
-      - name: Package
-        run: |
-          npm ci
-          npm run vscode:package
+          node-version: 'lts/hydrogen'
 
       - name: Update version for prerelease build
-        if: inputs.prerelease-version != ''
+        if: inputs.version != ''
         run: |
-          npm version ${{ inputs.prerelease-version }}
+          npm version ${{ inputs.version }} --git-tag-version false
 
       - name: Yoink version tag from package.json
         id: get-version
         run: |
           node -e "console.log('package-version=' + require('./package.json').version)" >> $GITHUB_OUTPUT
+          node -e "console.log('PACKAGE_VERSION=' + require('./package.json').version)" >> $GITHUB_ENV
+          echo "Got version: ${{ env.PACKAGE_VERSION }}"
+
+      - name: Package
+        run: |
+          npm ci
+          npm run vscode:package
 
       - name: Clean up dir
         run: |
@@ -50,6 +54,6 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
-          name: amalgam-lang-*.vsix
-          path: ./amalgam-lang-*.vsix
+          name: amalgam-lang-${{ env.PACKAGE_VERSION }}.vsix
+          path: ./amalgam-lang-${{ env.PACKAGE_VERSION }}.vsix
           if-no-files-found: error
