@@ -3,9 +3,13 @@ name: Reusable WF - Build
 on:
   workflow_call:
     inputs:
-      version:
-        required: true
+      prerelease-version:
+        required: false
+        default: ''
         type: string
+    outputs:
+      package-version:
+        value: ${{ jobs.build.outputs.package-version }}
 
 defaults:
   run:
@@ -15,5 +19,37 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    outputs:
+      package-version: ${{ steps.get-version.package-version }}
     steps:
-      - run: echo 'Done'
+
+      - name: Install nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Package
+        run: |
+          npm ci
+          npm run vscode:package
+
+      - name: Update version for prerelease build
+        if: inputs.prerelease-version != ''
+        run: |
+          npm version ${{ inputs.prerelease-version }}
+
+      - name: Yoink version tag from package.json
+        id: get-version
+        run: |
+          node -e "console.log('package-version=' + require('./package.json').version)" >> $GITHUB_OUTPUT
+
+      - name: Clean up dir
+        run: |
+          rm -rf dist/
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: amalgam-lang-*.vsix
+          path: ./amalgam-lang-*.vsix
+          if-no-files-found: error
