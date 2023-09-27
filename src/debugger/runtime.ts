@@ -8,6 +8,8 @@ import { NotifySubject } from "./utils/notify";
 
 export type DataSource = "stdout" | "stderr" | "stdin";
 
+export type RuntimePostfix = "-st" | "-mt" | "-mt-noavx" | "-omp" | "";
+
 /** Runtime launch options */
 export interface IRuntimeLaunchOptions {
   program: string;
@@ -153,7 +155,7 @@ export class RuntimeEntity extends RuntimeVariable {
 }
 
 export class AmalgamRuntime extends EventEmitter {
-  public static readonly DEFAULT_EXECUTABLE_DIRS = ["~/.amalgam/bin/"];
+  public static readonly DEFAULT_EXECUTABLE_DIR = "~/.amalgam/bin/";
   // Default thread id when running in ST mode
   public static readonly DEFAULT_THREAD_ID = 1;
 
@@ -226,11 +228,11 @@ export class AmalgamRuntime extends EventEmitter {
     this.commandQueue.pause();
   }
 
-  public static getExecutableName(postfix: "-st" | "-mt" | "" = ""): string {
+  public static getExecutableName(postfix: RuntimePostfix = ""): string {
     let name: string;
     switch (platform()) {
       case "win32":
-        name = `Amalgam${postfix}.exe`;
+        name = `amalgam${postfix}.exe`;
         break;
       default:
         name = `amalgam${postfix}`;

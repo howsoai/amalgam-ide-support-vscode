@@ -461,13 +461,17 @@ export class AmalgamDebugSession extends LoggingDebugSession {
 
     // Validate executable
     const executable = this.getExecutablePath(args.executable);
-    if (executable == null) {
+    if (executable == null || !fileExists(executable)) {
       this.sendErrorResponse(response, {
-        id: 2,
-        format: `No Amalgam executable not found at path: ${
-          args.executable || AmalgamRuntime.DEFAULT_EXECUTABLE_DIRS.join(" or ")
-        }`,
+        id: 1,
+        format: "Amalgam executable not found at path:\n{executable}",
+        variables: {
+          executable,
+        },
         showUser: true,
+        sendTelemetry: false,
+        url: "https://github.com/howsoai/amalgam",
+        urlLabel: "Get Amalgam",
       });
       return;
     }
@@ -477,8 +481,12 @@ export class AmalgamDebugSession extends LoggingDebugSession {
     if (workingDirectory != null && !fileExists(workingDirectory)) {
       this.sendErrorResponse(response, {
         id: 2,
-        format: `The provided working directory does not exist: ${workingDirectory}`,
+        format: "The provided working directory does not exist:\n{workingDirectory}",
+        variables: {
+          workingDirectory,
+        },
         showUser: true,
+        sendTelemetry: false,
       });
       return;
     }
@@ -518,8 +526,9 @@ export class AmalgamDebugSession extends LoggingDebugSession {
     } else {
       this.sendErrorResponse(response, {
         id: 1001,
-        format: `error: failed to start amalgam runtime`,
+        format: "Error: Failed to start Amalgam runtime",
         showUser: true,
+        sendTelemetry: false,
       });
     }
   }
@@ -548,28 +557,20 @@ export class AmalgamDebugSession extends LoggingDebugSession {
   }
 
   /**
-   * Resolve path to an amalgam executable.
-   * @param path Custom specified path.
-   * @returns The resolved path to an Amalgam executable, or undefined if no valid path found.
+   * Resolve path to Amalgam executable.
+   * @param filePath Custom specified path.
+   * @returns The resolved path to Amalgam executable.
    */
-  private getExecutablePath(filePath?: string): string | undefined {
+  private getExecutablePath(filePath?: string): string {
     if (filePath == null) {
-      // Find amongst the default directories
+      // Use default path
       const executableName = AmalgamRuntime.getExecutableName();
-      for (const dir of AmalgamRuntime.DEFAULT_EXECUTABLE_DIRS) {
-        filePath = path.resolve(expandUserHome(dir), executableName);
-        if (fileExists(filePath)) {
-          return filePath;
-        }
-      }
+      filePath = path.resolve(expandUserHome(AmalgamRuntime.DEFAULT_EXECUTABLE_DIR), executableName);
     } else {
       // Configured path
       filePath = path.resolve(expandUserHome(filePath));
-      if (fileExists(filePath)) {
-        return filePath;
-      }
     }
-    return undefined;
+    return filePath;
   }
 
   private createSource(filePath: string): Source {

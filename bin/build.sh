@@ -9,41 +9,25 @@
 set -eu # fail on error, and undefined var usage
 
 VERSION=$(jq -r '.version' package.json)
-PACKAGE_NAME="howso.amalgam-lang-$VERSION"
-
-VSCODE_DIR=~/.vscode/extensions
-BUILD_DIR="./build"
-PACKAGE_DIR="$BUILD_DIR/$PACKAGE_NAME"
-
-# Run build process
-build() {
-  npm run build
-}
+PACKAGE_NAME="amalgam-lang-$VERSION.vsix"
+RED='\033[0;31m'
+NC='\033[0m'
 
 # Package extension files
 package() {
-  rm -rf $BUILD_DIR
-  mkdir -p $PACKAGE_DIR
-  cp -r themes syntaxes snippets images configuration dist .vsixmanifest .vscodeignore package.json LICENSE.txt README.md $PACKAGE_DIR
-  echo "package built at $PACKAGE_DIR"
+  rm -f "$PACKAGE_NAME"
+  npm run vscode:package
 }
 
 # Package extension bundle and install it
 install() {
-  if [ -d "$VSCODE_DIR" ]; then
+  if command -v code &> /dev/null; then
     package
-    rm -rf $VSCODE_DIR/$PACKAGE_NAME
-    cp -r "$PACKAGE_DIR" "$VSCODE_DIR"
-    echo "extension installed"
+    code --install-extension $PACKAGE_NAME
   else
-    echo "$VSCODE_DIR directory not found"
+    echo -e "${RED}VSCode 'code' command not found, is it installed?${NC}"
+    exit 1
   fi
-}
-
-# Build and install
-build_install() {
-  build
-  install
 }
 
 # Show usage, and print functions
