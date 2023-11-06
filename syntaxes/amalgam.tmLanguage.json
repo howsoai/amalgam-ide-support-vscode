@@ -69,7 +69,7 @@
       "name": "constant.language.amalgam"
     },
     {
-      "match": "((?<=\\()target_index|target_value|target)",
+      "match": "((?<=\\()current_index|current_value|previous_result|target)",
       "name": "entity.name.type.amalgam"
     },
     {
