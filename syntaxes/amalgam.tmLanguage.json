@@ -61,7 +61,7 @@
       "name": "keyword.control.amalgam"
     },
     {
-      "match": "(\\(assoc\\)|\\(list\\)|\\(conclude\\)|\\(system_time\\)|\\(stack\\)|\\(args\\)|\\(contained_entities\\))",
+      "match": "(\\(assoc\\)|\\(list\\)|\\(conclude\\)|\\(system_time\\)|\\(target\\)|\\(stack\\)|\\(args\\)|\\(contained_entities\\))",
       "name": "keyword.control.amalgam"
     },
     {
@@ -69,7 +69,7 @@
       "name": "constant.language.amalgam"
     },
     {
-      "match": "((?<=\\()target_index|target_value|target)",
+      "match": "((?<=\\()current_index|current_value|previous_result)",
       "name": "entity.name.type.amalgam"
     },
     {
