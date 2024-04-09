@@ -100,7 +100,7 @@ export function activateDebug(context: vscode.ExtensionContext, factory: vscode.
         document: vscode.TextDocument,
         position: vscode.Position
       ): vscode.ProviderResult<vscode.EvaluatableExpression> {
-        const VARIABLE_REGEXP = /(?<![(#"'a-z0-9_.])(?<name>[_a-z]+[_a-z0-9]*)(?!["'a-z0-9])/gi;
+        const VARIABLE_REGEXP = /(?<![(#"'a-z0-9_.])(?<name>[_!^a-z]+[_a-z0-9]*)(?!["'a-z0-9])/gi;
         const line = document.lineAt(position.line).text;
 
         let matches: RegExpExecArray | null;
