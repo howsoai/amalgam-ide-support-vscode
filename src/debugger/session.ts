@@ -60,7 +60,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
     super();
     this.parentSession = session;
 
-    // The Amalgam debugger uses one-based lines and columns after version 50.0.0
+    // The Amalgam debugger uses one-based lines and columns starting with version 50.0.2
     this.setDebuggerLinesStartAt1(true);
     this.setDebuggerColumnsStartAt1(true);
 
@@ -503,7 +503,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
     try {
       const executableVersion = await this.getExecutableVersion(executable);
       outputLogger.info(`Amalgam Version: ${executableVersion}`);
-      if (semver.lt(executableVersion, "50.0.0")) {
+      if (semver.lt(executableVersion, "50.0.2")) {
         this.setDebuggerLinesStartAt1(false);
         this.setDebuggerColumnsStartAt1(false);
         outputLogger.debug("Line numbers set to 0-based");
