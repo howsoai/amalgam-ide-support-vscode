@@ -4,7 +4,7 @@ import { platform } from "os";
 import { queue, QueueObject } from "async";
 import { logger } from "../logging";
 import { InvalidRuntimeResponse, RuntimeCommandCancelled, RuntimeNotStarted } from "./errors";
-import { NotifySubject } from "./utils/notify";
+import { NotifySubject } from "./utils";
 
 export type DataSource = "stdout" | "stderr" | "stdin";
 
@@ -228,7 +228,7 @@ export class AmalgamRuntime extends EventEmitter {
     this.commandQueue.pause();
   }
 
-  public static getExecutableName(postfix: RuntimePostfix = ""): string {
+  public static getExecutableName(postfix: RuntimePostfix = "-st"): string {
     let name: string;
     switch (platform()) {
       case "win32":

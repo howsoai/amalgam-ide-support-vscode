@@ -45,9 +45,9 @@ export class AmalgamDocumentSymbolProvider implements vscode.DocumentSymbolProvi
         } else {
           // Match label
           // 1: Leading text up to and including #
-          // 2: The opcode
+          // 2: The opcode (including ! or ^)
           // 3: Tailing text to end of line
-          const reg = /^(\s*#)[\^!]?(\w+)\s*(.*)?\s*$/;
+          const reg = /^(\s*#)([\^!]?\w+)\s*(.*)?\s*$/;
           const matches = reg.exec(line.text);
 
           if (matches) {

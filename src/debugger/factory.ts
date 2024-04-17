@@ -21,7 +21,7 @@ export class ExternalDebugAdapterFactory implements vscode.DebugAdapterDescripto
   ): vscode.ProviderResult<vscode.DebugAdapterDescriptor> {
     // If the executable specified in the package.json does not exist, use the system default
     if (!executable) {
-      const command = "~/.amalgam/bin/amalgam";
+      const command = AmalgamDebugSession.getExecutablePath();
       const args = ["--debug", "--debug-sources"];
       const options = {
         cwd: session.workspaceFolder?.uri?.toString(), // working directory for executable

@@ -20,9 +20,10 @@ import { DebugProtocol } from "@vscode/debugprotocol";
 import { platform } from "os";
 import * as path from "path";
 import { existsSync as fileExists } from "fs";
-import { expandUserHome } from "./utils";
-import { NotifySubject } from "./utils/notify";
+import * as semver from "semver";
+import { expandUserHome, NotifySubject, executeCommand } from "./utils";
 import { AmalgamRuntime, IRuntimeBreakpoint, IRuntimeLaunchOptions, RuntimeEvent, RuntimeVariable } from "./runtime";
+import { logger as outputLogger } from "../logging";
 
 /**
  * This interface describes the Amalgam specific launch attributes (which are not part of the Debug Adapter Protocol).
@@ -59,9 +60,9 @@ export class AmalgamDebugSession extends LoggingDebugSession {
     super();
     this.parentSession = session;
 
-    // this debugger uses zero-based lines and columns
-    this.setDebuggerLinesStartAt1(false);
-    this.setDebuggerColumnsStartAt1(false);
+    // The Amalgam debugger uses one-based lines and columns starting with version 50.0.2
+    this.setDebuggerLinesStartAt1(true);
+    this.setDebuggerColumnsStartAt1(true);
 
     this.runtime = new AmalgamRuntime();
 
@@ -435,11 +436,6 @@ export class AmalgamDebugSession extends LoggingDebugSession {
     response.body.supportsConditionalBreakpoints = false;
 
     this.sendResponse(response);
-
-    // Since this debug adapter can accept configuration requests like 'setBreakpoint' at any time,
-    // we request them early by sending an 'initializeRequest' to the frontend.
-    // The frontend will end the configuration sequence by calling 'configurationDone' request.
-    this.sendEvent(new InitializedEvent());
   }
 
   protected completionsRequest(response: DebugProtocol.CompletionsResponse): void {
@@ -460,7 +456,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
     logger.setup(args.logging ? Logger.LogLevel.Verbose : Logger.LogLevel.Stop, false);
 
     // Validate executable
-    const executable = this.getExecutablePath(args.executable);
+    const executable = AmalgamDebugSession.getExecutablePath(args.executable);
     if (executable == null || !fileExists(executable)) {
       this.sendErrorResponse(response, {
         id: 1,
@@ -503,10 +499,35 @@ export class AmalgamDebugSession extends LoggingDebugSession {
 
     this.workingDirectory = cwd || workspaceUri?.fsPath;
 
-    // wait 1 second until configuration has finished (and configurationDone has been called)
-    await this.configurationDone.wait(1000);
+    // Update debugger configuration based binary version
+    try {
+      const executableVersion = await this.getExecutableVersion(executable);
+      outputLogger.info(`Amalgam Version: ${executableVersion}`);
+      if (semver.lt(executableVersion, "50.0.2")) {
+        this.setDebuggerLinesStartAt1(false);
+        this.setDebuggerColumnsStartAt1(false);
+        outputLogger.debug("Line numbers set to 0-based");
+      }
+    } catch (error) {
+      this.sendErrorResponse(response, {
+        id: 3,
+        format: "Error: Failed to verify Amalgam binary version.",
+        showUser: true,
+        sendTelemetry: false,
+      });
+      return;
+    }
+
+    // Tell the front end to initialize. Normally this could be done during initializeRequest but
+    // we must do this after interrogating the executable version to apply version based configurations.
+    // The frontend will end the configuration sequence by calling 'configurationDone' request.
+    this.sendEvent(new InitializedEvent());
+
+    // wait up to 5 seconds until configuration has finished (and configurationDone has been called)
+    await this.configurationDone.wait(5000);
 
     if (args.tracefile) {
+      // if a tracefile is defined, add it to the runtime arguments
       const tracefile = cwd ? path.resolve(cwd, args.tracefile) : args.tracefile;
       runtimeArgs.push("--tracefile", `"${tracefile}"`);
     }
@@ -526,7 +547,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
     } else {
       this.sendErrorResponse(response, {
         id: 1001,
-        format: "Error: Failed to start Amalgam runtime",
+        format: "Error: Failed to start Amalgam runtime.",
         showUser: true,
         sendTelemetry: false,
       });
@@ -561,7 +582,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
    * @param filePath Custom specified path.
    * @returns The resolved path to Amalgam executable.
    */
-  private getExecutablePath(filePath?: string): string {
+  public static getExecutablePath(filePath?: string): string {
     if (filePath == null) {
       // Use default path
       const executableName = AmalgamRuntime.getExecutableName();
@@ -571,6 +592,11 @@ export class AmalgamDebugSession extends LoggingDebugSession {
       filePath = path.resolve(expandUserHome(filePath));
     }
     return filePath;
+  }
+
+  protected async getExecutableVersion(executable: string): Promise<semver.SemVer> {
+    const result = await executeCommand(executable, "--version");
+    return new semver.SemVer(result, { loose: true });
   }
 
   private createSource(filePath: string): Source {
