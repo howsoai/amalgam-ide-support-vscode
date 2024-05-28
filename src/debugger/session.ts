@@ -503,7 +503,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
     try {
       const executableVersion = await this.getExecutableVersion(executable);
       outputLogger.info(`Amalgam Version: ${executableVersion}`);
-      if (semver.lt(executableVersion, "50.0.2")) {
+      if (semver.gt(executableVersion, "0.0.0") && semver.lt(executableVersion, "50.0.2")) {
         this.setDebuggerLinesStartAt1(false);
         this.setDebuggerColumnsStartAt1(false);
         outputLogger.debug("Line numbers set to 0-based");
