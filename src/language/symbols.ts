@@ -79,7 +79,11 @@ export class AmalgamDocumentSymbolProvider implements vscode.DocumentSymbolProvi
       return vscode.SymbolKind.Boolean;
     } else if (/^\(list(?:\s.*)?$/i.test(text)) {
       return vscode.SymbolKind.Array;
+    } else if (/^\[.*/i.test(text)) {
+      return vscode.SymbolKind.Array;
     } else if (/^\(assoc(?:\s.*)?$/i.test(text)) {
+      return vscode.SymbolKind.Object;
+    } else if (/^{.*/i.test(text)) {
       return vscode.SymbolKind.Object;
     } else if (/^\(null\)(?:\s*;.*)?$/i.test(text)) {
       return vscode.SymbolKind.Variable;
