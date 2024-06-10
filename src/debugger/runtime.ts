@@ -181,7 +181,7 @@ export class AmalgamRuntime extends EventEmitter {
   private matchers = {
     end: /\r\r(?:(?<thread>[xa-fA-F0-9]+) )?>$/m,
     stackFrameComment: /^ {2}comment:src: (?<line>\d+) (?<column>\d+) (?<file>.+)$/gm,
-    stackFrameOpcode: /^ {2}opcode: (?<opcode>.+?)(?: ;src: (?<line>\d+) (?<column>\d+) (?<file>.+))?$/gm,
+    stackFrameOpcode: /^ {2}opcode: (?<opcode>.+?)(?: ?;src: (?<line>\d+) (?<column>\d+) (?<file>.+))?$/gm,
     breakpointAction: /^(?<action>Added|Removed) breakpoint for (?:.+)?$/gm,
     breakpointLine: /^ {2}(?<line>\d+)(?: (?<file>.+))?$/gm,
     // Breakpoints and stack are matched via the header line and existing subsequent nested lines
@@ -396,7 +396,18 @@ export class AmalgamRuntime extends EventEmitter {
 
       return await Promise.all(
         values.map(async (v) => {
-          const { value } = await this.sendCommand("pp", signal, v);
+          let { value } = await this.sendCommand("pp", signal, v);
+          if (value != null) {
+            // Get rid of excess whitespace and newlines
+            value = value.split("\n").reduce((accumulator, line) => {
+              const trimmedLine = line.trim();
+              if (trimmedLine) {
+                if (accumulator) accumulator += " ";
+                accumulator += trimmedLine;
+              }
+              return accumulator;
+            }, "");
+          }
           return new RuntimeVariable(v, value);
         })
       );
