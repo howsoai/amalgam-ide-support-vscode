@@ -4,7 +4,7 @@ import { platform } from "os";
 import { queue, QueueObject } from "async";
 import { logger } from "../logging";
 import { InvalidRuntimeResponse, RuntimeCommandCancelled, RuntimeNotStarted } from "./errors";
-import { NotifySubject, collapseWhitespace } from "./utils";
+import { NotifySubject, collapseWhitespace, prepareExpression } from "./utils";
 
 export type DataSource = "stdout" | "stderr" | "stdin";
 
@@ -474,7 +474,7 @@ export class AmalgamRuntime extends EventEmitter {
         break;
     }
     if (command !== "") {
-      await this.sendCommand("eval", collapseWhitespace(command));
+      await this.sendCommand("eval", prepareExpression(command));
     }
   }
 
@@ -518,7 +518,7 @@ export class AmalgamRuntime extends EventEmitter {
    * @returns The expression result.
    */
   public async evaluate(expression: string): Promise<RuntimeVariable> {
-    const { value } = await this.sendCommand("eval", collapseWhitespace(expression));
+    const { value } = await this.sendCommand("eval", prepareExpression(expression));
     return new RuntimeVariable("eval", value);
   }
 

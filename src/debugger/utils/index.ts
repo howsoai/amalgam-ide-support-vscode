@@ -34,3 +34,24 @@ export function collapseWhitespace(value: string): string {
     return accumulator;
   }, "");
 }
+
+/**
+ * Prepare an expression before evaluation.
+ * @param expression The expression to prepare.
+ * @returns The modified expression.
+ */
+export function prepareExpression(expression: string): string {
+  return expression.split("\n").reduce((accumulator, line) => {
+    let trimmedLine = line.trim();
+    const commentIndex = trimmedLine.indexOf(";");
+    if (commentIndex != -1) {
+      // Remove comments
+      trimmedLine = trimmedLine.substring(0, commentIndex);
+    }
+    if (trimmedLine) {
+      if (accumulator) accumulator += " ";
+      accumulator += trimmedLine;
+    }
+    return accumulator;
+  }, "");
+}
