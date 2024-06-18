@@ -4,7 +4,7 @@ import { platform } from "os";
 import { queue, QueueObject } from "async";
 import { logger } from "../logging";
 import { InvalidRuntimeResponse, RuntimeCommandCancelled, RuntimeNotStarted } from "./errors";
-import { NotifySubject } from "./utils";
+import { NotifySubject, collapseWhitespace } from "./utils";
 
 export type DataSource = "stdout" | "stderr" | "stdin";
 
@@ -399,14 +399,7 @@ export class AmalgamRuntime extends EventEmitter {
           let { value } = await this.sendCommand("pp", signal, v);
           if (value != null) {
             // Get rid of excess whitespace and newlines
-            value = value.split("\n").reduce((accumulator, line) => {
-              const trimmedLine = line.trim();
-              if (trimmedLine) {
-                if (accumulator) accumulator += " ";
-                accumulator += trimmedLine;
-              }
-              return accumulator;
-            }, "");
+            value = collapseWhitespace(value);
           }
           return new RuntimeVariable(v, value);
         })
@@ -481,7 +474,7 @@ export class AmalgamRuntime extends EventEmitter {
         break;
     }
     if (command !== "") {
-      await this.sendCommand("eval", command);
+      await this.sendCommand("eval", collapseWhitespace(command));
     }
   }
 
@@ -525,7 +518,7 @@ export class AmalgamRuntime extends EventEmitter {
    * @returns The expression result.
    */
   public async evaluate(expression: string): Promise<RuntimeVariable> {
-    const { value } = await this.sendCommand("eval", expression);
+    const { value } = await this.sendCommand("eval", collapseWhitespace(expression));
     return new RuntimeVariable("eval", value);
   }
 
