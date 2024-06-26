@@ -71,9 +71,9 @@ export class AmalgamDocumentSymbolProvider implements vscode.DocumentSymbolProvi
   }
 
   private checkType(text: string, defaultKind: vscode.SymbolKind) {
-    if (/^(?:["'](?:[^"\\]|\\.)*["']|\.nas)(?:\s*;.*)?$/.test(text)) {
+    if (/^(?:["'](?:[^"\\]|\\.)*["'])(?:\s*;.*)?$/.test(text)) {
       return vscode.SymbolKind.String;
-    } else if (/^(?:\d+\.?\d*|\.nan|-?\.infinity)(?:\s*;.*)?$/.test(text)) {
+    } else if (/^(?:\d+\.?\d*|-?\.infinity)(?:\s*;.*)?$/.test(text)) {
       return vscode.SymbolKind.Number;
     } else if (/^\((?:true|false)\)(?:\s*;.*)?$/i.test(text)) {
       return vscode.SymbolKind.Boolean;

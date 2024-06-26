@@ -65,7 +65,7 @@
       "name": "keyword.control.amalgam"
     },
     {
-      "match": "(argv|interpreter|\\.nan|\\.nas|\\.infinity|-\\.infinity|(?<=\\()(null|false|true|rand|query_count))",
+      "match": "(argv|interpreter|\\.infinity|-\\.infinity|(?<=\\()(null|false|true|rand|query_count))",
       "name": "constant.language.amalgam"
     },
     {
