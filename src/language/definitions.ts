@@ -60,10 +60,7 @@ export class AmalgamDefinitionProvider implements vscode.DefinitionProvider {
       }
     }
 
-    if (locations.length > 0){
-      return locations
-    }
-    return undefined;
+    return locations;
   }
 
   private async readFile(filePath: string): Promise<string> {
