@@ -22,7 +22,7 @@ export class AmalgamDefinitionProvider implements vscode.DefinitionProvider {
         word = "!" + word;
       }
     }
-    const definitionPattern = new RegExp(`^[^;]*#${word}`);
+    const definitionPattern = new RegExp(`(?:^|[^#])(#${word})( .+)?$`);
 
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (!workspaceFolders) {
@@ -53,6 +53,7 @@ export class AmalgamDefinitionProvider implements vscode.DefinitionProvider {
           return undefined;
         }
         if (definitionPattern.test(lines[i])) {
+          console.log(lines[i]);
           const definitionUri = vscode.Uri.file(file.fsPath);
           const definitionPosition = new vscode.Position(i, lines[i].indexOf(`#${word}`));
           locations.push(new vscode.Location(definitionUri, definitionPosition));
