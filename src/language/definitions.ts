@@ -30,8 +30,12 @@ export class AmalgamDefinitionProvider implements vscode.DefinitionProvider {
       return undefined;
     }
 
-    const rootPath = workspaceFolders[0].uri.fsPath;
-    const files = await this.getAllAmlgFiles(rootPath);
+
+    const workspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
+    if (!workspaceFolder) {
+      return undefined;
+    }
+    const files = await this.getAllAmlgFiles(workspaceFolder.uri.fsPath);
 
     for (const file of files) {
       if (token.isCancellationRequested) {
