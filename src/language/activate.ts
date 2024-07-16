@@ -20,5 +20,5 @@ export function activateLanguage(context: vscode.ExtensionContext) {
       { scheme: "file", language: "amalgam" },
       new AmalgamDefinitionProvider()
     )
-  )
+  );
 }
