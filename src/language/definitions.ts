@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import * as fs from "fs";
 
 export class AmalgamDefinitionProvider implements vscode.DefinitionProvider {
   async provideDefinition(
@@ -13,22 +12,23 @@ export class AmalgamDefinitionProvider implements vscode.DefinitionProvider {
     }
     let word = document.getText(wordRange);
 
-    // Check for exclamation point before the word
+    // Check for label scope character before the word
     if (wordRange.start.character > 0) {
-      const charBeforeWord = document.getText(
-        new vscode.Range(new vscode.Position(wordRange.start.line, wordRange.start.character - 1), wordRange.start)
-      );
+      const charBeforeWord = document.getText(new vscode.Range(wordRange.start.translate(0, -1), wordRange.start));
       if (charBeforeWord === "!") {
         word = "!" + word;
+      } else if (charBeforeWord === "^") {
+        word = "\\^" + word;
       }
     }
-    const definitionPattern = new RegExp(`(?:^|[^#])(#${word})( .+)?$`);
+    // Find a label definition by meeting the following criteria:
+    // 1. The label word is not preceded by a semicolon, representing a comment
+    // 2. The label word is only immediately preceded by a single `#`
+    // 3. The label word is immediately followed by at least one whitespace or the end of the line
+    // We then capture the text leading up to the matched definition and the definition word itself
+    const definitionPattern = new RegExp(`^([^;]*)(?<!#)(#${word})(?:\\s+|$).*$`);
 
-    const workspaceFolders = vscode.workspace.workspaceFolders;
-    if (!workspaceFolders) {
-      return undefined;
-    }
-
+    // Get all Amalgam file URIs in the workspace
     const workspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
     if (!workspaceFolder) {
       return undefined;
@@ -40,31 +40,27 @@ export class AmalgamDefinitionProvider implements vscode.DefinitionProvider {
       token
     );
 
+    // For each file check each line for matches to the definition pattern
     const locations: vscode.Location[] = [];
-    for (const file of files) {
+    for (const uri of files) {
       if (token.isCancellationRequested) {
         return undefined;
       }
 
-      const content = await this.readFile(file.fsPath);
-      const lines = content.split("\n");
-      for (let i = 0; i < lines.length; i++) {
+      const file = await vscode.workspace.openTextDocument(uri);
+      for (let i = 0; i < file.lineCount; i++) {
         if (token.isCancellationRequested) {
           return undefined;
         }
-        if (definitionPattern.test(lines[i])) {
-          console.log(lines[i]);
-          const definitionUri = vscode.Uri.file(file.fsPath);
-          const definitionPosition = new vscode.Position(i, lines[i].indexOf(`#${word}`));
-          locations.push(new vscode.Location(definitionUri, definitionPosition));
+        const line = file.lineAt(i);
+        const matches = definitionPattern.exec(line.text);
+        if (matches) {
+          const definitionPosition = new vscode.Position(i, matches[1].length);
+          locations.push(new vscode.Location(file.uri, definitionPosition));
         }
       }
     }
 
     return locations;
-  }
-
-  private async readFile(filePath: string): Promise<string> {
-    return fs.promises.readFile(filePath, "utf-8");
   }
 }
