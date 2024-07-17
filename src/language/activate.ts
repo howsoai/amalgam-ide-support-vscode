@@ -1,5 +1,7 @@
 import * as vscode from "vscode";
+
 import { AmalgamDocumentSymbolProvider } from "./symbols";
+import { AmalgamDefinitionProvider } from "./definitions";
 
 /**
  * Activate language features.
@@ -10,6 +12,13 @@ export function activateLanguage(context: vscode.ExtensionContext) {
     vscode.languages.registerDocumentSymbolProvider(
       { scheme: "file", language: "amalgam" },
       new AmalgamDocumentSymbolProvider()
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.languages.registerDefinitionProvider(
+      { scheme: "file", language: "amalgam" },
+      new AmalgamDefinitionProvider()
     )
   );
 }
