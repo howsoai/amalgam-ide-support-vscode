@@ -37,7 +37,8 @@ export enum RuntimeEvent {
 export enum RuntimeStackType {
   CALL = "Call", // The amalgam "call" stack
   CONSTRUCTION = "Construction", // The construction stack
-  INTERPRET_NODE = "Interpret node", // Standard debugger call stack
+  INTERPRET_NODE = "Interpret node", // Standard debugger call stack Amalgam<54.3.8
+  OPCODE = "Opcode" // Standard debugger call stack Amalgam>=54.3.8
 }
 
 /** The types of breakpoints */
@@ -186,7 +187,7 @@ export class AmalgamRuntime extends EventEmitter {
     breakpointLine: /^ {2}(?<line>\d+)(?: (?<file>.+))?$/gm,
     // Breakpoints and stack are matched via the header line and existing subsequent nested lines
     breakpoints: /^(?<type>Line) Breakpoints:\n(?<brs>^(?:\s{2}.+)+)$/gm,
-    stack: /^(?<type>Interpret node) stack:\n(?<frames>^(?:\s{2}.+)+)$/gm,
+    stack: /^(?<type>Interpret node|Opcode) stack:\n(?<frames>^(?:\s{2}.+)+)$/gm,
     // Expression results match all lines up to final empty line
     expression: /^(?<value>[\s\S]+)\n{2}$/gm,
     // Results match all lines starting with 2 spaces
@@ -823,7 +824,7 @@ export class AmalgamRuntime extends EventEmitter {
       while ((matches = reg.exec(lines)) != null) {
         if (matches.groups) {
           const type = matches.groups.type;
-          if (type !== RuntimeStackType.INTERPRET_NODE) {
+          if (type !== RuntimeStackType.INTERPRET_NODE && type !== RuntimeStackType.OPCODE) {
             continue;
           }
           let frameReg: RegExp;
