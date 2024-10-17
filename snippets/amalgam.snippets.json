@@ -4,7 +4,7 @@
         "body": [
             "(system"
         ],
-        "description": "system string command || Executes system command specified by command.  See system commands in later table."
+        "description": "system string command || Executes system command specified by command.  See the system commands table for further information."
     },
     "(get_defaults": {
         "prefix": "(get_defaults",
@@ -18,7 +18,7 @@
         "body": [
             "(parse"
         ],
-        "description": "parse string str || String is parsed into code, and the result is returned."
+        "description": "parse string str [bool transactional] [bool return_warnings] || String is parsed into code, and the result is returned.  If transactional is false, the default, it will attempt to parse the whole string and will return the closest code possible if there are any parse issues.  If transactional is true, it will parse the string transactionally, meaning that any node that has a parse error or is incomplete will be omitted along with all child nodes except for the top node.  If return_warnings is true, which defaults to false, it will instead return a list, where the first element is the code and the second element is a list of warnings."
     },
     "(unparse": {
         "prefix": "(unparse",
@@ -578,14 +578,14 @@
         "body": [
             "(previous_result"
         ],
-        "description": "previous_result [number stack_distance] || Like target, but evaluates to the resulting node of the previous iteration for applicable opcodes."
+        "description": "previous_result [number stack_distance] [bool copy] || Like target, but evaluates to the resulting node of the previous iteration for applicable opcodes. If copy is true, then a copy of the resulting node of the previous iteration is returned, otherwise the result of the previous iteration is returned directly and consumed."
     },
     "(opcode_stack": {
         "prefix": "(opcode_stack",
         "body": [
             "(opcode_stack"
         ],
-        "description": "opcode_stack || Evaluates to the list of opcodes that include the call stack."
+        "description": "opcode_stack [number stack_distance] [bool no_child_nodes] || Evaluates to the list of opcodes that make up the call stack or a single opcode within the call stack. If stack_distance is specified, then a copy of the node at that specified depth is returned, otherwise the list of all opcodes in opcode stack are returned. Negative values for stack_distance specify the depth from the top of the stack and positive values specify the depth from the bottom. If no_child_nodes is true, then only the root node(s) are returned, otherwise the returned node(s) are deep-copied."
     },
     "(stack": {
         "prefix": "(stack",
@@ -802,7 +802,7 @@
         "body": [
             "(format"
         ],
-        "description": "format * data string from_format string to_format [assoc from_params] [assoc to_params] || Converts data from from_format into to_format.  Supported language types are \"number\", \"string\", and \"code\", where code represents everything beyond number and string.  Beyond the supported language types, additional formats that are stored in a binary string.  The additional formats are \"Base16\", \"Base64\", \"int8\", \"uint8\", \"int16\", \"uint16\", \"int32\", \"uint32\", \"int64\", \"uint64\", \"float\", \"double\", \"INT8\", \"UINT8\", \"INT16\", \"UINT16\", \"INT32\", \"UINT32\", \"INT64\", \"UINT64\", \"FLOAT\", \"DOUBLE\", \"json\", \"yaml\", and \"date\" (though date is a special case).  Lower case binary types names represent little endian and upper case binary type names represent big endian, and binary types will be handled as strings.  The \"date\" type requires additional information.  Following \"date\" is a colon, followed by a standard strftime date format string.  If from_params or to_params are specified, then it will apply the appropriate from or to as appropriate.  If the format is either \"string\", \"json\", or \"yaml\", then the key \"sort_keys\" can be used to specify a boolean value, if true, then it will sort the keys, otherwise the default behavior is to emit the keys based on memory layout.  If the format is date, then the to or from params can be an assoc with \"locale\" and \"timezone\" as optional keys, with the values representing the locale and timezone.  The locale is provided, then it will leverage operating system support to apply appropriate formatting, such as en_US.  Note that UTF-8 is assumed and automatically added to the locale.  If no locale is specified, then the default will be used.  If converting to or from dates, if timezone is specified, it will use the standard timezone name, if unspecified or empty string, it will assume the current time zone."
+        "description": "format * data string from_format string to_format [assoc from_params] [assoc to_params] || Converts data from from_format into to_format.  Supported language types are \"number\", \"string\", and \"code\", where code represents everything beyond number and string.  Beyond the supported language types, additional formats that are stored in a binary string.  The additional formats are \"Base16\", \"Base64\", \"int8\", \"uint8\", \"int16\", \"uint16\", \"int32\", \"uint32\", \"int64\", \"uint64\", \"float\", \"double\", \"INT8\", \"UINT8\", \"INT16\", \"UINT16\", \"INT32\", \"UINT32\", \"INT64\", \"UINT64\", \"FLOAT\", \"DOUBLE\", \"json\", \"yaml\", \"date\", and \"time\" (though date and time are special cases).  Lower case binary types names represent little endian and upper case binary type names represent big endian, and binary types will be handled as strings.  The \"date\" type requires additional information.  Following \"date\" or \"time\" is a colon, followed by a standard strftime date or time format string.  If from_params or to_params are specified, then it will apply the appropriate from or to as appropriate.  If the format is either \"string\", \"json\", or \"yaml\", then the key \"sort_keys\" can be used to specify a boolean value, if true, then it will sort the keys, otherwise the default behavior is to emit the keys based on memory layout.  If the format is date or time, then the to or from params can be an assoc with \"locale\" as an optional key.  If date then \"timezone\" is also allowed.  The locale is provided, then it will leverage operating system support to apply appropriate formatting, such as en_US.  Note that UTF-8 is assumed and automatically added to the locale.  If no locale is specified, then the default will be used.  If converting to or from dates, if timezone is specified, it will use the standard timezone name, if unspecified or empty string, it will assume the current time zone."
     },
     "(get_labels": {
         "prefix": "(get_labels",
@@ -1005,7 +1005,7 @@
         "body": [
             "(total_entity_size"
         ],
-        "description": "total_entity_size id entity || Evaluates to the total count of all of the nodes of the entity represented by the input id and all its contained entities."
+        "description": "total_entity_size id entity || Evaluates to the total count of all of the nodes of the entity represented by the input id and all its contained entities.  Each entity itself counts as multiple nodes, as it requires multiple nodes to create an entity as exhibited by flattening an entity."
     },
     "(flatten_entity": {
         "prefix": "(flatten_entity",
@@ -1096,7 +1096,7 @@
         "body": [
             "(get_entity_rand_seed"
         ],
-        "description": "get_entity_rand_seed id entity || Evaluates to a string representing the current state of the random number generator for the entity specified by id used for seeding the random streams of any calls to the entity."
+        "description": "get_entity_rand_seed [id entity] || Evaluates to a string representing the current state of the random number generator for the entity specified by id used for seeding the random streams of any calls to the entity."
     },
     "(set_entity_rand_seed": {
         "prefix": "(set_entity_rand_seed",
@@ -1110,7 +1110,7 @@
         "body": [
             "(get_entity_root_permission"
         ],
-        "description": "get_entity_root_permission id entity || Returns true if the entity has root permissions, false if not.  Will return null if the caller is not root."
+        "description": "get_entity_root_permission [id entity] || Returns true if the entity has root permissions, false if not.  Will return null if the caller is not root."
     },
     "(set_entity_root_permission": {
         "prefix": "(set_entity_root_permission",
@@ -1152,35 +1152,28 @@
         "body": [
             "(load"
         ],
-        "description": "load string file_path [bool escape_filename] [string file_type] || Loads the data specified by the resource in string.  Attempts to load the file type and parse it into appropriate data and evaluate to the corresponding code. The parameter escape_filename defaults to false, but if it is true, it will agressively escape filenames using only alphanumeric characters and the underscore, using underscore as an escape character.  If file_type is specified and not null, it will use the file_type specified instead of the extension of the file_path.  File formats supported are amlg, json, yaml, csv, and caml; anything not in this list will be loaded as a binary string.  Note that loading from a non-'.amlg' extension will only ever provide lists, assocs, numbers, and strings."
+        "description": "load string resource_path [string resource_type] [assoc params] || Loads the data specified by the resource in string.  Attempts to load the file type and parse it into appropriate data and evaluate to the corresponding code. The parameter escape_filename defaults to false, but if it is true, it will agressively escape filenames using only alphanumeric characters and the underscore, using underscore as an escape character.  If resource_type is specified and not null, it will use the resource_type specified instead of the extension of the resource_path.  File formats supported are amlg, json, yaml, csv, and caml; anything not in this list will be loaded as a binary string.  Note that loading from a non-'.amlg' extension will only ever provide lists, assocs, numbers, and strings."
     },
     "(load_entity": {
         "prefix": "(load_entity",
         "body": [
             "(load_entity"
         ],
-        "description": "load_entity string file_path [id entity] [bool escape_filename] [bool escape_contained_filenames] [string file_type] || Loads an entity specified by the resource in string.  Attempts to load the file type and parse it into appropriate data and store it in the entity specified by id, following the same id creation rules as create_entities, except that if no id is specified, it may default to a name based on the resource if available.  The parameter escape_filename defaults to false, but if it is true, it will agressively escape filenames using only alphanumeric characters and the underscore, using underscore as an escape character.  If escape_contained_filenames is true, which is its default, it will also escape contained entity filenames. If file_type is specified and not null, it will use the file_type specified instead of the extension of the file_path.  File formats supported are amlg, json, yaml, csv, and caml; anything not in this list will be loaded as a binary string.  Note that loading from a non-'.amlg' extension will only ever provide lists, assocs, numbers, and strings."
-    },
-    "(load_persistent_entity": {
-        "prefix": "(load_persistent_entity",
-        "body": [
-            "(load_persistent_entity"
-        ],
-        "description": "load_persistent_entity string file_path [id entity] [bool escape_filename] || Loads an entity specified by the resource in string.  Attempts to load the file type and parse it into appropriate data and store it in the entity specified by id, following the same id creation rules as create_entities. Any modifications to the entity or any entity contained within it will be written out to the resource, so that the memory and persistent storage are synchronized.  The parameter escape_filename defaults to false, but if it is true, it will agressively escape filenames using only alphanumeric characters and the underscore, using underscore as an escape character.  This command will escape contained filenames.  The file type of a persisted entity must match the extension of the file of the main entity.  File formats supported are amlg, json, yaml, csv, and caml; anything not in this list will be loaded as a binary string.  Note that loading from a non-'.amlg' extension will only ever provide lists, assocs, numbers, and strings.\n\n<b>WARNING:</b> Loading the same file as a persistent entity in more than one place will overwrite the file each time either entity is altered, but changes will not be propogated between the entities."
+        "description": "load_entity string resource_path [id entity] [string resource_type] [bool persistent] [assoc params] || Loads an entity specified by the resource in string.  Attempts to load the file type and parse it into appropriate data and store it in the entity specified by id, following the same id creation rules as create_entities, except that if no id is specified, it may default to a name based on the resource if available.  If persistent is true, default is false, then any modifications to the entity or any entity contained within it will be written out to the resource, so that the memory and persistent storage are synchronized.  Options for the file I/O are specified as key-value pairs in params.  See File I/O for the file types and related params."
     },
     "(store": {
         "prefix": "(store",
         "body": [
             "(store"
         ],
-        "description": "store string file_path * node [bool escape_filename] [string file_type] [assoc params] || Stores the code specified by * to the resource in string. Returns true if successful, false if not. The parameter escape_filename defaults to false, but if it is true, it will agressively escape filenames using only alphanumeric characters and the underscore, using underscore as an escape character.   If file_type is specified and not null, it will use the file_type specified instead of the extension of the file_path.  File formats supported are amlg, json, yaml, csv, and caml; anything not in this list will be loaded as a binary string.  Note that loading from a non-'.amlg' extension will only ever provide lists, assocs, numbers, and strings.  If params is specified, it is an assoc that contains key-value pairs describing the format.  The key \"sort_keys\" can be used to specify a boolean value, if true, then it will sort the keys, otherwise the default behavior is to emit the keys based on memory layout."
+        "description": "store string resource_path * node [string resource_type] [assoc params] || Stores the code specified by * to the resource in string. Returns true if successful, false if not. If resource_type is specified and not null, it will use the resource_type specified instead of the extension of the resource_path.    Options for the file I/O are specified as key-value pairs in params.  See File I/O for the file types and related params."
     },
     "(store_entity": {
         "prefix": "(store_entity",
         "body": [
             "(store_entity"
         ],
-        "description": "store_entity string file_path id entity [bool escape_filename] [bool escape_contained_filenames] [string file_type] [assoc params] || Stores the entity specified by the id to the resource in string. Returns true if successful, false if not. The parameter escape_filename defaults to false, but if it is true, it will agressively escape filenames using only alphanumeric characters and the underscore, using underscore as an escape character.  If escape_contained_filenames is true, which is its default, it will also escape contained entity filenames.  If file_type is specified and not null, it will use the file_type specified instead of the extension of the file_path.  File formats supported are amlg, json, yaml, csv, and caml; anything not in this list will be loaded as a binary string.  Note that loading from a non-'.amlg' extension will only ever provide lists, assocs, numbers, and strings.  If params is specified, it is an assoc that contains key-value pairs describing the format.  The key \"sort_keys\" can be used to specify a boolean value, if true, then it will sort the keys, otherwise the default behavior is to emit the keys based on memory layout.  The key \"include_rand_seeds\" can be used when storing caml files to indicate whether random seeds will be stored, which defaults to true.  The key \"parallel_create\" can be used when storing caml files to indicate whether creating entities will be performed in parallel when the caml is loaded, which defaults to false."
+        "description": "store_entity string resource_path id entity [string resource_type] [bool persistent] [assoc params] || Stores the entity specified by the id to the resource in string. Returns true if successful, false if not. If resource_type is specified and not null, it will use the resource_type specified instead of the extension of the resource_path.  If persistent is true, default is false, then any modifications to the entity or any entity contained within it will be written out to the resource, so that the memory and persistent storage are synchronized.  Options for the file I/O are specified as key-value pairs in params.  See File I/O for the file types and related params."
     },
     "(contains_entity": {
         "prefix": "(contains_entity",
@@ -1467,14 +1460,14 @@
         "body": [
             "(call_entity"
         ],
-        "description": "call_entity id entity [string label_name] [assoc arguments] [number operation_limit] [number max_node_allocations] [number max_opcode_execution_depth] || Calls the contained entity specified by id, using the entity as the new entity context.  It will evaluate to the return value of the call, null if not found.  If string is specified, then it will call the label specified by string.  If assoc is specified, then it will pass assoc as the arguments on the scope stack.  If operation_limit is specified, it represents the number of operations that are allowed to be performed. If operation_limit is 0 or infinite, then an infinite of operations will be allotted to the entity, but only if its containing entity (the current entity) has infinite operations. The root entity has infinite computing cycles.  If max_node_allocations is specified, it represents the maximum number of nodes that are allowed to be allocated, limiting the total memory.   If max_node_allocations is 0 or infinite, then there is no limit to the number of nodes to be allotted to the entity as long as the machine has sufficient memory, but only if the containing entity (the current entity) has unlimited memory access.  If max_opcode_execution_depth is 0 or infinite and the caller also has no limit, then there is no limit to the depth that opcodes can execute, otherwise max_opcode_execution_depth limits how deep nested opcodes will be called.  The execution performed will use a random number stream created from the entity's random number stream."
+        "description": "call_entity id entity [string label_name] [assoc arguments] [number operation_limit] [number max_node_allocations] [number max_opcode_execution_depth] [number max_contained_entities] [number max_contained_entity_depth] [number max_entity_id_length] || Calls the contained entity specified by id, using the entity as the new entity context.  It will evaluate to the return value of the call, null if not found.  If string is specified, then it will call the label specified by string.  If assoc is specified, then it will pass assoc as the arguments on the scope stack.  If operation_limit is specified, it represents the number of operations that are allowed to be performed. If operation_limit is 0 or infinite, then an infinite of operations will be allotted to the entity, but only if its containing entity (the current entity) has infinite operations. The root entity has infinite computing cycles.  If max_node_allocations is specified, it represents the maximum number of nodes that are allowed to be allocated, limiting the total memory.   If max_node_allocations is 0 or infinite, then there is no limit to the number of nodes to be allotted to the entity as long as the machine has sufficient memory, but only if the containing entity (the current entity) has unlimited memory access.  If max_opcode_execution_depth is 0 or infinite and the caller also has no limit, then there is no limit to the depth that opcodes can execute, otherwise max_opcode_execution_depth limits how deep nested opcodes will be called.  The parameters max_contained_entities, max_contained_entity_depth, and max_entity_id_length constrain what they describe, and are primarily useful when ensuring that an entity and all its contained entities can be stored out to the filesystem.  The execution performed will use a random number stream created from the entity's random number stream."
     },
     "(call_entity_get_changes": {
         "prefix": "(call_entity_get_changes",
         "body": [
             "(call_entity_get_changes"
         ],
-        "description": "call_entity_get_changes id entity [string label_name] [assoc arguments] [number operation_limit] [number max_node_allocations] [number max_opcode_execution_depth] || Like call_entity returning the value in *1.  However, it also returns a list of direct_assign_to_entities calls with respective data in *2, holding a log of all of the changes that have elapsed.  The log may be evaluated to apply or re-apply the changes to any id passed in to the log as _."
+        "description": "call_entity_get_changes id entity [string label_name] [assoc arguments] [number operation_limit] [number max_node_allocations] [number max_opcode_execution_depth] [number max_contained_entities] [number max_contained_entity_depth] [number max_entity_id_length] || Like call_entity returning the value in *1.  However, it also returns a list of direct_assign_to_entities calls with respective data in *2, holding a log of all of the changes that have elapsed.  The log may be evaluated to apply or re-apply the changes to any id passed in to the log as _."
     },
     "(call_container": {
         "prefix": "(call_container",
