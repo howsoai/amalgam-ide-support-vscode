@@ -1196,13 +1196,6 @@
         ],
         "description": "compute_on_contained_entities [id containing_entity] [list conditions] || Performs queries like contained_entities but returns a value or set of values appropriate for the last query in conditions.  The parameter conditions is a conjunction of conditions that are required in order for the final query to be evaluated.  Each entity in the list is a query.  The conditions are all of the commands that begin with query_.  If the last query does not return anything, then it will just return the matching entities."
     },
-    "(query_count": {
-        "prefix": "(query_count",
-        "body": [
-            "(query_count"
-        ],
-        "description": "query_count || When used as a compute_on_contained_entities argument, counts the number of entities that match the criteria and returns the number."
-    },
     "(query_select": {
         "prefix": "(query_select",
         "body": [
