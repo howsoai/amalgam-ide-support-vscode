@@ -102,6 +102,17 @@
 					}
 				},
 				{
+					"match": "^(VERIFY_ENTITY) (\\S+)?$",
+					"captures": {
+						"1": {
+							"name": "keyword.control.command.trace"
+						},
+						"2": {
+							"name": "string.quoted.double.trace"
+						}
+					}
+				},
+				{
 					"match": "^([A-Z_]+)(?: (\\S+) .*)?$",
 					"captures": {
 						"1": {
