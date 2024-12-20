@@ -38,7 +38,7 @@ export enum RuntimeStackType {
   CALL = "Call", // The amalgam "call" stack
   CONSTRUCTION = "Construction", // The construction stack
   INTERPRET_NODE = "Interpret node", // Standard debugger call stack Amalgam<54.3.8
-  OPCODE = "Opcode" // Standard debugger call stack Amalgam>=54.3.8
+  OPCODE = "Opcode", // Standard debugger call stack Amalgam>=54.3.8
 }
 
 /** The types of breakpoints */

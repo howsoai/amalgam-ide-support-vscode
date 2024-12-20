@@ -8,16 +8,16 @@ import { InlineDebugAdapterFactory, ExternalDebugAdapterFactory } from "./debugg
  */
 const runMode: "external" | "inline" = "inline";
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
   // debug adapters can be run in different ways by using a vscode.DebugAdapterDescriptorFactory:
   switch (runMode) {
     case "inline":
       // Run the debug adapter inside the extension and directly talk to it
-      activateDebug(context, new InlineDebugAdapterFactory());
+      await activateDebug(context, new InlineDebugAdapterFactory());
       break;
     case "external":
       // Run the debug adapter as a separate process
-      activateDebug(context, new ExternalDebugAdapterFactory());
+      await activateDebug(context, new ExternalDebugAdapterFactory());
       break;
     default:
       throw new Error(`Run mode '${runMode}' not implemented`);
