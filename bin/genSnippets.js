@@ -21,13 +21,18 @@ async function convert(filePath) {
   const output = {};
 
   for (const item of language) {
-    const { parameter, description } = item;
+    const { parameter, description, ...docs } = item;
     if (parameter != null) {
-      const opcode = "(" + parameter.split(" ")[0];
+      let params = parameter.split(" ");
+      if (params[0].startsWith("[")) continue;
+      const opcode = "(" + params[0];
+      params = params.slice(1).join(" ");
       output[opcode] = {
         prefix: opcode,
         body: [opcode],
-        description: `${parameter} || ${description}`,
+        description: `${params} || ${description}`,
+        // Custom property for use in HoverProvider
+        $doc: docs,
       };
     }
   }
