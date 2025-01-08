@@ -219,11 +219,22 @@
     {
       "name": "@mono-3",
       "scope": [
+        "comment.line.semicolon",
         "comment.markup.link",
         "punctuation.definition.comment"
       ],
       "settings": {
         "foreground": "#5C636F"
+      }
+    },
+    {
+      "name": "@mono-4",
+      "scope": [
+        "keyword.codetag.notation"
+      ],
+      "settings": {
+        "foreground": "#0000FF",
+        "fontStyle": "italic"
       }
     }
   ]

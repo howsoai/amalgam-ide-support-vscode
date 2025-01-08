@@ -11,13 +11,13 @@
   "keyEquivalent": "^~L",
   "patterns": [
     {
-      "name": "punctuation.definition.comment.amalgam",
+      "name": "comment.line.semicolon.amalgam",
       "begin": ";",
       "end": "$",
       "patterns": [
         {
           "match": "\\b(TODO|FIXME|NOTE)\\b",
-          "name": "markup.quote.note.amalgam"
+          "name": "keyword.codetag.notation.amalgam"
         }
       ]
     },
