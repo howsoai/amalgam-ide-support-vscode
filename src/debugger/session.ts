@@ -266,8 +266,16 @@ export class AmalgamDebugSession extends LoggingDebugSession {
       case "watch":
         rv = await this.runtime.evaluate(args.expression);
         break;
-      case "variables":
       case "hover":
+        if (args.expression.startsWith("(") && args.expression.endsWith(")")) {
+          // Evaluate opcode expression
+          rv = await this.runtime.evaluate(args.expression);
+        } else {
+          // Get variable value
+          rv = await this.runtime.getVariablePreview(args.expression);
+        }
+        break;
+      case "variables":
       case "clipboard":
       default: {
         const [category, expr] = args.expression.split(" ");

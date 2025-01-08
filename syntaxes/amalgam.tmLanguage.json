@@ -11,13 +11,15 @@
   "keyEquivalent": "^~L",
   "patterns": [
     {
-      "captures": {
-        "1": {
-          "name": "punctuation.definition.comment.amalgam"
+      "name": "punctuation.definition.comment.amalgam",
+      "begin": ";",
+      "end": "$",
+      "patterns": [
+        {
+          "match": "\\b(TODO|FIXME|NOTE)\\b",
+          "name": "markup.quote.note.amalgam"
         }
-      },
-      "match": "(;.*$)\\n?",
-      "name": "comment.line.semicolon.amalgam"
+      ]
     },
     {
       "captures": {
@@ -57,7 +59,7 @@
       "name": "variable.other.global.amalgam"
     },
     {
-      "match": "(?<=\\()(abs|accum|accum_entity_roots|accum_to_entities|acos|acosh|and|append|apply|args|asin|asinh|assign|assign_entity_roots|assign_to_entities|assoc|atan|atanh|call|call_container|call_entity|call_entity_get_changes|call_sandboxed|ceil|round|clone_entities|commonality|commonality_entities|compute_on_contained_entities|weighted_rand|compute_entity_group_kl_divergence|compute_entity_distance_contributions|compute_entity_kl_divergences|compute_entity_convictions|concat|conclude|contained_entities|contains_entity|contains_index|contains_label|contains_value|cos|cosh|create_entities|declare|dot_product|deep_set_entity_rand_seed|remove|keep|destroy_entities|difference|difference_entities|direct_assign_to_entities|direct_retrieve_from_entity|edit_distance|edit_distance_entities|entropy|erf|exp|explode|first|flatten_entity|floor|format|generalized_distance|get|get_all_labels|get_comments|get_concurrency|get_defaults|get_entity_comments|get_entity_rand_seed|get_entity_root_permission|get_labels|get_rand_seed|get_type|get_type_string|get_value|if|indices|intersect|intersect_entities|last|let|lgamma|load|load_entity|log|max|min|mix|mix_entities|mix_labels|mod|move_entities|mutate|mutate_entity|not|or|parallel|parse|pow|crypto_sign|crypto_sign_verify|encrypt|decrypt|print|query_among|query_not_among|query_between|query_equals|query_exists|query_greater_or_equal_to|query_in_entity_list|query_min_difference|query_max_difference|query_value_masses|query_mode|query_median|query_sum|query_less_or_equal_to|query_max|query_min|query_nearest_distance|query_nearest_generalized_distance|query_not_between|query_not_equals|query_not_exists|query_not_in_entity_list|query_sample|query_weighted_sample|query_select|query_within_distance|query_within_generalized_distance|query_generalized_mean|rand|range|retrieve|retrieve_entity_root|retrieve_from_entity|return|reverse|seq|set|set_comments|set_concurrency|set_entity_rand_seed|set_entity_root_permission|set_labels|set_rand_seed|set_type|set_value|sin|sinh|size|sqrt|split|stack|store|store_entity|substr|system|system_time|tail|tan|tanh|tgamma|total_entity_size|total_size|trunc|union|union_entities|unparse|unzip|values|associate|while|xor|zip_labels|filter|list|map|reduce|replace|rewrite|sort|weave|zip|lambda|null|target|\\+|\\-|\\*|\\/|=|\\<=|\\>=|\\!=|~|\\!~| \\S+)(?=\\s+)",
+      "match": "(?<=\\()(abs|accum|accum_entity_roots|accum_to_entities|acos|acosh|and|append|apply|args|asin|asinh|assign|assign_entity_roots|assign_to_entities|assoc|atan|atanh|call|call_container|call_entity|call_entity_get_changes|call_sandboxed|ceil|round|clone_entities|commonality|commonality_entities|compute_on_contained_entities|weighted_rand|compute_entity_group_kl_divergence|compute_entity_distance_contributions|compute_entity_kl_divergences|compute_entity_convictions|concat|conclude|contained_entities|contains_entity|contains_index|contains_label|contains_value|cos|cosh|create_entities|declare|dot_product|deep_set_entity_rand_seed|remove|keep|destroy_entities|difference|difference_entities|direct_assign_to_entities|direct_retrieve_from_entity|edit_distance|edit_distance_entities|entropy|erf|exp|explode|first|flatten_entity|floor|format|generalized_distance|get|get_all_labels|get_comments|get_concurrency|get_defaults|get_entity_comments|get_entity_rand_seed|get_entity_root_permission|get_labels|get_rand_seed|get_type|get_type_string|get_value|if|index_max|index_min|indices|intersect|intersect_entities|last|let|lgamma|load|load_entity|log|max|min|mix|mix_entities|mix_labels|mod|move_entities|mutate|mutate_entity|not|or|parallel|parse|pow|crypto_sign|crypto_sign_verify|encrypt|decrypt|print|query_among|query_not_among|query_between|query_equals|query_exists|query_greater_or_equal_to|query_in_entity_list|query_min_difference|query_max_difference|query_value_masses|query_mode|query_median|query_sum|query_less_or_equal_to|query_max|query_min|query_nearest_distance|query_nearest_generalized_distance|query_not_between|query_not_equals|query_not_exists|query_not_in_entity_list|query_sample|query_weighted_sample|query_select|query_within_distance|query_within_generalized_distance|query_generalized_mean|rand|range|retrieve|retrieve_entity_root|retrieve_from_entity|return|reverse|seq|set|set_comments|set_concurrency|set_entity_rand_seed|set_entity_root_permission|set_labels|set_rand_seed|set_type|set_value|sin|sinh|size|sqrt|split|stack|store|store_entity|substr|system|system_time|tail|tan|tanh|tgamma|total_entity_size|total_size|trunc|union|union_entities|unparse|unzip|values|associate|while|xor|zip_labels|filter|list|map|reduce|replace|rewrite|sort|weave|zip|lambda|null|target|\\+|\\-|\\*|\\/|=|\\<|\\>|\\<=|\\>=|\\!=|~|\\!~| \\S+)(?=\\s+)",
       "name": "keyword.control.amalgam"
     },
     {
