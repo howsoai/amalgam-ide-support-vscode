@@ -313,7 +313,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
   protected scopesRequest(response: DebugProtocol.ScopesResponse): void {
     response.body = {
       scopes: [
-        new Scope("Variables", this._variableHandles.create("vars"), false),
+        new Scope("Variables", this._variableHandles.create("vars"), true),
         new Scope("Labels", this._variableHandles.create("labels"), true),
         new Scope("Entities", this._variableHandles.create("entities"), true),
       ],
