@@ -101,7 +101,7 @@
                 "scopeName": "source.trace",
                 "path": "./syntaxes/trace.tmLanguage.json",
                 "embeddedLanguages": {
-                    "source.json": "json"
+                    "meta.embedded.block.json": "json"
                 }
             }
         ],
