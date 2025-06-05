@@ -1,6 +1,6 @@
 {
     "name": "amalgam-lang",
-    "version": "2.2.4",
+    "version": "2.3.0",
     "type": "commonjs",
     "publisher": "howso",
     "displayName": "Amalgam Language",
@@ -47,7 +47,7 @@
         "@types/vscode": "~1.74.0",
         "@typescript-eslint/eslint-plugin": "^5.48.1",
         "@typescript-eslint/parser": "^5.48.1",
-        "@vscode/vsce": "^2.21.0",
+        "@vscode/vsce": "^3.5.0",
         "eslint": "^8.38.0",
         "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-prettier": "^4.2.1",
@@ -101,7 +101,7 @@
                 "scopeName": "source.trace",
                 "path": "./syntaxes/trace.tmLanguage.json",
                 "embeddedLanguages": {
-                    "source.json": "json"
+                    "meta.embedded.block.json": "json"
                 }
             }
         ],

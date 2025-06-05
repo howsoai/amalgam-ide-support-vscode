@@ -7,7 +7,7 @@
         "description": "string command || Executes system command specified by command.  See the system commands table for further information.",
         "$doc": {
             "output": "*",
-            "permissions": "r",
+            "permissions": "depends on command",
             "new value": "new",
             "example": "(system \"exit\")"
         }
@@ -21,6 +21,18 @@
         "$doc": {
             "output": "*",
             "example": "(get_defaults mutation_opcodes)"
+        }
+    },
+    "(reclaim_resources": {
+        "prefix": "(reclaim_resources",
+        "body": [
+            "(reclaim_resources"
+        ],
+        "description": "[id_path entity] [bool apply_to_all_contained_entities] [bool clear_query_caches] [bool collect_garbage] [bool force_free_memory]  || Frees resources of the specified types on entity, which is the current entity if null, and will include all contained entities if apply_to_all_contained_entities is true, which defaults to false, though the opcode will be unable to complete if there are concurrent threads running on any of the contained entities.  The parameter clear_query_caches will remove the query caches, which will make it faster to add, remove, or edit contained entities, but the cache will be rebuilt once a query is called.  The parameter collect_garbage will perform garbage collection on the entity, and if force_free_memory is true, it will reallocate memory buffers to their current size, after garbage collection if both are specified.",
+        "$doc": {
+            "output": "*",
+            "permissions": "alter_performance",
+            "example": "(reclaim_resources (null) (true) (false) (true) (false))"
         }
     },
     "(parse": {
@@ -340,7 +352,6 @@
         "description": " || Evaluates to a string representing the current state of the random number generator.",
         "$doc": {
             "output": "string",
-            "permissions": "",
             "new value": "new",
             "example": "(print (get_rand_seed) \"\\n\")"
         }
@@ -353,7 +364,6 @@
         "description": "* node || Sets the random number seed and state for the current random number stream without affecting any entity.  If node is already a string in the proper format output by get_entity_rand_seed, then it will set the random generator to that current state, picking up where the previous state left off.  If it is anything else, it uses the value as a random seed to start the genrator.",
         "$doc": {
             "output": "string",
-            "permissions": "",
             "example": " (declare (assoc cur_seed (get_rand_seed)))\n (print (rand) \"\\n\")\n (set_rand_seed cur_seed)\n (print (rand) \"\\n\")"
         }
     },
@@ -365,7 +375,7 @@
         "description": " || Evaluates to the current system time since epoch in seconds (including fractions of seconds).",
         "$doc": {
             "output": "number",
-            "permissions": "r",
+            "permissions": "environment",
             "example": "(print (system_time))"
         }
     },
@@ -530,6 +540,18 @@
             "example": "(print (sin 0.5))"
         }
     },
+    "(asin": {
+        "prefix": "(asin",
+        "body": [
+            "(asin"
+        ],
+        "description": "number length || Arc sine (inverse sine)",
+        "$doc": {
+            "output": "number",
+            "new value": "new",
+            "example": "(print (sin 0.5))"
+        }
+    },
     "(cos": {
         "prefix": "(cos",
         "body": [
@@ -547,7 +569,7 @@
         "body": [
             "(acos"
         ],
-        "description": "number theta || inverse cosine",
+        "description": "number length || Arc cosine (inverse cosine)",
         "$doc": {
             "output": "number",
             "new value": "new",
@@ -571,7 +593,7 @@
         "body": [
             "(atan"
         ],
-        "description": "number theta [number divisor] || Inverse tangent.  If two numbers are provided, then it evaluates atan theta/divisor.",
+        "description": "number num [number divisor] || Arc tangent (inverse tangent).  If two numbers are provided, then it evaluates atan num/divisor.",
         "$doc": {
             "output": "number",
             "new value": "new",
@@ -583,7 +605,7 @@
         "body": [
             "(sinh"
         ],
-        "description": "number theta || hyperbolic sine",
+        "description": "number z || hyperbolic sine",
         "$doc": {
             "output": "number",
             "new value": "new",
@@ -595,7 +617,7 @@
         "body": [
             "(asinh"
         ],
-        "description": "number theta || area hyperbolic sine",
+        "description": "number x || area hyperbolic sine",
         "$doc": {
             "output": "number",
             "new value": "new",
@@ -607,7 +629,7 @@
         "body": [
             "(cosh"
         ],
-        "description": "number theta || hyperbolic cosine",
+        "description": "number z || hyperbolic cosine",
         "$doc": {
             "output": "number",
             "new value": "new",
@@ -619,7 +641,7 @@
         "body": [
             "(acosh"
         ],
-        "description": "number theta || area hyperbolic cosine",
+        "description": "number x || area hyperbolic cosine",
         "$doc": {
             "output": "number",
             "new value": "new",
@@ -631,7 +653,7 @@
         "body": [
             "(tanh"
         ],
-        "description": "number theta || hyperbolic tangent",
+        "description": "number z || hyperbolic tangent",
         "$doc": {
             "output": "number",
             "new value": "new",
@@ -643,7 +665,7 @@
         "body": [
             "(atanh"
         ],
-        "description": "number theta || area hyperbolic tanh",
+        "description": "number x || area hyperbolic tanh",
         "$doc": {
             "output": "number",
             "new value": "new",
@@ -984,7 +1006,7 @@
         "body": [
             "(sort"
         ],
-        "description": "[* function] list l [number k] || Returns a new list containing the list with its elements sorted in increasing order.  Numerical values come before strings, and code will be evaluated as the representative strings.  If function is specified and not null, it pushes a pair of new scope onto the stack with (current_value) and (current_value 1) accessesing a pair of elements from the list, and evaluates function. The function should return a number, positive if \"(current_value)\" is greater, negative if \"(current_value 1)\" is greater, 0 if equal.  If k is specified in addition to function, then it will only return the k smallest values sorted in order, or, if k is negative, it will ignore the negative sign and return the highest k values.",
+        "description": "[* function] list|assoc l [number k] || Returns a new list containing the list with its values sorted in increasing order, regardless of whether l is an assoc or list.  Numerical values come before strings, and code will be evaluated as the representative strings.  If function is null or true it sorts ascending, if false it sorts descending, and if any other value it pushes a pair of new scope onto the stack with (current_value) and (current_value 1) accessing a pair of elements from the list, and evaluates function.  The function should return a number, positive if \"(current_value)\" is greater, negative if \"(current_value 1)\" is greater, 0 if equal.  If k is specified in addition to function and not null, then it will only return the k smallest values sorted in order, or, if k is negative, it will ignore the negative sign and return the highest k values.",
         "$doc": {
             "output": "list",
             "new value": "partial",
@@ -1361,7 +1383,7 @@
         "body": [
             "(format"
         ],
-        "description": "* data string from_format string to_format [assoc from_params] [assoc to_params] || Converts data from from_format into to_format.  Supported language types are \"number\", \"string\", and \"code\", where code represents everything beyond number and string.  Beyond the supported language types, additional formats that are stored in a binary string.  The additional formats are \"Base16\", \"Base64\", \"int8\", \"uint8\", \"int16\", \"uint16\", \"int32\", \"uint32\", \"int64\", \"uint64\", \"float\", \"double\", \"INT8\", \"UINT8\", \"INT16\", \"UINT16\", \"INT32\", \"UINT32\", \"INT64\", \"UINT64\", \"FLOAT\", \"DOUBLE\", \"json\", \"yaml\", \"date\", and \"time\" (though date and time are special cases).  Lower case binary types names represent little endian and upper case binary type names represent big endian, and binary types will be handled as strings.  The \"date\" type requires additional information.  Following \"date\" or \"time\" is a colon, followed by a standard strftime date or time format string.  If from_params or to_params are specified, then it will apply the appropriate from or to as appropriate.  If the format is either \"string\", \"json\", or \"yaml\", then the key \"sort_keys\" can be used to specify a boolean value, if true, then it will sort the keys, otherwise the default behavior is to emit the keys based on memory layout.  If the format is date or time, then the to or from params can be an assoc with \"locale\" as an optional key.  If date then \"timezone\" is also allowed.  The locale is provided, then it will leverage operating system support to apply appropriate formatting, such as en_US.  Note that UTF-8 is assumed and automatically added to the locale.  If no locale is specified, then the default will be used.  If converting to or from dates, if timezone is specified, it will use the standard timezone name, if unspecified or empty string, it will assume the current time zone.",
+        "description": "* data string from_format string to_format [assoc from_params] [assoc to_params] || Converts data from from_format into to_format.  Supported language types are \"number\", \"string\", and \"code\", where code represents everything beyond number and string.  Beyond the supported language types, additional formats that are stored in a binary string.  The additional formats are \"Base16\", \"Base64\", \"int8\", \"uint8\", \"int16\", \"uint16\", \"int32\", \"uint32\", \"int64\", \"uint64\", \"float\", \"double\", \"INT8\", \"UINT8\", \"INT16\", \"UINT16\", \"INT32\", \"UINT32\", \"INT64\", \"UINT64\", \"FLOAT\", \"DOUBLE\", \"json\", \"yaml\", \"date\", and \"time\" (though date and time are special cases).  Lower case binary types names represent little endian and upper case binary type names represent big endian, and binary types will be handled as strings.  The \"date\" type requires additional information.  Following \"date\" or \"time\" is a colon, followed by a standard strftime date or time format string.  If from_params or to_params are specified, then it will apply the appropriate from or to as appropriate.  If the format is either \"string\", \"json\", or \"yaml\", then the key \"sort_keys\" can be used to specify a boolean value, if true, then it will sort the keys, otherwise the default behavior is to emit the keys based on memory layout.  If the format is date or time, then the to or from params can be an assoc with \"locale\" as an optional key.  If date then \"time_zone\" is also allowed.  The locale is provided, then it will leverage operating system support to apply appropriate formatting, such as en_US.  Note that UTF-8 is assumed and automatically added to the locale.  If no locale is specified, then the default will be used.  If converting to or from dates, if time_zone is specified, it will use the standard time_zone name, if unspecified or empty string, it will assume the current time zone.",
         "$doc": {
             "output": "*",
             "new value": "new",
@@ -1723,7 +1745,7 @@
         "description": "id_path entity [bool include_rand_seeds] [bool parallel_create] [bool include_version] || Evaluates to code that, if called, would completely reproduce the entity specified by id_path, as well as all contained entities.  If include_rand_seeds is true, its default, it will include all entities' random seeds.  If parallel_create is true, then the creates will be performed with parallel markers as appropriate for each group of contained entities.  If include_version is true, it will include a comment on the top node that is the current version of the Amalgam interpreter, which can be used for validating interoperability when loading code.  The code returned accepts two parameters, create_new_entity, which defaults to true, and new_entity, which defaults to null.  If create_new_entity is true, then it will create a new entity with id_path specified by new_entity, where null will create an unnamed entity.  If create_new_entity is false, then it will overwrite the current entity's code and create all contained entities.",
         "$doc": {
             "output": "*",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(create_entities \"FlattenTest\" (lambda\n  (parallel ##a (rand) )\n))\n(let (assoc fe (flatten_entity \"FlattenTest\"))\n  (print fe)\n  (print (flatten_entity (call fe)))\n  (print (difference_entities \"FlattenTest\" (call fe)))\n (call fe (assoc create_new_entity (false) new_entity \"new_entity_name\")) \n)"
         }
@@ -1736,7 +1758,7 @@
         "description": "id_path entity1 [number mutaton_rate] [id_path entity2] [assoc mutation_weights] [assoc operation_type] || Creates a mutated version of the entity specified by entity1 like mutate. Returns the id_path of a new entity created contained by the entity that ran it.  The value specified in mutation_rate, from 0.0 to 1.0 and defaulting to 0.00001, indicates the probability that any node will experience a mutation.  Uses entity2 as the optional destination via an internal call to create_contained_entity. The parameter mutation_weights is an assoc where the keys are the allowed opcode names and the values are the probabilities that each opcode would be chosen; if null or unspecified, it defaults to all opcodes each with their own default probability.  The operation_type is an assoc where the keys are mutation operations and the values are the probabilities that the operations will be performed.  The operations can consist of the strings change_type, delete, insert, swap_elements, deep_copy_elements, delete_elements, and change_label.",
         "$doc": {
             "output": "id_path",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(create_entities\n    \"MutateEntity\"\n  (lambda (list 1 2 3 4 5 6 7 8 9 10 11 12 13 14 (assoc \"a\" 1 \"b\" 2)))\n)\n(mutate_entity \"MutateEntity\" 0.4 \"MutatedEntity\")\n(print (retrieve_entity_root \"MutatedEntity\"))"
         }
@@ -1749,7 +1771,7 @@
         "description": "id_path entity1 id_path entity2 || Evaluates to the total count of all of the nodes referenced within entity1 and entity2 that are equivalent, including all contained entities.",
         "$doc": {
             "output": "number",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(create_entities \"e1\" (lambda (assoc \"a\" 3 \"b\" 4)) )\n(create_entities \"e2\" (lambda (assoc \"c\" 3 \"b\" 4)) )\n(print (commonality_entities \"e1\" \"e2\"))"
         }
@@ -1762,7 +1784,7 @@
         "description": "id_path entity1 id_path entity2 || Evaluates to the edit distance of all of the nodes referenced within entity1 and entity2 that are equivalent, including all contained entities.",
         "$doc": {
             "output": "number",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(create_entities \"e1\" (lambda (assoc \"a\" 3 \"b\" 4)) )\n(create_entities \"e2\" (lambda (assoc \"c\" 3 \"b\" 4)) )\n(print (edit_distance_entities \"e1\" \"e2\"))"
         }
@@ -1775,7 +1797,7 @@
         "description": "id_path entity1 id_path entity2 [id_path entity3] || Creates an entity of whatever is common between the Entities represented by entity1 and entity2 exclusive.  Returns the id_path of a new entity created contained by the entity that ran it.  Uses entity3 as the optional destination via an internal call create_contained_entity. Any contained entities will be intersected either based on matching name or maximal similarity for nameless entities.",
         "$doc": {
             "output": "id_path",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(create_entities \"e1\" (lambda (assoc \"a\" 3 \"b\" 4)) )\n(create_entities \"e2\" (lambda (assoc \"c\" 3 \"b\" 4)) )\n(intersect_entities \"e1\" \"e2\" \"e3\"))\n(print (retrieve_entity_root \"e3\")))"
         }
@@ -1788,7 +1810,7 @@
         "description": "id_path entity1 id_path entity2 [id_path entity3] || Creates an entity of whatever is inclusive when merging the Entities represented by entity1 and entity2.  Returns the id_path of a new entity created contained by the entity that ran it.  Uses entity3 as the optional destination via an internal call to create_contained_entity.  Any contained entities will be unioned either based on matching name or maximal similarity for nameless entities.",
         "$doc": {
             "output": "id_path",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(create_entities \"e1\" (lambda (assoc \"a\" 3 \"b\" 4)) )\n(create_entities \"e2\" (lambda (assoc \"c\" 3 \"b\" 4)) )\n(union_entities \"e1\" \"e2\" \"e3\"))\n(print (retrieve_entity_root \"e3\")))"
         }
@@ -1801,7 +1823,7 @@
         "description": "id_path entity1 id_path entity2 || Finds the difference between the entities specified by entity1 and entity2 and generates code that, if evaluated passing the entity id_path as its parameter \"_\", would create a new entity into the id_path specified by its parameter \"new_entity\" (null if unspecified), which would contain the applied difference between the two entities and returns the newly created entity id_path.  Useful for finding the smallest set of what needs to be changed to apply it to a new and different entity.",
         "$doc": {
             "output": "*",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(create_entities \"DiffEntity1\" (lambda (assoc \"a\" 3 \"b\" 4)) )\n(create_entities (list \"DiffEntity1\" \"DiffEntityChild1\") (lambda (assoc \"x\" 3 \"y\" 4 \"z\" 6)) )\n(create_entities (list \"DiffEntity1\" \"DiffEntityChild1\" \"DiffEntityChild2\") (lambda (assoc \"p\" 3 \"q\" 4 \"u\" 5 \"v\" 6 \"w\" 7)) )\n(create_entities (list \"DiffEntity1\" \"DiffEntityChild1\" \"DiffEntityChild2\" \"DiffEntityChild3\") (lambda (assoc \"e\" 3 \"p\" 4 \"a\" 5 \"o\" 6 \"w\" 7)) )\n(create_entities (list \"DiffEntity1\" \"OnlyIn1\") (lambda (assoc \"m\" 4)) )\n(create_entities (list \"DiffEntity1\") (lambda (assoc \"E\" 3 \"F\" 4)) )\n(create_entities (list \"DiffEntity1\") (lambda (assoc \"e\" 3 \"f\" 4 \"g\" 5 \"h\" 6)) )\n\n(create_entities \"DiffEntity2\" (lambda (assoc \"c\" 3 \"b\" 4)) )\n(create_entities (list \"DiffEntity2\" \"DiffEntityChild1\") (lambda (assoc \"x\" 3 \"y\" 4 \"z\" 5)) )\n(create_entities (list \"DiffEntity2\" \"DiffEntityChild1\" \"DiffEntityChild2\") (lambda (assoc \"p\" 3 \"q\" 4 \"u\" 5 \"v\" 6 \"w\" 7)) )\n(create_entities (list \"DiffEntity2\" \"DiffEntityChild1\" \"DiffEntityChild2\" \"DiffEntityChild3\") (lambda (assoc \"e\" 3 \"p\" 4 \"a\" 5 \"o\" 6 \"w\" 7)) )\n(create_entities (list \"DiffEntity2\" \"OnlyIn2\") (lambda (assoc \"o\" 6)) )\n(create_entities (list \"DiffEntity2\") (lambda (assoc \"E\" 3 \"F\" 4 \"G\" 5 \"H\" 6)) )\n(create_entities (list \"DiffEntity2\") (lambda (assoc \"e\" 3 \"f\" 4)) )\n\n(print (contained_entities \"DiffEntity2\"))\n\n(print (difference_entities \"DiffEntity1\" \"DiffEntity2\"))\n\n(let (assoc new_entity\n    (call (difference_entities \"DiffEntity1\" \"DiffEntity2\") (assoc _ \"DiffEntity1\")))\n  (print new_entity)\n  (print (retrieve_entity_root new_entity))\n  (print (retrieve_entity_root (list new_entity \"DiffEntityChild1\")))\n  (print (contained_entities new_entity))\n)\n\n(create_entities \"DiffContainer\" null)\n\n(create_entities (list \"DiffContainer\" \"DiffEntity1\") (lambda (assoc \"a\" 3 \"b\" 4)) )\n(create_entities (list \"DiffContainer\" \"DiffEntity1\" \"DiffEntityChild1\") (lambda (assoc \"x\" 3 \"y\" 4 \"z\" 6)) )\n(create_entities (list \"DiffContainer\" \"DiffEntity1\" \"DiffEntityChild1\" \"DiffEntityChild2\") (lambda (assoc \"p\" 3 \"q\" 4 \"u\" 5 \"v\" 6 \"w\" 7)) )\n(create_entities (list \"DiffContainer\" \"DiffEntity1\" \"DiffEntityChild1\" \"DiffEntityChild2\" \"DiffEntityChild3\") (lambda (assoc \"e\" 3 \"p\" 4 \"a\" 5 \"o\" 6 \"w\" 7)) )\n(create_entities (list \"DiffContainer\" \"DiffEntity1\" \"OnlyIn1\") (lambda (assoc \"m\" 4)) )\n(create_entities (list \"DiffContainer\" \"DiffEntity1\") (lambda (assoc \"E\" 3 \"F\" 4)) )\n(create_entities (list \"DiffContainer\" \"DiffEntity1\") (lambda (assoc \"e\" 3 \"f\" 4 \"g\" 5 \"h\" 6)) )\n\n(create_entities (list \"DiffContainer\" \"DiffEntity2\") (lambda (assoc \"c\" 3 \"b\" 4)) )\n(create_entities (list \"DiffContainer\" \"DiffEntity2\" \"DiffEntityChild1\") (lambda (assoc \"x\" 3 \"y\" 4 \"z\" 6)) )\n(create_entities (list \"DiffContainer\" \"DiffEntity2\" \"DiffEntityChild1\" \"DiffEntityChild2\") (lambda (assoc \"p\" 3 \"q\" 4 \"u\" 5 \"v\" 6 \"w\" 7)) )\n(create_entities (list \"DiffContainer\" \"DiffEntity2\" \"DiffEntityChild1\" \"DiffEntityChild2\" \"DiffEntityChild3\") (lambda (assoc \"e\" 3 \"p\" 4 \"a\" 5 \"o\" 6 \"w\" 7)) )\n(create_entities (list \"DiffContainer\" \"DiffEntity2\" \"OnlyIn2\") (lambda (assoc \"o\" 6)) )\n(create_entities (list \"DiffContainer\" \"DiffEntity2\") (lambda (assoc \"E\" 3 \"F\" 4 \"G\" 5 \"H\" 6)) )\n(create_entities (list \"DiffContainer\" \"DiffEntity2\") (lambda (assoc \"e\" 3 \"f\" 4)) )\n\n(print (difference_entities (list \"DiffContainer\" \"DiffEntity1\") (list \"DiffContainer\" \"DiffEntity2\") ))\n\n(let (assoc new_entity\n    (call (difference_entities (list \"DiffContainer\" \"DiffEntity1\") (list \"DiffContainer\" \"DiffEntity2\") )\n      (assoc _ (list \"DiffContainer\" \"DiffEntity1\") )))\n  (print new_entity)\n  (print (get_entity_code new_entity))\n  (print (get_entity_code (list new_entity \"DiffEntityChild1\")))\n  (print (contained_entities new_entity))\n)\n"
         }
@@ -1814,7 +1836,7 @@
         "description": "id_path entity1 id_path entity2 [number keep_chance_entity1] [number keep_chance_entity2] [number similar_mix_chance] [number chance_mix_unnamed_children] [id_path entity3] || Performs a union operation on the entities represented by entity1 and entity2, but randomly ignores nodes from one or the other tree if not equal.  If only keep_chance_entity1 is specified, keep_chance_entity2 defaults to 1-keep_chance_entity1.  keep_chance_entity1 specifies the probability that a node from the entity represented by entity1 will be kept, and keep_chance_entity2 the probability that a node from the entity represented by entity2 will be kept.  similar_mix_chance is the additional probability that two nodes will mix if they have some commonality, which will include interpolating number values based on keep_chance_node1 and keep_chance_node2, and defaults to 0.0.  If similar_mix_chance is negative, then 1 minus the value will be anded with the commonality probability, so -1 means that it will never mix and 0 means it will only mix when sufficiently common.  chance_mix_unnamed_children represents the probability that an unnamed entity pair will be mixed versus preserved as independent chunks, where 0.2 would yield 20% of the entities mixed. Returns the id_path of a new entity created contained by the entity that ran it.  Uses entity3 as the optional destination via an internal call to create_contained_entity.   Any contained entities will be mixed either based on matching name or maximal similarity for nameless entities.",
         "$doc": {
             "output": "id_path",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(create_entities \"e1\" (lambda (assoc \"a\" 3 \"b\" 4)) )\n(create_entities \"e2\" (lambda (assoc \"c\" 3 \"b\" 4)) )\n(mix_entities \"e1\" \"e2\" 0.5 0.5 \"e3\")"
         }
@@ -1827,7 +1849,7 @@
         "description": "[id_path entity] [string label] [bool deep_comments] || Evaluates to the corresponding comments based on the parameters.  If the id_path is specified or null is specified as the id_path, then it will use the current entity.  If the label is null or empty string, it will retrieve comments for the entity root, otherwise if it is a valid label it will attempt to retrieve the comments for that label, null if the label doesn't exist.  If deep_comments is specified and the label is a declare, then it will return a list of two elements.  The first element of this list is an assoc with the keys being the parameters and the values being lists of the descriptions followed by the default value.  The second element of this list is the comment of the assoc itself, which is intended to be used to describe what is returned.  If label is empty string or null and deep_comments is true, then it will return an assoc of label to comment for each label in the entity.",
         "$doc": {
             "output": "*",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(print (get_entity_comments))\n(print (get_entity_comments \"label_name\" (true))"
         }
@@ -1840,7 +1862,7 @@
         "description": "[id_path entity] [bool suppress_label_escapes] || Evaluates to the entity's code, looking up the entity by the id_path. If suppress_label_escapes is false or omitted, will disable any labels obtained by inserting an extra # at the beginning of each.",
         "$doc": {
             "output": "*",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(print (retrieve_entity_root))\n(print (retrieve_entity_root 1))"
         }
@@ -1853,7 +1875,7 @@
         "description": "[id_path entity_1] * root_1 [id_path entity_2] [* root_2] [...] || Sets the code of the entity specified by id_path to node.  If no id_path specified, then uses the current entity, otherwise accesses a contained entity. On assigning the code to the new entity, it will enable any labels obtained by removing any extra #s from the beginning of each.  If all assignments were successful, then returns true, otherwise returns false.",
         "$doc": {
             "output": "bool",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(print (assign_entity_roots (list)))"
         }
@@ -1866,7 +1888,7 @@
         "description": "[id_path entity_1] * root_1 [id_path entity_2] [* root_2] [...] || Accumulates the code of the entity specified by id_path to node. If no id_path specified, then uses the current entity, otherwise accesses a contained entity. On assigning the code to the new entity, it will enable any labels obtained by removing any extra #s from the beginning of each.  If all accumulations were successful, then returns true, otherwise returns false.",
         "$doc": {
             "output": "bool",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(create_entities \"AER_test\" (lambda (null ##a 1 ##b 2)))\n(accum_entity_roots \"AER_test\" (list ##c 3))\n(print (retrieve_entity_root \"AER_test\" 1))"
         }
@@ -1879,7 +1901,7 @@
         "description": "[id_path entity] || Evaluates to a string representing the current state of the random number generator for the entity specified by id_path used for seeding the random streams of any calls to the entity.",
         "$doc": {
             "output": "string",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(create_entities \"RandTest\" (lambda\n  (null ##a (rand) )\n  ))\n(print (call_entity \"RandTest\" \"a\"))\n(print (get_entity_rand_seed \"RandTest\"))\n"
         }
@@ -1892,34 +1914,34 @@
         "description": "[id_path entity] * node [bool deep] || Sets the random number seed and state for the random number generator of the specified entity, or the current entity if not specified, to the state specified by node.  If node is already a string in the proper format output by get_entity_rand_seed, then it will set the random generator to that current state, picking up where the previous state left off.  If it is anything else, it uses the value as a random seed to start the genrator.  Note that this will not affect the state of the current random number stream, only future random streams created by the entity for new calls.  The parameter deep defaults to false, but if it is true, all contained entities are recursively set with random seeds based on the specified random seed and a hash of their relative id_path path to the entity being set.",
         "$doc": {
             "output": "string",
-            "permissions": "e",
+            "permissions": "entity",
             "example": "(create_entities \"RandTest\" (lambda\n  (null ##a (rand) )\n  ) )\n(create_entities (list \"RandTest\" \"DeepRand\") (lambda\n  (null ##a (rand) )\n  ) )\n(declare (assoc seed (get_entity_rand_seed \"RandTest\")))\n(print (call_entity \"RandTest\" \"a\"))\n(set_entity_rand_seed \"RandTest\" 1234)\n(print (call_entity \"RandTest\" \"a\"))"
         }
     },
-    "(get_entity_root_permission": {
-        "prefix": "(get_entity_root_permission",
+    "(get_entity_permissions": {
+        "prefix": "(get_entity_permissions",
         "body": [
-            "(get_entity_root_permission"
+            "(get_entity_permissions"
         ],
-        "description": "[id_path entity] || Returns true if the entity has root permissions, false if not.  Will return null if the caller is not root.",
+        "description": "[id_path entity] || Returns an assoc of the permissions of the specified entity, where each key is the permission and each value is either true or false.",
         "$doc": {
             "output": "bool",
             "new value": "new",
-            "permissions": "r",
-            "example": " (create_entities \"RootTest\" (lambda (print (system_time)) ))\n(print (get_entity_root_permission \"RootTest\"))"
+            "permissions": "entity",
+            "example": " (create_entities \"RootTest\" (lambda (print (system_time)) ))\n(print (get_entity_permissions \"RootTest\"))"
         }
     },
-    "(set_entity_root_permission": {
-        "prefix": "(set_entity_root_permission",
+    "(set_entity_permissions": {
+        "prefix": "(set_entity_permissions",
         "body": [
-            "(set_entity_root_permission"
+            "(set_entity_permissions"
         ],
-        "description": "id_path entity bool permission || Sets the root permission on the entity specified by id_path.  If bool is true, then it grants permissions, if it is false, then it removes them.  Returns the id_path of the entity.  Can only be called by an entity with root permissions.",
+        "description": "id_path entity bool|assoc permissions [bool deep] || Sets the permissions on the entity specified by id_path.  If permissions is true, then it grants all permissions, if it is false, then it removes all.  If permissions is an assoc, it alters the permissions of the assoc keys to the boolean values of the assoc's values.  The parameter deep defaults to false, but if it is true, all contained entities have their permissions updated.  Returns the id_path of the entity.",
         "$doc": {
             "output": "id_path",
             "new value": "new",
-            "permissions": "r",
-            "example": "(create_entities \"RootTest\" (lambda (print (system_time)) ))\n(set_entity_root_permission \"RootTest\" (true))\n(call_entity \"RootTest\")"
+            "permissions": "entity",
+            "example": "(create_entities \"RootTest\" (lambda (print (system_time)) ))\n(set_entity_permissions \"RootTest\" (true))\n(call_entity \"RootTest\")"
         }
     },
     "(create_entities": {
@@ -1930,7 +1952,7 @@
         "description": "[id_path entity_1] * node_1 [id_path entity_2] [* node_2] [...] || Creates a new entity with code specified by node, returning the list of id_path paths for each of the entities created.  Uses the optional entity location specified by the id_path, ignored if null or invalid.  Evaluates to a list of all of the new entities ids, null in place of each id_path if it was unable to create the id_path.  If the entity does not have permission to create the entities, it will evaluate to null.  If the id_path is ommitted, then it will create the new entity in the calling entity.  If id_path specifies an existing entity, then it will create the new entity within that existing entity.  If the last id_path in the string is not an existing entity, then it will attempt to create that entity (returning null if it cannot).  Can only be performed by an entity that contains to the destination specified by id_path. Will automatically remove a # from the beginning of each label in case the label had been disabled.  Unlike the rest of the entity creation commands, create_entities specifies the optional id_path first to make it easy to read entity definitions.  If more than 2 parameters are specified, create_entities will iterate through all of the pairs of parameters, treating them like the first two as it creates new entities.",
         "$doc": {
             "output": "list of id_path",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(print (create_entities \"MyLibrary\" (lambda (+ #three 3 4)) ) )\n\n(create_entities \"EntityWithChildren\" (lambda (assoc \"a\" 3 \"b\" 4)) )\n(create_entities (list \"EntityWithChildren\" \"Child1\") (lambda (assoc \"x\" 3 \"y\" 4)) )\n(create_entities (list \"EntityWithChildren\" \"Child2\") (lambda (assoc \"p\" 3 \"q\" 4)) )\n(print (contained_entities \"EntityWithChildren\"))"
         }
@@ -1943,7 +1965,7 @@
         "description": "id_path source_entity_1 [id_path destination_entity_1] [id_path source_entity_2] [id_path destination_entity_2] [...] || Creates a clone of source_entity_1.  If destination_entity_1 is not specified, then it clones the entity into the current entity.  If destination_entity_1 is specified, then it clones it into the location specified by destination_entity_1; if destination_entity_1 is an existing entity, then it will create it within that entity, if not, it will attempt to create it with the given id_path.  Evaluates to the id_path of the new entity.  Can only be performed by an entity that contains both source_entity_1 and the specified path of destination_entity_1. If multiple entities are specified, it will move each from the source to the destination.  Evaluates to a list of the new entity ids.",
         "$doc": {
             "output": "list of id_path",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(print (create_entities \"MyLibrary\" (lambda (+ #three 3 4)) ) )\n(print (clone_entities \"MyLibrary\" \"MyNewLibrary\"))"
         }
@@ -1956,7 +1978,7 @@
         "description": "id_path source_entity_1 [id_path destination_entity_1] [id_path source_entity_2] [id_path destination_entity_2] [...] || Moves the entity from location specified by source_entity_1 to destination destination_entity_1.  If destination_entity_1 exists, it will move source_entity_1 using source_entity_1's current id_path into destination_entity_1.  If destination_entity_1 does not exist, then it will move source_entity_1 and rename it to the end of the id_path specified in destination_entity_1. Can only be performed by a containing entity relative to both ids.  If multiple entities are specified, it will move each from the source to the destination.  Evaluates to a list of the new entity ids.",
         "$doc": {
             "output": "list of id_path",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(print (create_entities \"MyLibrary\" (lambda (+ #three 3 4)) ) )\n(print (move_entities \"MyLibrary\" \"MyLibrary2\"))"
         }
@@ -1969,7 +1991,7 @@
         "description": "[id_path entity_1] [id_path entity_2] [...] || Destroys the entities specified by the ids entity_1, entity_2, etc. Can only be performed by containing entity.  Retruns true if all entities were successfully destroyed, false if not due to not existing in the first place or due to code being currently run in it.",
         "$doc": {
             "output": "bool",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(print (create_entities \"MyLibrary\" (lambda (+ #three 3 4)) ) )\n(print (contained_entities))\n(destroy_entities \"MyLibrary\")\n(print (contained_entities))"
         }
@@ -1983,7 +2005,7 @@
         "$doc": {
             "output": "*",
             "new value": "new",
-            "permissions": "r",
+            "permissions": "load",
             "example": "(print (load \"my_directory/MyModule.amlg\"))"
         }
     },
@@ -1996,7 +2018,7 @@
         "$doc": {
             "output": "id_path",
             "new value": "new",
-            "permissions": "r",
+            "permissions": "load",
             "example": "(load_entity \"my_directory/MyModule.amlg\" \"MyModule\")"
         }
     },
@@ -2009,7 +2031,7 @@
         "$doc": {
             "output": "bool",
             "new value": "new",
-            "permissions": "r",
+            "permissions": "store",
             "example": "(store \"my_directory/MyData.amlg\" (list 1 2 3))"
         }
     },
@@ -2022,7 +2044,7 @@
         "$doc": {
             "output": "bool",
             "new value": "new",
-            "permissions": "r",
+            "permissions": "store",
             "example": "(store_entity \"my_directory/MyData.amlg\" \"MyData\")"
         }
     },
@@ -2034,7 +2056,7 @@
         "description": "id_path entity || Returns true if the referred to entity specified by id_path exists.",
         "$doc": {
             "output": "bool",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "new",
             "example": "(print (create_entities \"MyLibrary\" (lambda (+ #three 3 4)) ) )\n(print (contains_entity \"MyLibrary\"))\n(print (contains_entity (list \"MyLibrary\")))"
         }
@@ -2047,7 +2069,7 @@
         "description": "[id_path containing_entity] [list conditions] || Returns a list of strings of ids of entities contained in the entity specified by id_path or current entity if id_path is ommitted.  The optional list is a conjunction of conditions that are required in order for a contained entity to be returned.  The conditions are all of the commands that begin with query_.",
         "$doc": {
             "output": "list of string",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "conditional",
             "example": "(create_entities (list \"TestEntity\" \"Child\")\n  (lambda (null ##TargetLabel 3))\n) \n\n (contained_entities \"TestEntity\" (list\n  (query_exists \"TargetLabel\")\n)) \n\n ; For more examples see the individual entries for each query."
         }
@@ -2060,7 +2082,7 @@
         "description": "[id_path containing_entity] [list conditions] || Performs queries like contained_entities but returns a value or set of values appropriate for the last query in conditions.  The parameter conditions is a conjunction of conditions that are required in order for the final query to be evaluated.  Each entity in the list is a query.  The conditions are all of the commands that begin with query_.  If the last query does not return anything, then it will just return the matching entities.",
         "$doc": {
             "output": "*",
-            "permissions": "e",
+            "permissions": "entity",
             "new value": "conditional",
             "example": "(create_entities (list \"TestEntity\" \"Child\")\n  (lambda (null ##TargetLabel 3))\n) \n\n (compute_on_contained_entities \"TestEntity\" (list\n  (query_exists \"TargetLabel\")\n)) \n\n ; For more examples see the individual entries for each query."
         }
@@ -2451,7 +2473,7 @@
         "$doc": {
             "output": "bool",
             "new value": "new",
-            "permissions": "e",
+            "permissions": "entity",
             "example": "(null #asgn_test1 12)\n(assign_to_entities (assoc asgn_test1 4))\n(print (retrieve_from_entity \"asgn_test1\"))\n\n"
         }
     },
@@ -2464,7 +2486,7 @@
         "$doc": {
             "output": "bool",
             "new value": "new",
-            "permissions": "e",
+            "permissions": "entity",
             "example": "(null #asgn_test1 12)\n(accum_to_entities (assoc asgn_test1 4))\n(print (retrieve_from_entity \"asgn_test1\"))\n\n"
         }
     },
@@ -2477,7 +2499,7 @@
         "$doc": {
             "output": "bool",
             "new value": "new",
-            "permissions": "e",
+            "permissions": "entity",
             "example": "(create_entities \"DRFE\" (lambda (null ##a 12)) )\n(print (direct_retrieve_from_entity \"DRFE\" \"a\"))\n(print (direct_assign_to_entities \"DRFE\" (assoc a 7)))\n(print (direct_retrieve_from_entity \"DRFE\" \"a\"))"
         }
     },
@@ -2490,7 +2512,7 @@
         "$doc": {
             "output": "*",
             "new value": "conditional",
-            "permissions": "e",
+            "permissions": "entity",
             "example": "(null #asgn_test1 12)\n(assign_to_entities (assoc asgn_test1 4))\n(print (retrieve_from_entity \"asgn_test1\"))\n\n(null #asgn_test2 12)\n(assign_to_entities (assoc asgn_test2 4))\n(print (retrieve_from_entity \"asgn_test2\"))\n(create_entities \"RCT\" (lambda (null ##a 12 ##b 13)) )\n(print (retrieve_from_entity \"RCT\" \"a\"))\n(print (retrieve_from_entity \"RCT\" (list \"a\" \"b\") ))\n(print (retrieve_from_entity \"RCT\" (zip (list \"a\" \"b\") null) ))\n"
         }
     },
@@ -2503,7 +2525,7 @@
         "$doc": {
             "output": "*",
             "new value": "conditional",
-            "permissions": "e",
+            "permissions": "entity",
             "example": "(create_entities \"DRFE\" (lambda (null ##a 12)) )\n(print (direct_retrieve_from_entity \"DRFE\" \"a\"))\n(print (direct_assign_to_entities \"DRFE\" (assoc a 7)))\n(print (direct_retrieve_from_entity \"DRFE\" \"a\"))"
         }
     },
@@ -2516,7 +2538,7 @@
         "$doc": {
             "output": "*",
             "new value": "conditional",
-            "permissions": "e",
+            "permissions": "entity",
             "new scope": true,
             "example": "(create_entities \"TestContainerExec\"\n  (lambda (parallel\n  ##d (print \"hello \" x)\n  )) \n)\n\n(print (call_entity \"TestContainerExec\" \"d\" (assoc x \"goodbye\")))"
         }
@@ -2530,7 +2552,7 @@
         "$doc": {
             "output": "list of *1 *2",
             "new value": "conditional",
-            "permissions": "e",
+            "permissions": "entity",
             "new scope": true,
             "example": "(create_entities \"CEGCTest\" (lambda\n    (null ##a_assign\n    (seq \n      (create_entities \"Contained\" (lambda\n        (null ##a 4 )\n      ))\n      (print (retrieve_from_entity \"Contained\" \"a\") )\n      (assign_to_entities \"Contained\" (assoc a 6) )\n      (print (retrieve_from_entity \"Contained\" \"a\") )\n      (set_entity_rand_seed \"Contained\" \"bbbb\")\n      (destroy_entities \"Contained\")\n    )\n  )\n))\n\n(print (call_entity_get_changes \"CEGCTest\" \"a_assign\"))\n"
         }
@@ -2545,7 +2567,7 @@
             "output": "*",
             "new value": "new",
             "new scope": true,
-            "permissions": "e",
+            "permissions": "entity",
             "example": "(create_entities \"TestContainerExec\"\n  (lambda (parallel\n  ##^a 3\n  ##b (contained_entities)\n  ##c (+ x 1)\n  ##d (call_entity \"TCEc\" \"q\" (assoc x x))\n  ##x 4\n  ##y 5\n  )) \n)\n(create_entities (list \"TestContainerExec\" \"TCEc\")\n  (lambda (parallel\n  ##p 3\n  ##q (+ x (call_container \"a\"))\n  ##bar \"foo\"\n  ))\n)\n\n(print (call_entity \"TestContainerExec\" \"d\" (assoc x 4)))"
         }
     }

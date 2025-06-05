@@ -43,8 +43,8 @@
 		"directives": {
 			"patterns": [
 				{
-					"match": "^(EXECUTE_ENTITY_JSON) (\\S+) (\\S+) (.*)$",
-					"captures": {
+					"begin": "^(EXECUTE_ENTITY_JSON|EXECUTE_ENTITY_JSON_LOGGED|SET_JSON_TO_LABEL) (\\S+) (\\S+) ",
+					"beginCaptures": {
 						"1": {
 							"name": "keyword.control.command.trace"
 						},
@@ -53,19 +53,24 @@
 						},
 						"3": {
 							"name": "entity.name.function.trace"
-						},
-						"4": {
-							"contentName": "source.json",
+						}
+					},
+					"end": "$",
+					"patterns": [
+						{
+							"begin": "",
+							"end": "$",
+							"contentName": "meta.embedded.block.json",
 							"patterns": [
 								{
 									"include": "source.json"
 								}
 							]
 						}
-					}
+					]
 				},
 				{
-					"match": "^(LOAD_ENTITY) (\\S+) (\\S+) (\\S+) (\\S+)(?: (\\S+))?(?: (\\S+))?$",
+					"match": "^(LOAD_ENTITY) (\\S+) (\\S+)(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?$",
 					"captures": {
 						"1": {
 							"name": "keyword.control.command.trace"
@@ -77,7 +82,7 @@
 							"name": "string.quoted.double.trace"
 						},
 						"4": {
-							"name": "constant.language.trace"
+							"name": "string.quoted.double.trace"
 						},
 						"5": {
 							"name": "constant.language.trace"
@@ -87,11 +92,91 @@
 						},
 						"7": {
 							"name": "string.quoted.double.trace"
+						},
+						"8": {
+							"name": "string.quoted.double.trace"
+						},
+						"9": {
+							"name": "string.quoted.double.trace"
 						}
 					}
 				},
 				{
-					"match": "^(DESTROY_ENTITY) (\\S+)?$",
+					"match": "^(CLONE_ENTITY) (\\S+) (\\S+)(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?$",
+					"captures": {
+						"1": {
+							"name": "keyword.control.command.trace"
+						},
+						"2": {
+							"name": "support.constant.command.trace"
+						},
+						"3": {
+							"name": "string.quoted.double.trace"
+						},
+						"4": {
+							"name": "string.quoted.double.trace"
+						},
+						"5": {
+							"name": "string.quoted.double.trace"
+						},
+						"6": {
+							"name": "constant.language.trace"
+						},
+						"7": {
+							"name": "string.quoted.double.trace"
+						},
+						"8": {
+							"name": "string.quoted.double.trace"
+						},
+						"9": {
+							"name": "string.quoted.double.trace"
+						}
+					}
+				},
+				{
+					"match": "^(STORE_ENTITY) (\\S+) (\\S+)(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?$",
+					"captures": {
+						"1": {
+							"name": "keyword.control.command.trace"
+						},
+						"2": {
+							"name": "support.constant.command.trace"
+						},
+						"3": {
+							"name": "string.quoted.double.trace"
+						},
+						"4": {
+							"name": "string.quoted.double.trace"
+						},
+						"5": {
+							"name": "constant.language.trace"
+						},
+						"6": {
+							"name": "string.quoted.double.trace"
+						}
+					}
+				},
+				{
+					"match": "^(SET_ENTITY_PERMISSIONS|SET_RANDOM_SEED) (\\S+) (.*)$",
+					"captures": {
+						"1": {
+							"name": "keyword.control.command.trace"
+						},
+						"2": {
+							"name": "support.constant.command.trace"
+						},
+						"3": {
+							"contentName": "meta.embedded.block.json",
+							"patterns": [
+								{
+									"include": "source.json"
+								}
+							]
+						}
+					}
+				},
+				{
+					"match": "^(DESTROY_ENTITY|GET_ENTITY_PERMISSIONS|SET_MAX_NUM_THREADS) (\\S+)?$",
 					"captures": {
 						"1": {
 							"name": "keyword.control.command.trace"
@@ -113,13 +198,38 @@
 					}
 				},
 				{
-					"match": "^([A-Z_]+)(?: (\\S+) .*)?$",
+					"match": "^(EVAL_ON_ENTITY) (\\S+) (.*)$",
 					"captures": {
 						"1": {
 							"name": "keyword.control.command.trace"
 						},
 						"2": {
 							"name": "support.constant.command.trace"
+						},
+						"3": {
+							"name": "string.quoted.double.trace"
+						}
+					}
+				},
+				{
+					"match": "^(GET_JSON_FROM_LABEL) (\\S+) (\\S+)$",
+					"captures": {
+						"1": {
+							"name": "keyword.control.command.trace"
+						},
+						"2": {
+							"name": "support.constant.command.trace"
+						},
+						"3": {
+							"name": "entity.name.function.trace"
+						}
+					}
+				},
+				{
+					"match": "^(VERSION|EXIT|GET_MAX_NUM_THREADS)$",
+					"captures": {
+						"1": {
+							"name": "keyword.control.command.trace"
 						}
 					}
 				},
@@ -138,7 +248,7 @@
 									"match": ">b'(.*)'$",
 									"captures": {
 										"1": {
-											"contentName": "source.json",
+											"contentName": "meta.embedded.block.json",
 											"patterns": [
 												{
 													"include": "source.json"
