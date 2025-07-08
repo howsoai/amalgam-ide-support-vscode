@@ -1,0 +1,94 @@
+name: Build
+run-name: "Branch Build (${{ github.run_attempt }}.${{ github.run_number }}) - ${{ github.ref_name }}"
+
+on:
+  workflow_call:
+    inputs:
+      build-type:
+        required: false
+        type: string
+      optional-release-tag:
+        required: false
+        type: string
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  metadata:
+    uses: howsoai/.github/.github/workflows/set-metadata.yml@main
+    secrets: inherit
+    with:
+      build-type: ${{ inputs.build-type }}
+      optional-release-tag: ${{ inputs.optional-release-tag }}
+
+  build:
+    needs: ['metadata']
+    runs-on: ubuntu-latest
+    outputs:
+      package-version: ${{ steps.get-version.outputs.package-version }}
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - name: Install nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/hydrogen'
+
+      - name: Update version for prerelease build
+        run: |
+          npm version ${{ needs.metadata.ouptuts.version }} --git-tag-version false
+
+      - name: Yoink version tag from package.json
+        id: get-version
+        run: |
+          node -e "console.log('package-version=' + require('./package.json').version)" >> $GITHUB_OUTPUT
+          node -e "console.log('PACKAGE_VERSION=' + require('./package.json').version)" >> $GITHUB_ENV
+
+      - name: Package
+        run: |
+          npm ci
+          npm run vscode:package
+
+      - name: Clean up dir
+        run: |
+          rm -rf dist/
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: amalgam-lang-${{ env.PACKAGE_VERSION }}.vsix
+          path: ./amalgam-lang-${{ env.PACKAGE_VERSION }}.vsix
+          if-no-files-found: error
+
+  generate-changelog:
+    if: inputs.build-type == 'release'
+    secrets: inherit
+    needs:
+      - metadata
+    uses: "howsoai/.github/.github/workflows/release-notes.yml@main"
+
+  release:
+    if: inputs.build-type == 'release'
+    needs: ['build', 'generate-changelog']
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Download Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: ./
+
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      with:
+        tag: ${{ needs.build.outputs.package-version }}
+        commit: ${{ github.sha }}
+        name: "Amalgam VSCode Plugin ${{ needs.build.outputs.package-version }}"
+        artifactErrorsFailBuild: true
+        body: ${{ needs.generate-changelog.ouptuts.changelog }}
+        makeLatest: legacy
+        artifacts: "./amalgam-lang-*.vsix/amalgam-lang-*.vsix"
