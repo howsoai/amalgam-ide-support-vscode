@@ -72,7 +72,8 @@ jobs:
     uses: "howsoai/.github/.github/workflows/release-notes.yml@main"
 
   release:
-    needs: ['build']
+    if: inputs.build-type == 'release'
+    needs: ['build', 'generate-changelog']
     runs-on: ubuntu-latest
     steps:
 
@@ -88,6 +89,6 @@ jobs:
         commit: ${{ github.sha }}
         name: "Amalgam VSCode Plugin ${{ needs.build.outputs.package-version }}"
         artifactErrorsFailBuild: true
-        generateReleaseNotes: true
+        body: ${{ needs.generate-changelog.ouptuts.changelog }}
         makeLatest: legacy
         artifacts: "./amalgam-lang-*.vsix/amalgam-lang-*.vsix"
