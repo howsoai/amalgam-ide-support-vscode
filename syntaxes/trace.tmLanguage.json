@@ -245,7 +245,7 @@
 						"3": {
 							"patterns": [
 								{
-									"match": ">b'(.*)'$",
+									"match": ">(.*)$",
 									"captures": {
 										"1": {
 											"contentName": "meta.embedded.block.json",
