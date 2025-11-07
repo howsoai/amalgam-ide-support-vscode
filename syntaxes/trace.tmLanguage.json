@@ -43,7 +43,7 @@
 		"directives": {
 			"patterns": [
 				{
-					"begin": "^(EXECUTE_ENTITY_JSON|EXECUTE_ENTITY_JSON_LOGGED|SET_JSON_TO_LABEL) (\\S+) (\\S+) ",
+					"begin": "^(EXECUTE_ENTITY_JSON|EXECUTE_ENTITY_JSON_LOGGED|SET_JSON_TO_LABEL) (\"(?:[^\"\\\\]|\\\\.)*\") (\"(?:[^\"\\\\]|\\\\.)*\") ",
 					"beginCaptures": {
 						"1": {
 							"name": "keyword.control.command.trace"
@@ -70,7 +70,7 @@
 					]
 				},
 				{
-					"match": "^(LOAD_ENTITY) (\\S+) (\\S+)(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?$",
+					"match": "^(LOAD_ENTITY|LOAD_ENTITY_FROM_MEMORY) (\"(?:[^\"\\\\]|\\\\.)*\") (\"(?:[^\"\\\\]|\\\\.)*\")(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?(?: (true|false))?(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?\\s*$",
 					"captures": {
 						"1": {
 							"name": "keyword.control.command.trace"
@@ -98,11 +98,14 @@
 						},
 						"9": {
 							"name": "string.quoted.double.trace"
+						},
+						"10": {
+							"name": "string.quoted.double.trace"
 						}
 					}
 				},
 				{
-					"match": "^(CLONE_ENTITY) (\\S+) (\\S+)(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?$",
+					"match": "^(CLONE_ENTITY) (\"(?:[^\"\\\\]|\\\\.)*\") (\"(?:[^\"\\\\]|\\\\.)*\")(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?(?: (true|false))?(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?\\s*$",
 					"captures": {
 						"1": {
 							"name": "keyword.control.command.trace"
@@ -134,7 +137,7 @@
 					}
 				},
 				{
-					"match": "^(STORE_ENTITY) (\\S+) (\\S+)(?: (\\S+))?(?: (\\S+))?(?: (\\S+))?$",
+					"match": "^(STORE_ENTITY) (\"(?:[^\"\\\\]|\\\\.)*\") (\"(?:[^\"\\\\]|\\\\.)*\")(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?(?: (true|false))?(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?\\s*$",
 					"captures": {
 						"1": {
 							"name": "keyword.control.command.trace"
@@ -153,11 +156,37 @@
 						},
 						"6": {
 							"name": "string.quoted.double.trace"
+						},
+						"7": {
+							"name": "string.quoted.double.trace"
 						}
 					}
 				},
 				{
-					"match": "^(SET_ENTITY_PERMISSIONS|SET_RANDOM_SEED) (\\S+) (.*)$",
+					"match": "^(STORE_ENTITY_TO_MEMORY) (\"(?:[^\"\\\\]|\\\\.)*\") (\"(?:[^\"\\\\]|\\\\.)*\")(?: (true|false))?(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?(?: (\"(?:[^\"\\\\]|\\\\.)*\"))?\\s*$",
+					"captures": {
+						"1": {
+							"name": "keyword.control.command.trace"
+						},
+						"2": {
+							"name": "support.constant.command.trace"
+						},
+						"3": {
+							"name": "string.quoted.double.trace"
+						},
+						"4": {
+							"name": "constant.language.trace"
+						},
+						"5": {
+							"name": "string.quoted.double.trace"
+						},
+						"6": {
+							"name": "string.quoted.double.trace"
+						}
+					}
+				},
+				{
+					"match": "^(SET_ENTITY_PERMISSIONS|SET_RANDOM_SEED) (\"(?:[^\"\\\\]|\\\\.)*\") (.*)$",
 					"captures": {
 						"1": {
 							"name": "keyword.control.command.trace"
@@ -176,7 +205,7 @@
 					}
 				},
 				{
-					"match": "^(DESTROY_ENTITY|GET_ENTITY_PERMISSIONS|SET_MAX_NUM_THREADS) (\\S+)?$",
+					"match": "^(DESTROY_ENTITY|GET_ENTITY_PERMISSIONS) (\"(?:[^\"\\\\]|\\\\.)*\")\\s*$",
 					"captures": {
 						"1": {
 							"name": "keyword.control.command.trace"
@@ -187,7 +216,18 @@
 					}
 				},
 				{
-					"match": "^(VERIFY_ENTITY) (\\S+)?$",
+					"match": "^(SET_MAX_NUM_THREADS) (\\S+)?\\s*$",
+					"captures": {
+						"1": {
+							"name": "keyword.control.command.trace"
+						},
+						"2": {
+							"name": "support.constant.command.trace"
+						}
+					}
+				},
+				{
+					"match": "^(VERIFY_ENTITY) (\"(?:[^\"\\\\]|\\\\.)*\")\\s*$",
 					"captures": {
 						"1": {
 							"name": "keyword.control.command.trace"
@@ -198,7 +238,7 @@
 					}
 				},
 				{
-					"match": "^(EVAL_ON_ENTITY) (\\S+) (.*)$",
+					"match": "^(EVAL_ON_ENTITY) (\"(?:[^\"\\\\]|\\\\.)*\") (.*)$",
 					"captures": {
 						"1": {
 							"name": "keyword.control.command.trace"
@@ -212,7 +252,7 @@
 					}
 				},
 				{
-					"match": "^(GET_JSON_FROM_LABEL) (\\S+) (\\S+)$",
+					"match": "^(GET_JSON_FROM_LABEL) (\"(?:[^\"\\\\]|\\\\.)*\") (\"(?:[^\"\\\\]|\\\\.)*\")\\s*$",
 					"captures": {
 						"1": {
 							"name": "keyword.control.command.trace"
@@ -226,7 +266,7 @@
 					}
 				},
 				{
-					"match": "^(VERSION|EXIT|GET_MAX_NUM_THREADS)$",
+					"match": "^(VERSION|EXIT|GET_MAX_NUM_THREADS)\\s*$",
 					"captures": {
 						"1": {
 							"name": "keyword.control.command.trace"
