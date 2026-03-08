@@ -22,13 +22,14 @@
       ]
     },
     {
-      "captures": {
-        "1": {
-          "name": "entity.name.function.amalgam"
+      "name": "variable.parameter.amalgam",
+      "begin": "#",
+      "beginCaptures": {
+        "0": {
+          "name": "comment.line.annotation.amalgam"
         }
       },
-      "match": "(#+[\\^!]?[\\w\\.]+)",
-      "name": "constant.character.amalgam"
+      "end": "$"
     },
     {
       "match": "(\\@|\\|\\|)",

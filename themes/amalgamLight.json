@@ -220,6 +220,7 @@
       "name": "@mono-3",
       "scope": [
         "comment.line.semicolon",
+        "comment.line.annotation",
         "comment.markup.link",
         "punctuation.definition.comment"
       ],
