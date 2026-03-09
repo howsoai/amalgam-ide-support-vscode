@@ -4,16 +4,29 @@ export class AmalgamDocumentSymbolProvider implements vscode.DocumentSymbolProvi
   public provideDocumentSymbols(
     document: vscode.TextDocument,
     token: vscode.CancellationToken
-  ): vscode.ProviderResult<vscode.SymbolInformation[] | vscode.DocumentSymbol[]> {
+  ): vscode.ProviderResult<vscode.DocumentSymbol[]> {
     return new Promise((resolve, reject) => {
       const symbols: vscode.DocumentSymbol[] = [];
-      let symbol: vscode.DocumentSymbol | null = null;
-      let prevSymbol: vscode.DocumentSymbol | null = null;
 
-      const updatePrevSymbol = (line: number) => {
-        if (prevSymbol != null) {
-          // Capture previous symbol's range to be up to this symbol's start
-          prevSymbol.range = new vscode.Range(prevSymbol.range.start, new vscode.Position(line, 0));
+      // Labels only exist when the file root is (assoc ...) or {...}
+      let state: "seeking" | "in-assoc" | "none" | "done" = "seeking";
+      let depth = 0; // paren/brace nesting depth; 1 = directly inside root assoc
+      let expectingKey = true; // keys and values strictly alternate at depth 1
+      let lastContentLine = 0; // last non-blank/comment/annotation line processed
+
+      let pendingSymbol: vscode.DocumentSymbol | null = null;
+      let prevSymbol: vscode.DocumentSymbol | null = null;
+      const skipLineRegex = /^\s*(?:$|[;#])/;
+      const assocRegex = /^\(assoc(?:\s|\))/i;
+
+      // End the previous symbol's range just after the last content line.
+      // Called when a new key is found, so blank/comment lines sitting above
+      // the new key are not absorbed into the previous symbol's range.
+      const finalizePrevSymbol = () => {
+        if (prevSymbol) {
+          const endChar = document.lineAt(lastContentLine).range.end.character;
+          // This will update the symbol in the list, then we can clear the reference
+          prevSymbol.range = new vscode.Range(prevSymbol.range.start, new vscode.Position(lastContentLine, endChar));
           prevSymbol = null;
         }
       };
@@ -24,50 +37,124 @@ export class AmalgamDocumentSymbolProvider implements vscode.DocumentSymbolProvi
           return;
         }
 
-        const line = document.lineAt(i);
-        if (symbol) {
-          // Look ahead to see if label's nested value is a variable
-          if (/^\s*(?:;.*)?$/.test(line.text)) {
-            // Blank or comment line
-            continue;
+        const lineObj = document.lineAt(i);
+        const text = lineObj.text;
+
+        // Skip blank, comment (;...), and annotation (#...) lines without updating lastContentLine
+        if (skipLineRegex.test(text)) {
+          continue;
+        }
+
+        const depthChange = this.getDepthChange(text);
+        const nextDepth = depth + depthChange;
+
+        if (state === "seeking") {
+          // First significant line determines whether this file has labels
+          const trimmed = text.trimStart();
+          if (assocRegex.test(trimmed) || trimmed.startsWith("{")) {
+            state = "in-assoc";
+          } else {
+            state = "none";
           }
+          depth = nextDepth;
+          lastContentLine = i;
+          continue;
+        }
 
-          const reg = /^\s*(.+)\s*.*$/;
-          const matches = reg.exec(line.text);
-          if (matches) {
-            symbol.kind = this.checkType(matches[1], vscode.SymbolKind.Function);
-          }
+        if (state !== "in-assoc") break;
 
-          updatePrevSymbol(i);
-          prevSymbol = symbol;
-          symbols.push(symbol);
-          symbol = null; // reset to look for next label
-        } else {
-          // Match label
-          // 1: Leading text up to and including #
-          // 2: The opcode (including ! or ^)
-          // 3: Tailing text to end of line
-          const reg = /^(\s*#)([\^!]?\w+)\s*(.*)?\s*$/;
-          const matches = reg.exec(line.text);
+        if (depth === 1) {
+          if (expectingKey) {
+            // Finalize previous symbol before processing the new key.
+            // lastContentLine still points to the previous value's last line,
+            // so blank/comment lines above the new key are excluded.
+            finalizePrevSymbol();
 
-          if (matches) {
-            const symbolRange = new vscode.Range(i, matches[1].length, i, line.range.end.character);
-            const selectionRange = new vscode.Range(i, matches[1].length, i, matches[1].length + matches[2].length);
-            symbol = new vscode.DocumentSymbol(matches[2], "", vscode.SymbolKind.Function, symbolRange, selectionRange);
+            const labelReg = /^(\s*)([!^]?\w+)(.*)?$/;
+            const matches = labelReg.exec(text);
+            if (matches) {
+              const indent = matches[1].length;
+              const name = matches[2];
+              const rest = (matches[3] ?? "").trim();
 
-            // Treat as variable when value is on same line
-            if (matches[3]) {
-              updatePrevSymbol(i);
-              symbol.kind = this.checkType(matches[3], vscode.SymbolKind.Variable);
-              symbols.push(symbol);
-              symbol = null; // reset to look for next label
+              const symbolRange = new vscode.Range(i, indent, i, lineObj.range.end.character);
+              const selectionRange = new vscode.Range(i, indent, i, indent + name.length);
+              const sym = new vscode.DocumentSymbol(name, "", vscode.SymbolKind.Function, symbolRange, selectionRange);
+
+              if (rest && !rest.startsWith(";") && !rest.startsWith("#")) {
+                // Value on the same line as the key
+                sym.kind = this.checkType(rest, vscode.SymbolKind.Variable);
+                symbols.push(sym);
+                prevSymbol = sym;
+                expectingKey = true;
+              } else {
+                // Value is on a subsequent line
+                pendingSymbol = sym;
+                expectingKey = false;
+              }
             }
+          } else {
+            // This line begins the value for pendingSymbol
+            if (pendingSymbol) {
+              pendingSymbol.kind = this.checkType(text.trimStart(), vscode.SymbolKind.Function);
+              symbols.push(pendingSymbol);
+              prevSymbol = pendingSymbol;
+              pendingSymbol = null;
+            }
+            // Simple value (no depth change) means the next line is a key
+            if (depthChange === 0) {
+              expectingKey = true;
+            }
+            // If depthChange > 0 the value spans multiple lines; wait for depth to return to 1
           }
         }
+
+        // Returning to depth 1 from a nested block means we finished a multi-line value
+        if (depth > 1 && nextDepth === 1) {
+          expectingKey = true;
+        }
+
+        depth = nextDepth;
+        lastContentLine = i; // update after finalizePrevSymbol so it reflects the previous symbol's last line
+        if (depth <= 0) {
+          state = "done";
+          break;
+        }
       }
-      updatePrevSymbol(document.lineCount);
+
+      finalizePrevSymbol();
       resolve(symbols);
     });
+  }
+
+  // Count the net paren/brace depth change for a line, ignoring strings and comments.
+  private getDepthChange(text: string): number {
+    let change = 0;
+    let inString = false;
+    let stringChar = "";
+
+    for (let j = 0; j < text.length; j++) {
+      const ch = text[j];
+      if (inString) {
+        if (ch === "\\") {
+          j++; // skip escaped character
+        } else if (ch === stringChar) {
+          inString = false;
+        }
+      } else {
+        if (ch === ";" || ch == "#") break; // rest of line is a comment/annotation
+        if (ch === '"' || ch === "'") {
+          inString = true;
+          stringChar = ch;
+        } else if (ch === "(" || ch === "{" || ch === "[") {
+          change++;
+        } else if (ch === ")" || ch === "}" || ch === "]") {
+          change--;
+        }
+      }
+    }
+
+    return change;
   }
 
   private checkType(text: string, defaultKind: vscode.SymbolKind) {
