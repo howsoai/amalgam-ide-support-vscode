@@ -9,6 +9,9 @@
     "patterns": [
         { "include": "#comments" },
         { "include": "#annotations" },
+        { "include": "#root-assoc" },
+        { "include": "#root-assoc-bracket" },
+        { "include": "#s-expression" },
         { "include": "#special-ops" },
         { "include": "#call-target" },
         { "include": "#system-args" },
@@ -36,11 +39,117 @@
             "name": "variable.parameter.amalgam",
             "begin": "#",
             "beginCaptures": {
-                "0": {
-                    "name": "comment.line.annotation.amalgam"
-                }
+                "0": { "name": "comment.line.annotation.amalgam" }
             },
             "end": "$"
+        },
+        "root-assoc": {
+            "comment": "Top-level (assoc ) block",
+            "name": "meta.entity.amalgam",
+            "begin": "\\(assoc(?=\\s|\\))",
+            "beginCaptures": {
+                "0": { "name": "keyword.control.amalgam" }
+            },
+            "end": "\\)",
+            "patterns": [
+                { "include": "#comments" },
+                { "include": "#annotations" },
+                { "include": "#s-expression" },
+                { "include": "#inner-assoc" },
+                { "include": "#inner-assoc-bracket" },
+                { "include": "#strings" },
+                { "include": "#numbers" },
+                { "include": "#constants" },
+                { "include": "#label" }
+            ]
+        },
+        "root-assoc-bracket": {
+            "comment": "Top-level { } block",
+            "name": "meta.entity.amalgam",
+            "begin": "\\{",
+            "end": "\\}",
+            "patterns": [
+                { "include": "#comments" },
+                { "include": "#annotations" },
+                { "include": "#s-expression" },
+                { "include": "#inner-assoc" },
+                { "include": "#inner-assoc-bracket" },
+                { "include": "#strings" },
+                { "include": "#numbers" },
+                { "include": "#constants" },
+                { "include": "#label" }
+            ]
+        },
+        "label": {
+            "comment": "A direct property of a root assoc",
+            "match": "^\\s*[!^]?\\w+(?=\\s|$)",
+            "name": "entity.name.function.amalgam"
+        },
+        "s-expression": {
+            "comment": "Balanced ( ) block — uses full rule set but no label highlighting",
+            "begin": "\\(",
+            "end": "\\)",
+            "patterns": [
+                { "include": "#comments" },
+                { "include": "#annotations" },
+                { "include": "#special-ops" },
+                { "include": "#call-target" },
+                { "include": "#system-args" },
+                { "include": "#opcodes" },
+                { "include": "#zero-arg-opcodes" },
+                { "include": "#constants" },
+                { "include": "#loop-vars" },
+                { "include": "#numbers" },
+                { "include": "#camel-case" },
+                { "include": "#strings" },
+                { "include": "#s-expression" },
+                { "include": "#inner-assoc" },
+                { "include": "#inner-assoc-bracket" }
+            ]
+        },
+        "inner-assoc": {
+            "comment": "Nested (assoc ) block inside an s-expression",
+            "begin": "\\(assoc(?=\\s|\\))",
+            "end": "\\)",
+            "patterns": [
+                { "include": "#comments" },
+                { "include": "#annotations" },
+                { "include": "#special-ops" },
+                { "include": "#call-target" },
+                { "include": "#system-args" },
+                { "include": "#opcodes" },
+                { "include": "#zero-arg-opcodes" },
+                { "include": "#constants" },
+                { "include": "#loop-vars" },
+                { "include": "#numbers" },
+                { "include": "#camel-case" },
+                { "include": "#strings" },
+                { "include": "#s-expression" },
+                { "include": "#inner-assoc" },
+                { "include": "#inner-assoc-bracket" }
+            ]
+        },
+        "inner-assoc-bracket": {
+            "comment": "Nested { } block inside an s-expression",
+            "begin": "\\{",
+            "end": "\\}",
+            "patterns": [
+                { "include": "#comments" },
+                { "include": "#annotations" },
+                { "include": "#special-ops" },
+                { "include": "#call-target" },
+                { "include": "#system-args" },
+                { "include": "#opcodes" },
+                { "include": "#zero-arg-opcodes" },
+                { "include": "#constants" },
+                { "include": "#loop-vars" },
+                { "include": "#numbers" },
+                { "include": "#camel-case" },
+                { "include": "#strings" },
+                { "include": "#s-expression" },
+                { "include": "#inner-assoc" },
+                { "include": "#inner-assoc-bracket" }
+            ]
         },
         "special-ops": {
             "match": "(\\@|\\|\\|)",
@@ -48,24 +157,16 @@
         },
         "call-target": {
             "captures": {
-                "1": {
-                    "name": "punctuation.definition.variable.amalgam"
-                },
-                "3": {
-                    "name": "punctuation.definition.variable.amalgam"
-                }
+                "1": { "name": "punctuation.definition.variable.amalgam" },
+                "3": { "name": "punctuation.definition.variable.amalgam" }
             },
             "match": "(?<=\\(call\\s+|call_entity\\s+)(\\!?\\w+)",
             "name": "variable.other.global.amalgam"
         },
         "system-args": {
             "captures": {
-                "1": {
-                    "name": "punctuation.definition.variable.amalgam"
-                },
-                "3": {
-                    "name": "punctuation.definition.variable.amalgam"
-                }
+                "1": { "name": "punctuation.definition.variable.amalgam" },
+                "3": { "name": "punctuation.definition.variable.amalgam" }
             },
             "match": "(?<=\\(system\\s+)(\"exit\"|\"readline\"|\"printline\"|\"cwd\"|\"system\"|\"os\"|\"date_time\"|\"version\"|\"est_mem_reserve\"|\"est_mem_used\"|\"mem_diagnostics\"|\"rand\"|\"sign_key_pair\"|\"encrypt_key_pair\"|\"built_in_data\")",
             "name": "variable.other.global.amalgam"
@@ -98,15 +199,11 @@
             "name": "string.quoted.double.amalgam",
             "begin": "\"",
             "beginCaptures": {
-                "0": {
-                    "name": "punctuation.definition.string.begin.amalgam"
-                }
+                "0": { "name": "punctuation.definition.string.begin.amalgam" }
             },
             "end": "\"",
             "endCaptures": {
-                "0": {
-                    "name": "punctuation.definition.string.end.amalgam"
-                }
+                "0": { "name": "punctuation.definition.string.end.amalgam" }
             },
             "patterns": [
                 {
