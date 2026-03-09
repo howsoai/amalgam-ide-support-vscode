@@ -116,6 +116,11 @@
                 "label": "Amalgam Light",
                 "path": "./themes/amalgamLight.json",
                 "uiTheme": "vs"
+            },
+            {
+                "label": "Amalgam Dark",
+                "path": "./themes/amalgamDark.json",
+                "uiTheme": "vs-dark"
             }
         ],
         "menus": {
