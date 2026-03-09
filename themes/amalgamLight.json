@@ -19,9 +19,9 @@
     },
     {
       "name": "comment",
-      "scope": ["comment"],
+      "scope": ["comment", "comment.markup.link", "punctuation.definition.comment"],
       "settings": {
-        "foreground": "#CCCCCC",
+        "foreground": "#AAAAAA",
         "fontStyle": "italic"
       }
     },
@@ -186,27 +186,21 @@
         "punctuation.section.inner-class",
         "punctuation.section.method",
         "storage.modifier.import",
-        "storage.modifier.package",
-        "variable.parameter"
+        "storage.modifier.package"
       ],
       "settings": {
         "foreground": "#ABB2BE"
       }
     },
     {
-      "name": "@mono-3",
-      "scope": [
-        "comment.line.semicolon",
-        "comment.line.annotation",
-        "comment.markup.link",
-        "punctuation.definition.comment"
-      ],
+      "name": "@mono-2",
+      "scope": ["variable.parameter"],
       "settings": {
-        "foreground": "#5C636F"
+        "foreground": "#999999"
       }
     },
     {
-      "name": "@mono-4",
+      "name": "@mono-3",
       "scope": ["keyword.codetag.notation"],
       "settings": {
         "foreground": "#0000FF",
