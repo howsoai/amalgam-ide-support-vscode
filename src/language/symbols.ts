@@ -17,7 +17,7 @@ export class AmalgamDocumentSymbolProvider implements vscode.DocumentSymbolProvi
       let pendingSymbol: vscode.DocumentSymbol | null = null;
       let prevSymbol: vscode.DocumentSymbol | null = null;
       const skipLineRegex = /^\s*(?:$|[;#])/;
-      const assocRegex = /^\(assoc(?:\s|\))/i;
+      const assocRegex = /^\(assoc(?:$|\s|\))/i;
 
       // End the previous symbol's range just after the last content line.
       // Called when a new key is found, so blank/comment lines sitting above
