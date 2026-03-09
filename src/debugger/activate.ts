@@ -128,8 +128,8 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
               }
             }
 
-            // Don't match when inside a comment
-            const COMMENT_REGEXP = /;.*$/g;
+            // Don't match when inside a comment or annotation
+            const COMMENT_REGEXP = /[;#].*$/g;
             let cMatches: RegExpExecArray | null;
             while ((cMatches = COMMENT_REGEXP.exec(line)) != null) {
               const cRange = new vscode.Range(
@@ -167,8 +167,9 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
             return undefined;
           }
 
-          if (line.text.substring(0, range.start.character).includes(";")) {
-            // range is in a comment
+          const startCharacter = line.text.substring(0, range.start.character);
+          if (startCharacter.includes(";") || startCharacter.includes("#")) {
+            // range is in a comment or annotation
             return undefined;
           }
 
