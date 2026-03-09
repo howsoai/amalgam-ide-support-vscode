@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { getDepthChange } from "./util";
 
 export class AmalgamDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
   public provideDocumentSymbols(
@@ -45,7 +46,7 @@ export class AmalgamDocumentSymbolProvider implements vscode.DocumentSymbolProvi
           continue;
         }
 
-        const depthChange = this.getDepthChange(text);
+        const depthChange = getDepthChange(text);
         const nextDepth = depth + depthChange;
 
         if (state === "seeking") {
@@ -125,36 +126,6 @@ export class AmalgamDocumentSymbolProvider implements vscode.DocumentSymbolProvi
       finalizePrevSymbol();
       resolve(symbols);
     });
-  }
-
-  // Count the net paren/brace depth change for a line, ignoring strings and comments.
-  private getDepthChange(text: string): number {
-    let change = 0;
-    let inString = false;
-    let stringChar = "";
-
-    for (let j = 0; j < text.length; j++) {
-      const ch = text[j];
-      if (inString) {
-        if (ch === "\\") {
-          j++; // skip escaped character
-        } else if (ch === stringChar) {
-          inString = false;
-        }
-      } else {
-        if (ch === ";" || ch == "#") break; // rest of line is a comment/annotation
-        if (ch === '"' || ch === "'") {
-          inString = true;
-          stringChar = ch;
-        } else if (ch === "(" || ch === "{" || ch === "[") {
-          change++;
-        } else if (ch === ")" || ch === "}" || ch === "]") {
-          change--;
-        }
-      }
-    }
-
-    return change;
   }
 
   private checkType(text: string, defaultKind: vscode.SymbolKind) {
