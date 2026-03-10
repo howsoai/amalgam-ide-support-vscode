@@ -225,11 +225,6 @@ export class AmalgamDebugSession extends LoggingDebugSession {
         //   sf.instructionPointerReference = address;
         // }
 
-        // Subtly change appearance if frame is for a label
-        if (f.name.startsWith("#")) {
-          sf.presentationHint = "subtle";
-        }
-
         return sf;
       }),
       totalFrames: stk.count,
