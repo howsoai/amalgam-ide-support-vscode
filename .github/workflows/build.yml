@@ -31,7 +31,7 @@ jobs:
       package-version: ${{ steps.get-version.outputs.package-version }}
     steps:
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install nodejs
         uses: actions/setup-node@v4
