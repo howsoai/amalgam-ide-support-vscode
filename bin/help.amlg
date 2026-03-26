@@ -1,0 +1,13 @@
+;print all help documentation for every opcode
+(print
+	(format
+		(map
+			(lambda (set (help (current_value)) "opcode" (current_value)))
+			(help "opcodes")
+		)
+		"code"
+		"json"
+		(null)
+		{"sort_keys" .true}
+	)
+)

@@ -1,36 +1,48 @@
 /**
- * Converts the Amalgam documentation language.js to snippets for VSCode.
+ * Converts the Amalgam documentation to snippets for VSCode.
  *
  * Run this script from the root of the project:
- * > node ./bin/genSnippets.js ~/my/path/to/amalgam/documentation/language.js
+ * > node ./bin/genSnippets.js ~/my/path/to/amalgam
  */
 import path from "node:path";
 import fs from "node:fs";
+import { spawnSync } from "node:child_process";
 
-const TARGET_FILE = path.resolve("snippets/amalgam.snippets.json");
+const TARGET_FILE = path.resolve(import.meta.dirname + "/../snippets/amalgam.snippets.json");
 
-async function convert(filePath) {
-  if (filePath == null) {
-    throw new Error("A filepath to the Amalgam language.js is required.");
+async function convert(amalgamPath) {
+  if (amalgamPath == null) {
+    throw new Error("A filepath to the Amalgam executable is required.");
   }
-  if (!fs.existsSync(filePath)) {
-    throw new Error("The provided filepath does not exist");
+  if (!fs.existsSync(amalgamPath)) {
+    throw new Error("The provided Amalgam filepath does not exist");
   }
 
-  const { language } = await import(filePath);
+  // Run amalgam binary on the help.amlg file to capture all opcode documentation
+  const result = spawnSync(amalgamPath, ["help.amlg"], {
+    encoding: "utf-8",
+    cwd: import.meta.dirname,
+  });
+  if (result.error) throw result.error;
+  if (result.status !== 0) {
+    console.error(result.stderr);
+    throw new Error(`Exited with code ${result.status}`);
+  }
+
+  // Parse the result and update snippets
+  const help = JSON.parse(result.stdout);
   const output = {};
 
-  for (const item of language) {
-    const { parameter, description, ...docs } = item;
-    if (parameter != null) {
-      let params = parameter.split(" ");
-      if (params[0].startsWith("[")) continue;
-      const opcode = "(" + params[0];
-      params = params.slice(1).join(" ");
-      output[opcode] = {
-        prefix: opcode,
-        body: [opcode],
-        description: `${params} || ${description}`,
+  for (const item of help) {
+    const { opcode, parameters, description, ...docs } = item;
+    if (opcode != null) {
+      // TODO: continue if not (opcode)
+      // if (params[0].startsWith("[")) continue;
+      const opcode_key = "(" + opcode;
+      output[opcode_key] = {
+        prefix: opcode_key,
+        body: [opcode_key],
+        description: `${parameters} || ${description}`,
         // Custom property for use in HoverProvider
         $doc: docs,
       };

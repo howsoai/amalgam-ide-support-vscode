@@ -198,9 +198,9 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
           } else {
             headerText += ")";
           }
-          if (doc.output) {
-            // Add the output as a comment on the end
-            headerText += " ; -> " + doc.output;
+          if (doc.returns) {
+            // Add the return type as a comment on the end
+            headerText += " ; -> " + doc.returns;
           }
           header.appendCodeblock(headerText, "amalgam");
           sections.push(header);
@@ -212,10 +212,13 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
             sections.push(content);
           }
           // Render examples if defined
-          if (doc.example) {
+          if (doc.examples) {
             const content = new vscode.MarkdownString();
             content.appendMarkdown("##### Examples:");
-            content.appendCodeblock(doc.example, "amalgam");
+            for (const ex of doc.examples) {
+              content.appendCodeblock(ex.example, "amalgam");
+              content.appendCodeblock(ex.output, "amalgam");
+            }
             sections.push(content);
           }
           return new vscode.Hover(sections, range);

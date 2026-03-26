@@ -1,12 +1,22 @@
 import * as vscode from "vscode";
 import { TextDecoder } from "node:util";
 
+export type OpcodeExample = {
+  example: string;
+  output: string;
+};
+
 export type OpcodeDefinition = {
   parameters: string;
   description: string;
-  output: string;
-  example: string;
-  concurrency: boolean;
+  allows_concurrency: boolean;
+  examples: OpcodeExample[];
+  new_scope: boolean;
+  new_target_scope: boolean;
+  permissions: string;
+  requires_entity: boolean;
+  returns: string;
+  value_newness: string;
 };
 
 export type OpcodeIndex = Record<string, OpcodeDefinition>;
