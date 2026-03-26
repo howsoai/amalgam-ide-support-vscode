@@ -58,7 +58,7 @@ jobs:
           rm -rf dist/
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: amalgam-lang-${{ env.PACKAGE_VERSION }}.vsix
           path: ./amalgam-lang-${{ env.PACKAGE_VERSION }}.vsix
@@ -78,7 +78,7 @@ jobs:
     steps:
 
     - name: Download Artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         path: ./
 
