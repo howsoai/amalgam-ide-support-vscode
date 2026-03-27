@@ -36,7 +36,7 @@ jobs:
       - name: Install nodejs
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/hydrogen'
+          node-version: 'lts/krypton'
 
       - name: Update version for prerelease build
         run: |
