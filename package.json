@@ -1,6 +1,6 @@
 {
     "name": "amalgam-lang",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "type": "commonjs",
     "publisher": "howso",
     "displayName": "Amalgam Language",
@@ -33,21 +33,21 @@
         "lint": "eslint src/**"
     },
     "engines": {
-        "vscode": "^1.74.0"
+        "vscode": "^1.105.0"
     },
     "dependencies": {
-        "@vscode/debugadapter": "^1.59.0",
-        "@vscode/debugprotocol": "^1.59.0",
-        "async": "^3.2.4",
-        "semver": "^7.6.0"
+        "@vscode/debugadapter": "^1.68.0",
+        "@vscode/debugprotocol": "^1.68.0",
+        "async": "^3.2.6",
+        "semver": "^7.7.4"
     },
     "devDependencies": {
-        "@types/async": "^3.2.18",
-        "@types/node": "^18.15.11",
-        "@types/vscode": "~1.74.0",
+        "@types/async": "^3.2.25",
+        "@types/node": "^25.5.0",
+        "@types/vscode": "^1.105.0",
         "@typescript-eslint/eslint-plugin": "^5.48.1",
         "@typescript-eslint/parser": "^5.48.1",
-        "@vscode/vsce": "^3.7.0",
+        "@vscode/vsce": "^3.7.1",
         "eslint": "^8.38.0",
         "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-prettier": "^4.2.1",
