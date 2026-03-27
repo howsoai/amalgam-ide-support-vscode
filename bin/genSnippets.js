@@ -2,7 +2,7 @@
  * Converts the Amalgam documentation to snippets for VSCode.
  *
  * Run this script from the root of the project:
- * > node ./bin/genSnippets.js ~/my/path/to/amalgam
+ * > node ./bin/genSnippets.js ~/my/path/to/amalgam-binary
  */
 import path from "node:path";
 import fs from "node:fs";
@@ -12,7 +12,8 @@ const TARGET_FILE = path.resolve(import.meta.dirname + "/../snippets/amalgam.sni
 const TMLANGUAGE_FILE = path.resolve(import.meta.dirname + "/../syntaxes/amalgam.tmLanguage.json");
 const LITERALS = ["string", "number", "bool", "symbol"];
 
-function getKnownOpcodes() {
+function getDefinedOpcodes() {
+  // Get opcodes defined in the tmLanguage file
   const grammar = JSON.parse(fs.readFileSync(TMLANGUAGE_FILE, "utf-8"));
   const opcodesDef = grammar.repository?.opcodes?.match;
   const loopVarsDef = grammar.repository?.["loop-vars"]?.match;
@@ -40,11 +41,12 @@ function getKnownOpcodes() {
 }
 
 function validateOpcodes(help) {
+  const definedOpcodes = getDefinedOpcodes();
+
   // Check all opcodes from help exist in the tmLanguage opcodes regex
-  const knownOpcodes = getKnownOpcodes();
   const missing = help
     .map((item) => item.opcode)
-    .filter((opcode) => opcode != null && !LITERALS.includes(opcode) && !knownOpcodes.has(opcode));
+    .filter((opcode) => opcode != null && !LITERALS.includes(opcode) && !definedOpcodes.has(opcode));
   if (missing.length > 0) {
     console.warn("WARNING: The following opcodes are missing from the tmLanguage regex:");
     for (const opcode of missing) console.warn(`  - ${opcode}`);
@@ -52,13 +54,14 @@ function validateOpcodes(help) {
 
   // Check all opcodes in tmLanguage are also present in help output
   const helpOpcodes = new Set(help.map((item) => item.opcode).filter(Boolean));
-  const extras = [...knownOpcodes].filter((opcode) => !helpOpcodes.has(opcode));
+  const extras = [...definedOpcodes].filter((opcode) => !helpOpcodes.has(opcode));
   if (extras.length > 0) {
     console.warn("WARNING: The following tmLanguage regex opcodes have no associated help documentation:");
     for (const opcode of extras) console.warn(`  - ${opcode}`);
   }
 }
 
+/** Convert Amalgam help documentation into snippets. */
 async function convert(amalgamPath) {
   if (amalgamPath == null) {
     throw new Error("A filepath to the Amalgam executable is required.");
