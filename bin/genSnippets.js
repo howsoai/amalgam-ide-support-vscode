@@ -9,6 +9,7 @@ import fs from "node:fs";
 import { spawnSync } from "node:child_process";
 
 const TARGET_FILE = path.resolve(import.meta.dirname + "/../snippets/amalgam.snippets.json");
+const LITERALS = ["string", "number", "bool", "symbol"];
 
 async function convert(amalgamPath) {
   if (amalgamPath == null) {
@@ -35,13 +36,11 @@ async function convert(amalgamPath) {
 
   for (const item of help) {
     const { opcode, parameters, description, ...docs } = item;
-    if (opcode != null) {
-      // TODO: continue if not (opcode)
-      // if (params[0].startsWith("[")) continue;
-      const opcode_key = "(" + opcode;
-      output[opcode_key] = {
-        prefix: opcode_key,
-        body: [opcode_key],
+    if (opcode != null && !LITERALS.includes(opcode)) {
+      const opcode_prefix = "(" + opcode;
+      output[opcode] = {
+        prefix: opcode_prefix,
+        body: [opcode_prefix],
         description: `${parameters} || ${description}`,
         // Custom property for use in HoverProvider
         $doc: docs,

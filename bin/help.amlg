@@ -1,4 +1,4 @@
-;print all help documentation for every opcode
+;print json of all help documentation for every opcode
 (print
 	(format
 		(map

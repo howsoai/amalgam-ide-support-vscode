@@ -156,10 +156,14 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
 
   context.subscriptions.push(
     vscode.languages.registerHoverProvider("amalgam", {
-      provideHover: function (document: vscode.TextDocument, position: vscode.Position): ProviderResult<vscode.Hover> {
+      provideHover: function (
+        document: vscode.TextDocument,
+        position: vscode.Position,
+        token: vscode.CancellationToken
+      ): ProviderResult<vscode.Hover> {
         const range = document.getWordRangeAtPosition(position, /\([\w<>!+-~=*/]+/);
         if (range) {
-          const opcode = document.getText(range);
+          const opcode = document.getText(range).substring(1);
           const line = document.lineAt(position.line);
 
           if (!(opcode in documentation)) {
@@ -176,6 +180,7 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
           const quoteRegex = /(["'])(?:(?=(\\?))\2.)*?\1/g;
           let qMatches: RegExpExecArray | null;
           while ((qMatches = quoteRegex.exec(line.text)) !== null) {
+            if (token.isCancellationRequested) return undefined;
             const qRange = new vscode.Range(
               position.line,
               qMatches.index,
@@ -192,7 +197,7 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
           const sections: vscode.MarkdownString[] = [];
           // Render opcode signature
           const header = new vscode.MarkdownString();
-          let headerText = opcode;
+          let headerText = "(" + opcode;
           if (doc.parameters) {
             headerText += `\n\t${doc.parameters}\n)`;
           } else {
@@ -212,12 +217,24 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
             sections.push(content);
           }
           // Render examples if defined
-          if (doc.examples) {
+          if (Array.isArray(doc.examples)) {
             const content = new vscode.MarkdownString();
-            content.appendMarkdown("##### Examples:");
-            for (const ex of doc.examples) {
+            if (doc.examples.length == 1) {
+              content.appendMarkdown("#### Example:\n\n");
+            } else {
+              content.appendMarkdown("#### Examples:\n\n");
+            }
+            for (let i = 0; i < doc.examples.length; i++) {
+              const ex = doc.examples[i];
+              if (doc.examples.length > 1) {
+                content.appendMarkdown(`*Code:*\n`);
+              }
               content.appendCodeblock(ex.example, "amalgam");
+              content.appendMarkdown("*Output:*\n");
               content.appendCodeblock(ex.output, "amalgam");
+              if (i < doc.examples.length - 1) {
+                content.appendMarkdown("&nbsp;\n\n");
+              }
             }
             sections.push(content);
           }
