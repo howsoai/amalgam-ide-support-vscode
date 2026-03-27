@@ -91,4 +91,4 @@ jobs:
         artifactErrorsFailBuild: true
         body: ${{ needs.generate-changelog.ouptuts.changelog }}
         makeLatest: legacy
-        artifacts: "./amalgam-lang-*.vsix/amalgam-lang-*.vsix"
+        artifacts: "./amalgam-lang-*.vsix"
