@@ -241,7 +241,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
 
     switch (args.context) {
       case "repl": {
-        const CMD_REGEXP = /^~(?<cmd>entities)(?: (?<args>.+))?$/i;
+        const CMD_REGEXP = /^~(?<cmd>entities|return)(?: (?<args>.+))?$/i;
         const match = CMD_REGEXP.exec(args.expression);
         if (match?.groups) {
           // Handle custom commands
@@ -249,6 +249,10 @@ export class AmalgamDebugSession extends LoggingDebugSession {
             case "entities": {
               const entities = await this.runtime.getEntities();
               reply = entities.map((e) => e.name).join("\n");
+              break;
+            }
+            case "return": {
+              rv = await this.runtime.getReturnValue();
               break;
             }
           }
@@ -449,6 +453,11 @@ export class AmalgamDebugSession extends LoggingDebugSession {
           detail: "Print out the contained entities.",
           type: "method",
         },
+        {
+          label: "return",
+          detail: "Print out the value returned by the previous opcode.",
+          type: "method",
+        },
       ],
     };
     this.sendResponse(response);
@@ -635,13 +644,15 @@ export class AmalgamDebugSession extends LoggingDebugSession {
       value: "???",
       variablesReference: 0,
       evaluateName: `${variable.category} ${variable.name}`,
+      presentationHint: { ...variable.presentationHint },
     };
     if (variable.lazy) {
       variable.reference ??= this._variableHandles.create(variable);
       dapVariable.variablesReference = variable.reference;
       dapVariable.value = "";
       dapVariable.presentationHint = {
-        lazy: variable.lazy,
+        ...dapVariable.presentationHint,
+        lazy: true,
       };
     } else {
       if (Array.isArray(variable.value)) {
