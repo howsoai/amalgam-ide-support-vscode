@@ -1,4 +1,5 @@
 import { spawn, ChildProcessWithoutNullStreams } from "child_process";
+import { DebugProtocol } from "@vscode/debugprotocol";
 import { EventEmitter } from "events";
 import { platform } from "os";
 import { queue, QueueObject } from "async";
@@ -86,6 +87,7 @@ export type IRuntimeCommand =
   | "c"
   | "f"
   | "fc"
+  | "r"
   | "s"
   | "n"
   | "br"
@@ -112,8 +114,8 @@ export interface IRuntimeTask {
 /** The result of a runtime command */
 export type IRuntimeResult<T extends IRuntimeCommand = IRuntimeCommand> = T extends "stack"
   ? { type: "stack"; stack: IRuntimeStack | undefined }
-  : T extends "eval" | "pv" | "pp" | "p" | "entity"
-  ? { type: "eval" | "pv" | "pp" | "p" | "entity"; value: string | undefined }
+  : T extends "eval" | "pv" | "pp" | "p" | "r" | "entity"
+  ? { type: "eval" | "pv" | "pp" | "p" | "r" | "entity"; value: string | undefined }
   : T extends "vars" | "labels" | "entities"
   ? { type: "vars" | "labels" | "entities"; values: string[] }
   : T extends "bn"
@@ -129,6 +131,7 @@ export type IRuntimeVariableCategory = "var" | "label" | "entity";
 
 export class RuntimeVariable {
   public reference?: number;
+  public presentationHint?: Omit<DebugProtocol.VariablePresentationHint, "lazy">;
   public readonly category: IRuntimeVariableCategory = "var";
 
   public get value() {
@@ -188,8 +191,8 @@ export class AmalgamRuntime extends EventEmitter {
     // Breakpoints and stack are matched via the header line and existing subsequent nested lines
     breakpoints: /^(?<type>Line) Breakpoints:\n(?<brs>^(?:\s{2}.+)+)$/gm,
     stack: /^(?<type>Interpret node|Opcode) stack:\n(?<frames>^(?:\s{2}.+)+)$/gm,
-    // Expression results match all lines up to final empty line
-    expression: /^(?<value>[\s\S]+)\n{2}$/gm,
+    // Expression results match all lines
+    expression: /^(?<value>[\s\S]+)$/gm,
     // Results match all lines starting with 2 spaces
     lines: /^ {2}(?<line>.+)$/gm,
   };
@@ -395,7 +398,8 @@ export class AmalgamRuntime extends EventEmitter {
       let { values } = await this.sendCommand("vars", signal);
       values = Array.from(new Set(values)).sort();
 
-      return await Promise.all(
+      // Get value preview for all variables
+      const variables = await Promise.all(
         values.map(async (v) => {
           let { value } = await this.sendCommand("pp", signal, v);
           if (value != null) {
@@ -405,6 +409,12 @@ export class AmalgamRuntime extends EventEmitter {
           return new RuntimeVariable(v, value);
         })
       );
+
+      // Get the last opcode return value
+      const returnValue = await this.getReturnValue();
+      variables.push(returnValue);
+
+      return variables;
     } catch (err) {
       if (err instanceof RuntimeCommandCancelled) {
         return [];
@@ -521,6 +531,17 @@ export class AmalgamRuntime extends EventEmitter {
   public async evaluate(expression: string): Promise<RuntimeVariable> {
     const { value } = await this.sendCommand("eval", prepareExpression(expression));
     return new RuntimeVariable("eval", value);
+  }
+
+  /**
+   * Get the previous opcode's return value.
+   * @returns The return value.
+   */
+  public async getReturnValue(): Promise<RuntimeVariable> {
+    const { value } = await this.sendCommand("r");
+    const rv = new RuntimeVariable("[return value]", value);
+    rv.presentationHint = { kind: "virtual", visibility: "internal", attributes: ["readOnly"] };
+    return rv;
   }
 
   /**
@@ -762,7 +783,7 @@ export class AmalgamRuntime extends EventEmitter {
 
     // Match expression
     let expressionResult: string | undefined = undefined;
-    if (["p", "pv", "pp", "eval", "entity"].indexOf(command) >= 0) {
+    if (["p", "pv", "pp", "r", "eval", "entity"].indexOf(command) >= 0) {
       reg = new RegExp(this.matchers.expression);
       while ((matches = reg.exec(lines)) != null) {
         if (matches.groups) {
@@ -894,6 +915,7 @@ export class AmalgamRuntime extends EventEmitter {
       case "p":
       case "pv":
       case "pp":
+      case "r":
       case "entity":
       case "eval": {
         this.commandDone.notify({
