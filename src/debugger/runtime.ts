@@ -6,6 +6,7 @@ import { queue, QueueObject } from "async";
 import { logger } from "../logging";
 import { InvalidRuntimeResponse, RuntimeCommandCancelled, RuntimeNotStarted } from "./errors";
 import { NotifySubject, collapseWhitespace, prepareExpression } from "./utils";
+import { getDebuggerSettings, AmalgamDebuggerSettings } from "./configuration";
 
 export type DataSource = "stdout" | "stderr" | "stdin";
 
@@ -163,6 +164,8 @@ export class AmalgamRuntime extends EventEmitter {
   // Default thread id when running in ST mode
   public static readonly DEFAULT_THREAD_ID = 1;
 
+  private settings: AmalgamDebuggerSettings;
+
   private cp: ChildProcessWithoutNullStreams | null = null;
   private ignoreOutput = false;
   private outputBuffer = "";
@@ -208,6 +211,8 @@ export class AmalgamRuntime extends EventEmitter {
 
   public constructor() {
     super();
+    this.settings = getDebuggerSettings();
+
     // Initialize the command message queue
     this.commandQueue = queue<IRuntimeTask, IRuntimeResult, Error>(async (task) => {
       if (this.cp?.pid === undefined) {
@@ -411,8 +416,10 @@ export class AmalgamRuntime extends EventEmitter {
       );
 
       // Get the last opcode return value
-      const returnValue = await this.getReturnValue();
-      variables.push(returnValue);
+      if (this.settings.enableOpcodeReturn) {
+        const returnValue = await this.getReturnValue();
+        variables.push(returnValue);
+      }
 
       return variables;
     } catch (err) {
