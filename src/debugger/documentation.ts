@@ -17,6 +17,8 @@ export type OpcodeDefinition = {
   requires_entity: boolean;
   returns: string;
   value_newness: string;
+  opcode_group: string;
+  frequency_per_10000_opcodes: number;
 };
 
 export type OpcodeIndex = Record<string, OpcodeDefinition>;

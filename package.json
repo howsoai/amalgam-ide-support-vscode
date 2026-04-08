@@ -1,6 +1,6 @@
 {
     "name": "amalgam-lang",
-    "version": "3.2.0",
+    "version": "3.3.0",
     "type": "commonjs",
     "publisher": "howso",
     "displayName": "Amalgam Language",
@@ -123,6 +123,16 @@
                 "uiTheme": "vs-dark"
             }
         ],
+        "configuration": {
+            "title": "Amalgam",
+            "properties": {
+                "amalgam.debugger.enableOpcodeReturn": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Include the return value of the previous opcode in the variables scope of debug sessions."
+                }
+            }
+        },
         "menus": {
             "editor/title/run": [
                 {
