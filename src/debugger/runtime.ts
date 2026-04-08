@@ -89,6 +89,8 @@ export type IRuntimeCommand =
   | "f"
   | "fc"
   | "r"
+  | "rp"
+  | "rwatch"
   | "s"
   | "n"
   | "br"
@@ -115,8 +117,8 @@ export interface IRuntimeTask {
 /** The result of a runtime command */
 export type IRuntimeResult<T extends IRuntimeCommand = IRuntimeCommand> = T extends "stack"
   ? { type: "stack"; stack: IRuntimeStack | undefined }
-  : T extends "eval" | "pv" | "pp" | "p" | "r" | "entity"
-  ? { type: "eval" | "pv" | "pp" | "p" | "r" | "entity"; value: string | undefined }
+  : T extends "eval" | "pv" | "pp" | "p" | "r" | "rp" | "entity"
+  ? { type: "eval" | "pv" | "pp" | "p" | "r" | "rp" | "entity"; value: string | undefined }
   : T extends "vars" | "labels" | "entities"
   ? { type: "vars" | "labels" | "entities"; values: string[] }
   : T extends "bn"
@@ -170,6 +172,7 @@ export class AmalgamRuntime extends EventEmitter {
   private ignoreOutput = false;
   private outputBuffer = "";
   private debugStarted = new NotifySubject<null>();
+  private returnValueTracking = false;
 
   private commandQueue: QueueObject<IRuntimeTask>;
   private commandDone = new NotifySubject<IRuntimeResult>();
@@ -289,6 +292,7 @@ export class AmalgamRuntime extends EventEmitter {
         await debugStarted;
       }
       await this.verifyBreakpoints();
+      await this.setReturnValueTracking(this.returnValueTracking); // Send command to configure tracking
       if (stopOnEntry) {
         this.sendEvent(RuntimeEvent.STOP_ON_ENTRY, this.currentThread);
       } else {
@@ -416,8 +420,8 @@ export class AmalgamRuntime extends EventEmitter {
       );
 
       // Get the last opcode return value
-      if (this.settings.enableOpcodeReturn) {
-        const returnValue = await this.getReturnValue();
+      if (this.returnValueTracking && this.settings.showOpcodeReturnValue) {
+        const returnValue = await this.getReturnValue(true);
         variables.push(returnValue);
       }
 
@@ -542,13 +546,27 @@ export class AmalgamRuntime extends EventEmitter {
 
   /**
    * Get the previous opcode's return value.
+   * @param preview Retrieve the truncated value instead when over 1kb in size.
    * @returns The return value.
    */
-  public async getReturnValue(): Promise<RuntimeVariable> {
-    const { value } = await this.sendCommand("r");
+  public async getReturnValue(preview = false): Promise<RuntimeVariable> {
+    if (!this.returnValueTracking) {
+      await this.setReturnValueTracking(true);
+    }
+    const { value } = await this.sendCommand(preview ? "rp" : "r");
     const rv = new RuntimeVariable("[return value]", value);
     rv.presentationHint = { kind: "virtual", visibility: "internal", attributes: ["readOnly"] };
     return rv;
+  }
+
+  /**
+   * Set tracking of previous opcode's return value.
+   */
+  public async setReturnValueTracking(enabled: boolean): Promise<void> {
+    if (this.isRunning) {
+      await this.sendCommand("rwatch", enabled ? "on" : "off");
+    }
+    this.returnValueTracking = enabled;
   }
 
   /**
@@ -790,7 +808,7 @@ export class AmalgamRuntime extends EventEmitter {
 
     // Match expression
     let expressionResult: string | undefined = undefined;
-    if (["p", "pv", "pp", "r", "eval", "entity"].indexOf(command) >= 0) {
+    if (["p", "pv", "pp", "r", "rp", "eval", "entity"].indexOf(command) >= 0) {
       reg = new RegExp(this.matchers.expression);
       while ((matches = reg.exec(lines)) != null) {
         if (matches.groups) {
@@ -923,6 +941,7 @@ export class AmalgamRuntime extends EventEmitter {
       case "pv":
       case "pp":
       case "r":
+      case "rp":
       case "entity":
       case "eval": {
         this.commandDone.notify({

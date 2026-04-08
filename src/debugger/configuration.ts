@@ -33,7 +33,7 @@ export class AmalgamConfigurationProvider implements vscode.DebugConfigurationPr
 }
 
 export type AmalgamDebuggerSettings = {
-  enableOpcodeReturn: boolean;
+  showOpcodeReturnValue: boolean;
 };
 
 export function getDebuggerSettings(scope?: vscode.ConfigurationScope | null): AmalgamDebuggerSettings {
@@ -41,7 +41,7 @@ export function getDebuggerSettings(scope?: vscode.ConfigurationScope | null): A
   if (settings == null) {
     // Return defaults
     return {
-      enableOpcodeReturn: false,
+      showOpcodeReturnValue: true,
     };
   }
   return settings;

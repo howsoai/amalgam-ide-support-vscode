@@ -44,6 +44,8 @@ interface ILaunchRequestArguments extends DebugProtocol.LaunchRequestArguments {
   stopOnEntry?: boolean;
   /** Enable logging the Debug Adapter Protocol. */
   logging?: boolean;
+  /** Enable tracking of previous opcode return values. */
+  returnValueTracking?: boolean;
 }
 
 export class AmalgamDebugSession extends LoggingDebugSession {
@@ -252,7 +254,16 @@ export class AmalgamDebugSession extends LoggingDebugSession {
               break;
             }
             case "return": {
-              rv = await this.runtime.getReturnValue();
+              const option = match.groups.args?.trim();
+              if (option == "off") {
+                await this.runtime.setReturnValueTracking(false);
+                reply = "Disabled return value tracking.";
+              } else if (option == "on") {
+                await this.runtime.setReturnValueTracking(true);
+                reply = "Enabled return value tracking.";
+              } else {
+                rv = await this.runtime.getReturnValue();
+              }
               break;
             }
           }
@@ -450,12 +461,13 @@ export class AmalgamDebugSession extends LoggingDebugSession {
       targets: [
         {
           label: "entities",
-          detail: "Print out the contained entities.",
+          detail: "Print the contained entities.",
           type: "method",
         },
         {
           label: "return",
-          detail: "Print out the value returned by the previous opcode.",
+          detail:
+            "Print the value returned by the previous opcode. Specify 'on/off' to enable/disable return value tracking.",
           type: "method",
         },
       ],
@@ -550,6 +562,9 @@ export class AmalgamDebugSession extends LoggingDebugSession {
       args: runtimeArgs,
       program: programUri.fsPath,
     };
+
+    // Configure runtime options
+    await this.runtime.setReturnValueTracking(!!args.returnValueTracking);
 
     // start the program in the runtime
     const started = await this.runtime.start(startArgs, !!args.stopOnEntry, !args.noDebug);

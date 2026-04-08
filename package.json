@@ -1,6 +1,6 @@
 {
     "name": "amalgam-lang",
-    "version": "3.3.0",
+    "version": "3.4.0",
     "type": "commonjs",
     "publisher": "howso",
     "displayName": "Amalgam Language",
@@ -126,10 +126,10 @@
         "configuration": {
             "title": "Amalgam",
             "properties": {
-                "amalgam.debugger.enableOpcodeReturn": {
+                "amalgam.debugger.showOpcodeReturnValue": {
                     "type": "boolean",
-                    "default": false,
-                    "description": "Include the return value of the previous opcode in the variables scope of debug sessions."
+                    "default": true,
+                    "description": "Include the return value of the previous opcode in the variables scope of debug sessions, when return value tracking is enabled by the debugger."
                 }
             }
         },
@@ -225,6 +225,11 @@
                             "logging": {
                                 "type": "boolean",
                                 "description": "Enable logging of the Debug Adapter Protocol.",
+                                "default": false
+                            },
+                            "returnValueTracking": {
+                                "type": "boolean",
+                                "description": "Enable tracking of previous opcode return values by debugger so they can be inspected. May also be enabled during a session using the ~return command.",
                                 "default": false
                             }
                         }
