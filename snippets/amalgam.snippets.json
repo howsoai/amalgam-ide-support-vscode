@@ -237,11 +237,11 @@
                     "output": ".false"
                 },
                 {
-                    "example": "(<= (null) 2)",
+                    "example": "(<= .null 2)",
                     "output": ".false"
                 },
                 {
-                    "example": "(<= 2 (null))",
+                    "example": "(<= 2 .null)",
                     "output": ".false"
                 }
             ],
@@ -273,11 +273,11 @@
                     "output": ".true"
                 },
                 {
-                    "example": "(=\n\t(sqrt -1)\n\t(null)\n)",
+                    "example": "(=\n\t(sqrt -1)\n\t.null\n)",
                     "output": ".true"
                 },
                 {
-                    "example": "(= (null) (null))",
+                    "example": "(= .null .null)",
                     "output": ".true"
                 },
                 {
@@ -361,11 +361,11 @@
                     "output": ".false"
                 },
                 {
-                    "example": "(>= (null) 2)",
+                    "example": "(>= .null 2)",
                     "output": ".false"
                 },
                 {
-                    "example": "(>= 2 (null))",
+                    "example": "(>= 2 .null)",
                     "output": ".false"
                 }
             ],
@@ -435,7 +435,7 @@
             "opcode_group": "Variable Definition and Modification",
             "permissions": "none",
             "requires_entity": false,
-            "returns": "null",
+            "returns": ".null",
             "value_newness": "null"
         }
     },
@@ -711,7 +711,7 @@
             "opcode_group": "Variable Definition and Modification",
             "permissions": "none",
             "requires_entity": false,
-            "returns": "null",
+            "returns": ".null",
             "value_newness": "null"
         }
     },
@@ -777,8 +777,8 @@
                     "output": "\"{b 2 c 3}\""
                 },
                 {
-                    "example": "(unparse\n\t{(null) 0 (+ 1 2) 3}\n)",
-                    "output": "\"{(null) 0 (+ 1 2) 3}\""
+                    "example": "(unparse\n\t{.null 0 (+ 1 2) 3}\n)",
+                    "output": "\"{.null 0 (+ 1 2) 3}\""
                 }
             ],
             "frequency_per_10000_opcodes": 352,
@@ -901,8 +901,8 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"OuterEntity\"\n\t\t(lambda\n\t\t\t{\n\t\t\t\t^available_method 3\n\t\t\t\tcompute_value (call_entity\n\t\t\t\t\t\t\"InnerEntity\"\n\t\t\t\t\t\t\"inner_call\"\n\t\t\t\t\t\t{x x}\n\t\t\t\t\t)\n\t\t\t}\n\t\t)\n\t)\n\t(create_entities\n\t\t[\"OuterEntity\" \"InnerEntity\"]\n\t\t(lambda\n\t\t\t{\n\t\t\t\tinner_call (+\n\t\t\t\t\t\tx\n\t\t\t\t\t\t(call_container \"^available_method\")\n\t\t\t\t\t)\n\t\t\t}\n\t\t)\n\t)\n\t[\n\t\t(call_entity\n\t\t\t\"OuterEntity\"\n\t\t\t\"compute_value\"\n\t\t\t{x 5}\n\t\t)\n\t\t(call_entity\n\t\t\t\"OuterEntity\"\n\t\t\t\"compute_value\"\n\t\t\t{x 5}\n\t\t\t30\n\t\t\t30\n\t\t)\n\t\t(call_entity\n\t\t\t\"OuterEntity\"\n\t\t\t\"compute_value\"\n\t\t\t{x 5}\n\t\t\t1\n\t\t\t1\n\t\t)\n\t\t(call_entity\n\t\t\t\"OuterEntity\"\n\t\t\t\"compute_value\"\n\t\t\t{x 5}\n\t\t\t1\n\t\t\t1\n\t\t\t1\n\t\t\t1\n\t\t\t1\n\t\t\t.false\n\t\t)\n\t]\n)",
-                    "output": "[\n\t8\n\t[\n\t\t[8 {} (null)]\n\t\t{}\n\t\t(null)\n\t]\n\t[(null) {} \"Execution step limit exceeded\"]\n\t[(null) {} \"Execution step limit exceeded\"]\n]"
+                    "example": "(seq\n\t(create_entities\n\t\t\"OuterEntity\"\n\t\t(lambda\n\t\t\t{\n\t\t\t\t^available_method 5\n\t\t\t\tcompute_value (call_entity\n\t\t\t\t\t\t\"InnerEntity\"\n\t\t\t\t\t\t\"inner_call\"\n\t\t\t\t\t\t{x x}\n\t\t\t\t\t)\n\t\t\t}\n\t\t)\n\t)\n\t(create_entities\n\t\t[\"OuterEntity\" \"InnerEntity\"]\n\t\t(lambda\n\t\t\t{\n\t\t\t\tinner_call (+\n\t\t\t\t\t\tx\n\t\t\t\t\t\t(call_container \"^available_method\")\n\t\t\t\t\t)\n\t\t\t}\n\t\t)\n\t)\n\t[\n\t\t(call_entity\n\t\t\t\"OuterEntity\"\n\t\t\t\"compute_value\"\n\t\t\t{x 5}\n\t\t)\n\t\t(call_entity\n\t\t\t\"OuterEntity\"\n\t\t\t\"compute_value\"\n\t\t\t{x 5}\n\t\t\t30\n\t\t\t50\n\t\t)\n\t\t(call_entity\n\t\t\t\"OuterEntity\"\n\t\t\t\"compute_value\"\n\t\t\t{x 5}\n\t\t\t1\n\t\t\t1\n\t\t)\n\t\t(call_entity\n\t\t\t\"OuterEntity\"\n\t\t\t\"compute_value\"\n\t\t\t{x 5}\n\t\t\t1\n\t\t\t1\n\t\t\t1\n\t\t\t1\n\t\t\t1\n\t\t\t.false\n\t\t)\n\t]\n)",
+                    "output": "[\n\t10\n\t[10 {} .null]\n\t[.null {} \"Execution step limit exceeded\"]\n\t[.null {} \"Execution step limit exceeded\"]\n]"
                 }
             ],
             "frequency_per_10000_opcodes": 0.25,
@@ -925,8 +925,8 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"Entity\"\n\t\t(lambda\n\t\t\t{\n\t\t\t\t!private_method \"should not access\"\n\t\t\t\tcopy_entity (while\n\t\t\t\t\t\t.true\n\t\t\t\t\t\t(clone_entities (null) (null))\n\t\t\t\t\t)\n\t\t\t\thello (declare\n\t\t\t\t\t\t{message \"\"}\n\t\t\t\t\t\t(concat \"hello \" message)\n\t\t\t\t\t)\n\t\t\t\tload (while .true)\n\t\t\t}\n\t\t)\n\t)\n\t[\n\t\t(call_entity\n\t\t\t\"Entity\"\n\t\t\t\"hello\"\n\t\t\t{message \"world\"}\n\t\t)\n\t\t(call_entity \"Entity\" \"!private_method\")\n\t\t(call_entity \"Entity\" \"load\" (null) 100)\n\t\t(call_entity\n\t\t\t\"Entity\"\n\t\t\t\"copy_entity\"\n\t\t\t(null)\n\t\t\t1000\n\t\t\t1000\n\t\t\t100\n\t\t\t10\n\t\t\t3\n\t\t\t20\n\t\t)\n\t]\n)",
-                    "output": "[\n\t\"hello world\"\n\t(null)\n\t[(null) {} \"Execution step limit exceeded\"]\n\t[(null) {} \"Execution step limit exceeded\"]\n]"
+                    "example": "(seq\n\t(create_entities\n\t\t\"Entity\"\n\t\t(lambda\n\t\t\t{\n\t\t\t\t!private_method \"should not access\"\n\t\t\t\tcopy_entity (while\n\t\t\t\t\t\t.true\n\t\t\t\t\t\t(clone_entities .null .null)\n\t\t\t\t\t)\n\t\t\t\thello (declare\n\t\t\t\t\t\t{message \"\"}\n\t\t\t\t\t\t(concat \"hello \" message)\n\t\t\t\t\t)\n\t\t\t\tload (while .true)\n\t\t\t}\n\t\t)\n\t)\n\t[\n\t\t(call_entity\n\t\t\t\"Entity\"\n\t\t\t\"hello\"\n\t\t\t{message \"world\"}\n\t\t)\n\t\t(call_entity \"Entity\" \"!private_method\")\n\t\t(call_entity \"Entity\" \"load\" .null 100)\n\t\t(call_entity\n\t\t\t\"Entity\"\n\t\t\t\"copy_entity\"\n\t\t\t.null\n\t\t\t1000\n\t\t\t1000\n\t\t\t100\n\t\t\t10\n\t\t\t3\n\t\t\t20\n\t\t)\n\t]\n)",
+                    "output": "[\n\t\"hello world\"\n\t.null\n\t[.null {} \"Execution step limit exceeded\"]\n\t[.null {} \"Execution step limit exceeded\"]\n]"
                 }
             ],
             "frequency_per_10000_opcodes": 48,
@@ -992,21 +992,21 @@
         "body": [
             "(call_sandboxed"
         ],
-        "description": "* function assoc arguments [number operation_limit] [number max_node_allocations] [number max_opcode_execution_depth] [bool return_warnings] || Evaluates the code specified by function, isolating it from everything except for arguments, which is used as a single layer of the scope stack.  This is useful when evaluating code passed by other entities that may or may not be trusted.  Opcodes run from within call_sandboxed that require any form of permissions will not perform any action and will evaluate to null.  If `operation_limit` is specified, it represents the number of operations that are allowed to be performed. If `operation_limit` is 0 or infinite, then an infinite of operations will be allotted, up to the limits of the current calling context. If `max_node_allocations` is specified, it represents the maximum number of nodes that are allowed to be allocated, limiting the total memory, up to the current calling context's limit.   If `max_node_allocations` is 0 or infinite and the caller also has no limit, then there is no limit to the number of nodes to be allotted as long as the machine has sufficient memory.  Note that if `max_node_allocations` is specified while call_sandboxed is being called in a multithreaded environment, if the collective memory from all the related threads exceeds the average memory specified by call_sandboxed, that may trigger a memory limit for the call_sandboxed.  If `max_opcode_execution_depth` is 0 or infinite and the caller also has no limit, then there is no limit to the depth that opcodes can execute, otherwise `max_opcode_execution_depth` limits how deep nested opcodes will be called. If `return_warnings` is true, the result will be a tuple of the form [value, warnings, performance_constraint_violation], where warnings is a list of all warnings, and perf_constraint_violation is a string denoting the performance constraint exceeded (or (null) if none)).  If `return_warnings` is false, just the value will be returned.",
+        "description": "* function assoc arguments [number operation_limit] [number max_node_allocations] [number max_opcode_execution_depth] [bool return_warnings] || Evaluates the code specified by function, isolating it from everything except for arguments, which is used as a single layer of the scope stack.  This is useful when evaluating code passed by other entities that may or may not be trusted.  Opcodes run from within call_sandboxed that require any form of permissions will not perform any action and will evaluate to null.  If `operation_limit` is specified, it represents the number of operations that are allowed to be performed. If `operation_limit` is 0 or infinite, then an infinite of operations will be allotted, up to the limits of the current calling context. If `max_node_allocations` is specified, it represents the maximum number of nodes that are allowed to be allocated, limiting the total memory, up to the current calling context's limit.   If `max_node_allocations` is 0 or infinite and the caller also has no limit, then there is no limit to the number of nodes to be allotted as long as the machine has sufficient memory.  Note that if `max_node_allocations` is specified while call_sandboxed is being called in a multithreaded environment, if the collective memory from all the related threads exceeds the average memory specified by call_sandboxed, that may trigger a memory limit for the call_sandboxed.  If `max_opcode_execution_depth` is 0 or infinite and the caller also has no limit, then there is no limit to the depth that opcodes can execute, otherwise `max_opcode_execution_depth` limits how deep nested opcodes will be called. If `return_warnings` is true, the result will be a tuple of the form [value, warnings, performance_constraint_violation], where warnings is a list of all warnings, and perf_constraint_violation is a string denoting the performance constraint exceeded (or .null if none)).  If `return_warnings` is false, just the value will be returned.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(call_sandboxed\n\t(lambda\n\t\t(+\n\t\t\t(+ y 4)\n\t\t\t4\n\t\t)\n\t)\n\t{y 3}\n\t(null)\n\t(null)\n\t50\n)",
-                    "output": "[11 {} (null)]"
+                    "example": "(call_sandboxed\n\t(lambda\n\t\t(+\n\t\t\t(+ y 4)\n\t\t\t4\n\t\t)\n\t)\n\t{y 3}\n\t.null\n\t.null\n\t50\n)",
+                    "output": "[11 {} .null]"
                 },
                 {
-                    "example": "(call_sandboxed\n\t(lambda\n\t\t(+\n\t\t\t(+ y 4)\n\t\t\t4\n\t\t)\n\t)\n\t{y 3}\n\t(null)\n\t(null)\n\t1\n)",
-                    "output": "[(null) {} \"Execution depth exceeded\"]"
+                    "example": "(call_sandboxed\n\t(lambda\n\t\t(+\n\t\t\t(+ y 4)\n\t\t\t4\n\t\t)\n\t)\n\t{y 3}\n\t.null\n\t.null\n\t1\n)",
+                    "output": "[.null {} \"Execution depth exceeded\"]"
                 },
                 {
-                    "example": "(call_sandboxed\n\t(lambda\n\t\t(call_sandboxed\n\t\t\t(lambda\n\t\t\t\t(+\n\t\t\t\t\t(+ y 4)\n\t\t\t\t\t4\n\t\t\t\t)\n\t\t\t)\n\t\t\t{y 3}\n\t\t\t(null)\n\t\t\t(null)\n\t\t\t2\n\t\t)\n\t)\n\t{y 3}\n\t(null)\n\t(null)\n\t50\n)",
-                    "output": "[\n\t[(null) {} \"Execution depth exceeded\"]\n\t{}\n\t(null)\n]"
+                    "example": "(call_sandboxed\n\t(lambda\n\t\t(call_sandboxed\n\t\t\t(lambda\n\t\t\t\t(+\n\t\t\t\t\t(+ y 4)\n\t\t\t\t\t4\n\t\t\t\t)\n\t\t\t)\n\t\t\t{y 3}\n\t\t\t.null\n\t\t\t.null\n\t\t\t2\n\t\t)\n\t)\n\t{y 3}\n\t.null\n\t.null\n\t50\n)",
+                    "output": "[\n\t[.null {} \"Execution depth exceeded\"]\n\t{}\n\t.null\n]"
                 }
             ],
             "frequency_per_10000_opcodes": 1,
@@ -1089,7 +1089,7 @@
                     "output": "0.125"
                 },
                 {
-                    "example": "(commonality\n\t(null)\n\t3\n\t{types_must_match .false}\n)",
+                    "example": "(commonality\n\t.null\n\t3\n\t{types_must_match .false}\n)",
                     "output": "0.125"
                 },
                 {
@@ -1129,8 +1129,8 @@
                     "output": "4"
                 },
                 {
-                    "example": "(commonality\n\t[1 2 3]\n\t(lambda\n\t\t(null 1 2 3)\n\t)\n\t{types_must_match .false}\n)",
-                    "output": "3.125"
+                    "example": "(commonality\n\t[1 2 3]\n\t(unordered_list 1 2 3)\n\t{types_must_match .false}\n)",
+                    "output": "3.5"
                 }
             ],
             "frequency_per_10000_opcodes": 0.05,
@@ -1682,35 +1682,35 @@
             "examples": [
                 {
                     "example": "(difference\n\t(lambda\n\t\t{\n\t\t\ta 1\n\t\t\tb 2\n\t\t\tc 4\n\t\t\td 7\n\t\t\te 10\n\t\t\tf 12\n\t\t\tg 13\n\t\t}\n\t)\n\t(lambda\n\t\t[\n\t\t\ta\n\t\t\t2\n\t\t\tc\n\t\t\t4\n\t\t\td\n\t\t\t6\n\t\t\tq\n\t\t\t8\n\t\t\te\n\t\t\t10\n\t\t\tf\n\t\t\t12\n\t\t\tg\n\t\t\t14\n\t\t]\n\t)\n)",
-                    "output": "(declare\n\t{_ (null)}\n\t(replace\n\t\t_\n\t\t[]\n\t\t(lambda\n\t\t\t[\n\t\t\t\ta\n\t\t\t\t2\n\t\t\t\tc\n\t\t\t\t4\n\t\t\t\td\n\t\t\t\t6\n\t\t\t\tq\n\t\t\t\t8\n\t\t\t\te\n\t\t\t\t10\n\t\t\t\tf\n\t\t\t\t12\n\t\t\t\tg\n\t\t\t\t14\n\t\t\t]\n\t\t)\n\t)\n)"
+                    "output": "(declare\n\t{_ .null}\n\t(replace\n\t\t_\n\t\t[]\n\t\t(lambda\n\t\t\t[\n\t\t\t\ta\n\t\t\t\t2\n\t\t\t\tc\n\t\t\t\t4\n\t\t\t\td\n\t\t\t\t6\n\t\t\t\tq\n\t\t\t\t8\n\t\t\t\te\n\t\t\t\t10\n\t\t\t\tf\n\t\t\t\t12\n\t\t\t\tg\n\t\t\t\t14\n\t\t\t]\n\t\t)\n\t)\n)"
                 },
                 {
                     "example": "(difference\n\t{\n\t\ta 1\n\t\tb 2\n\t\tc 4\n\t\td 7\n\t\te 10\n\t\tf 12\n\t\tg 13\n\t}\n\t{\n\t\ta 2\n\t\tc 4\n\t\td 6\n\t\te 10\n\t\tf 12\n\t\tg 14\n\t\tq 8\n\t}\n)",
-                    "output": "(declare\n\t{_ (null)}\n\t(replace\n\t\t_\n\t\t[]\n\t\t(lambda\n\t\t\t{\n\t\t\t\ta 2\n\t\t\t\tc (get\n\t\t\t\t\t\t(current_value 1)\n\t\t\t\t\t\t\"c\"\n\t\t\t\t\t)\n\t\t\t\td 6\n\t\t\t\te (get\n\t\t\t\t\t\t(current_value 1)\n\t\t\t\t\t\t\"e\"\n\t\t\t\t\t)\n\t\t\t\tf (get\n\t\t\t\t\t\t(current_value 1)\n\t\t\t\t\t\t\"f\"\n\t\t\t\t\t)\n\t\t\t\tg 14\n\t\t\t\tq 8\n\t\t\t}\n\t\t)\n\t)\n)"
+                    "output": "(declare\n\t{_ .null}\n\t(replace\n\t\t_\n\t\t[]\n\t\t(lambda\n\t\t\t{\n\t\t\t\ta 2\n\t\t\t\tc (get\n\t\t\t\t\t\t(current_value 1)\n\t\t\t\t\t\t\"c\"\n\t\t\t\t\t)\n\t\t\t\td 6\n\t\t\t\te (get\n\t\t\t\t\t\t(current_value 1)\n\t\t\t\t\t\t\"e\"\n\t\t\t\t\t)\n\t\t\t\tf (get\n\t\t\t\t\t\t(current_value 1)\n\t\t\t\t\t\t\"f\"\n\t\t\t\t\t)\n\t\t\t\tg 14\n\t\t\t\tq 8\n\t\t\t}\n\t\t)\n\t)\n)"
                 },
                 {
                     "example": "(difference\n\t(lambda\n\t\t[\n\t\t\t1\n\t\t\t2\n\t\t\t4\n\t\t\t7\n\t\t\t10\n\t\t\t12\n\t\t\t13\n\t\t]\n\t)\n\t(lambda\n\t\t[\n\t\t\t2\n\t\t\t4\n\t\t\t6\n\t\t\t8\n\t\t\t10\n\t\t\t12\n\t\t\t14\n\t\t]\n\t)\n)",
-                    "output": "(declare\n\t{_ (null)}\n\t(replace\n\t\t_\n\t\t[]\n\t\t(lambda\n\t\t\t[\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t1\n\t\t\t\t)\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t2\n\t\t\t\t)\n\t\t\t\t6\n\t\t\t\t8\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t4\n\t\t\t\t)\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t5\n\t\t\t\t)\n\t\t\t\t14\n\t\t\t]\n\t\t)\n\t)\n)"
+                    "output": "(declare\n\t{_ .null}\n\t(replace\n\t\t_\n\t\t[]\n\t\t(lambda\n\t\t\t[\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t1\n\t\t\t\t)\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t2\n\t\t\t\t)\n\t\t\t\t6\n\t\t\t\t8\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t4\n\t\t\t\t)\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t5\n\t\t\t\t)\n\t\t\t\t14\n\t\t\t]\n\t\t)\n\t)\n)"
                 },
                 {
                     "example": "(unparse\n\t(difference\n\t\t(lambda\n\t\t\t{\n\t\t\t\ta 1\n\t\t\t\tb 2\n\t\t\t\tc 4\n\t\t\t\td 7\n\t\t\t\te 10\n\t\t\t\tf 12\n\t\t\t\tg 13\n\t\t\t}\n\t\t)\n\t\t(lambda\n\t\t\t{\n\t\t\t\ta 2\n\t\t\t\tc 4\n\t\t\t\td 6\n\t\t\t\te 10\n\t\t\t\tf 12\n\t\t\t\tg 14\n\t\t\t\tq 8\n\t\t\t}\n\t\t)\n\t)\n\t.true\n\t.true\n\t.true\n)",
-                    "output": "\"(declare\\r\\n\\t{_ (null)}\\r\\n\\t(replace\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\ta 2\\r\\n\\t\\t\\t\\tc (get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t\\\"c\\\"\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\td 6\\r\\n\\t\\t\\t\\te (get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t\\\"e\\\"\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\tf (get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t\\\"f\\\"\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\tg 14\\r\\n\\t\\t\\t\\tq 8\\r\\n\\t\\t\\t}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
+                    "output": "\"(declare\\r\\n\\t{_ .null}\\r\\n\\t(replace\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\ta 2\\r\\n\\t\\t\\t\\tc (get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t\\\"c\\\"\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\td 6\\r\\n\\t\\t\\t\\te (get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t\\\"e\\\"\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\tf (get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t\\\"f\\\"\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\tg 14\\r\\n\\t\\t\\t\\tq 8\\r\\n\\t\\t\\t}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
                 },
                 {
                     "example": "(unparse\n\t(difference\n\t\t(lambda\n\t\t\t(associate\n\t\t\t\ta\n\t\t\t\t1\n\t\t\t\tg\n\t\t\t\t[1 2]\n\t\t\t)\n\t\t)\n\t\t(lambda\n\t\t\t(associate\n\t\t\t\ta\n\t\t\t\t2\n\t\t\t\tg\n\t\t\t\t[1 4]\n\t\t\t)\n\t\t)\n\t)\n\t.true\n\t.true\n\t.true\n)",
-                    "output": "\"(declare\\r\\n\\t{_ (null)}\\r\\n\\t(replace\\r\\n\\t\\t_\\r\\n\\t\\t[3]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t[\\r\\n\\t\\t\\t\\t(get\\r\\n\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t0\\r\\n\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\t4\\r\\n\\t\\t\\t]\\r\\n\\t\\t)\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t(set_type\\r\\n\\t\\t\\t\\t[\\r\\n\\t\\t\\t\\t\\ta\\r\\n\\t\\t\\t\\t\\t2\\r\\n\\t\\t\\t\\t\\tg\\r\\n\\t\\t\\t\\t\\t(get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t3\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\\"associate\\\"\\r\\n\\t\\t\\t)\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
+                    "output": "\"(declare\\r\\n\\t{_ .null}\\r\\n\\t(replace\\r\\n\\t\\t_\\r\\n\\t\\t[3]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t[\\r\\n\\t\\t\\t\\t(get\\r\\n\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t0\\r\\n\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\t4\\r\\n\\t\\t\\t]\\r\\n\\t\\t)\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t(set_type\\r\\n\\t\\t\\t\\t[\\r\\n\\t\\t\\t\\t\\ta\\r\\n\\t\\t\\t\\t\\t2\\r\\n\\t\\t\\t\\t\\tg\\r\\n\\t\\t\\t\\t\\t(get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t3\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\\"associate\\\"\\r\\n\\t\\t\\t)\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
                 },
                 {
                     "example": "(unparse\n\t(difference\n\t\t(zip\n\t\t\t[1 2 3 4 5]\n\t\t)\n\t\t(append\n\t\t\t(zip\n\t\t\t\t[2 6 5]\n\t\t\t)\n\t\t\t{a 1}\n\t\t)\n\t)\n\t.true\n\t.true\n\t.true\n)",
-                    "output": "\"(declare\\r\\n\\t{_ (null)}\\r\\n\\t(replace\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t2 (null)\\r\\n\\t\\t\\t\\t5 (null)\\r\\n\\t\\t\\t\\t6 (null)\\r\\n\\t\\t\\t\\ta 1\\r\\n\\t\\t\\t}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
+                    "output": "\"(declare\\r\\n\\t{_ .null}\\r\\n\\t(replace\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t2 .null\\r\\n\\t\\t\\t\\t5 .null\\r\\n\\t\\t\\t\\t6 .null\\r\\n\\t\\t\\t\\ta 1\\r\\n\\t\\t\\t}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
                 },
                 {
                     "example": "(unparse\n\t(difference\n\t\t(zip\n\t\t\t[1 2 3 4 5]\n\t\t)\n\t\t(zip\n\t\t\t[2 6 5]\n\t\t)\n\t)\n\t.true\n\t.true\n\t.true\n)",
-                    "output": "\"(declare\\r\\n\\t{_ (null)}\\r\\n\\t(replace\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{2 (null) 5 (null) 6 (null)}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
+                    "output": "\"(declare\\r\\n\\t{_ .null}\\r\\n\\t(replace\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{2 .null 5 .null 6 .null}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
                 },
                 {
                     "example": "(unparse\n\t(difference\n\t\t(zip\n\t\t\t[1 2 5]\n\t\t)\n\t\t(zip\n\t\t\t[2 6 5]\n\t\t)\n\t)\n\t.true\n\t.true\n\t.true\n)",
-                    "output": "\"(declare\\r\\n\\t{_ (null)}\\r\\n\\t(replace\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{2 (null) 5 (null) 6 (null)}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
+                    "output": "\"(declare\\r\\n\\t{_ .null}\\r\\n\\t(replace\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{2 .null 5 .null 6 .null}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
                 },
                 {
                     "example": "(let\n\t{\n\t\tx (lambda\n\t\t\t\t[\n\t\t\t\t\t6\n\t\t\t\t\t[1 2]\n\t\t\t\t]\n\t\t\t)\n\t\ty (lambda\n\t\t\t\t[\n\t\t\t\t\t7\n\t\t\t\t\t[1 4]\n\t\t\t\t]\n\t\t\t)\n\t}\n\t(call\n\t\t(difference x y)\n\t\t{_ x}\n\t)\n)",
@@ -1746,7 +1746,7 @@
             "examples": [
                 {
                     "example": "(seq\n\t(create_entities\n\t\t\"DiffEntity1\"\n\t\t(lambda\n\t\t\t{a 3 b 4}\n\t\t)\n\t)\n\t(create_entities\n\t\t[\"DiffEntity1\" \"DiffEntityChild1\"]\n\t\t(lambda\n\t\t\t{x 3 y 4 z 6}\n\t\t)\n\t)\n\t(create_entities\n\t\t[\"DiffEntity1\" \"DiffEntityChild1\" \"DiffEntityChild2\"]\n\t\t(lambda\n\t\t\t{\n\t\t\t\tp 3\n\t\t\t\tq 4\n\t\t\t\tu 5\n\t\t\t\tv 6\n\t\t\t\tw 7\n\t\t\t}\n\t\t)\n\t)\n\t(create_entities\n\t\t[\"DiffEntity1\" \"DiffEntityChild1\" \"DiffEntityChild2\" \"DiffEntityChild3\"]\n\t\t(lambda\n\t\t\t{\n\t\t\t\ta 5\n\t\t\t\te 3\n\t\t\t\to 6\n\t\t\t\tp 4\n\t\t\t\tw 7\n\t\t\t}\n\t\t)\n\t)\n\t(create_entities\n\t\t[\"DiffEntity1\" \"OnlyIn1\"]\n\t\t(lambda\n\t\t\t{m 4}\n\t\t)\n\t)\n\t(create_entities\n\t\t[\"DiffEntity1\"]\n\t\t(lambda\n\t\t\t{e 3 f 4}\n\t\t)\n\t)\n\t(create_entities\n\t\t[\"DiffEntity1\"]\n\t\t(lambda\n\t\t\t{\n\t\t\t\tE 3\n\t\t\t\tF 4\n\t\t\t\tG 5\n\t\t\t\tH 6\n\t\t\t}\n\t\t)\n\t)\n\t(create_entities\n\t\t\"DiffEntity2\"\n\t\t(lambda\n\t\t\t{b 4 c 3}\n\t\t)\n\t)\n\t(create_entities\n\t\t[\"DiffEntity2\" \"DiffEntityChild1\"]\n\t\t(lambda\n\t\t\t{x 3 y 4 z 5}\n\t\t)\n\t)\n\t(create_entities\n\t\t[\"DiffEntity2\" \"DiffEntityChild1\" \"DiffEntityChild2\"]\n\t\t(lambda\n\t\t\t{\n\t\t\t\tp 3\n\t\t\t\tq 4\n\t\t\t\tu 5\n\t\t\t\tv 6\n\t\t\t\tw 7\n\t\t\t}\n\t\t)\n\t)\n\t(create_entities\n\t\t[\"DiffEntity2\" \"DiffEntityChild1\" \"DiffEntityChild2\" \"DiffEntityChild3\"]\n\t\t(lambda\n\t\t\t{\n\t\t\t\ta 5\n\t\t\t\te 3\n\t\t\t\to 6\n\t\t\t\tp 4\n\t\t\t\tw 7\n\t\t\t}\n\t\t)\n\t)\n\t(create_entities\n\t\t[\"DiffEntity2\" \"OnlyIn2\"]\n\t\t(lambda\n\t\t\t{o 6}\n\t\t)\n\t)\n\t(create_entities\n\t\t[\"DiffEntity2\"]\n\t\t(lambda\n\t\t\t{\n\t\t\t\tE 3\n\t\t\t\tF 4\n\t\t\t\tG 5\n\t\t\t\tH 6\n\t\t\t}\n\t\t)\n\t)\n\t(create_entities\n\t\t[\"DiffEntity2\"]\n\t\t(lambda\n\t\t\t{e 3 f 4}\n\t\t)\n\t)\n\t\n\t;applying the difference to DiffEntity1 results in an entity identical to DiffEntity2\n\t(let\n\t\t{\n\t\t\tnew_entity (call\n\t\t\t\t\t(difference_entities \"DiffEntity1\" \"DiffEntity2\")\n\t\t\t\t\t{_ \"DiffEntity1\"}\n\t\t\t\t)\n\t\t}\n\t\t(difference_entities \"DiffEntity2\" new_entity)\n\t)\n)",
-                    "output": "(declare\n\t{_ (null) new_entity (null)}\n\t(clone_entities _ new_entity)\n)"
+                    "output": "(declare\n\t{_ .null new_entity .null}\n\t(clone_entities _ new_entity)\n)"
                 }
             ],
             "frequency_per_10000_opcodes": 0.05,
@@ -2045,28 +2045,28 @@
                     "output": "{10 1}"
                 },
                 {
-                    "example": "(filter\n\t[\n\t\t10\n\t\t1\n\t\t20\n\t\t(null)\n\t\t30\n\t\t(null)\n\t\t(null)\n\t\t40\n\t\t4\n\t]\n)",
+                    "example": "(filter\n\t[\n\t\t10\n\t\t1\n\t\t20\n\t\t.null\n\t\t30\n\t\t.null\n\t\t.null\n\t\t40\n\t\t4\n\t]\n)",
                     "output": "[10 1 20 30 40 4]"
                 },
                 {
-                    "example": "(filter\n\t[\n\t\t10\n\t\t1\n\t\t20\n\t\t(null)\n\t\t30\n\t\t\"\"\n\t\t40\n\t\t4\n\t]\n)",
+                    "example": "(filter\n\t[\n\t\t10\n\t\t1\n\t\t20\n\t\t.null\n\t\t30\n\t\t\"\"\n\t\t40\n\t\t4\n\t]\n)",
                     "output": "[\n\t10\n\t1\n\t20\n\t30\n\t\"\"\n\t40\n\t4\n]"
                 },
                 {
-                    "example": "(filter\n\t{\n\t\ta 10\n\t\tb 1\n\t\tc 20\n\t\td \"\"\n\t\te 30\n\t\tf 3\n\t\tg (null)\n\t\th 4\n\t}\n)",
+                    "example": "(filter\n\t{\n\t\ta 10\n\t\tb 1\n\t\tc 20\n\t\td \"\"\n\t\te 30\n\t\tf 3\n\t\tg .null\n\t\th 4\n\t}\n)",
                     "output": "{\n\ta 10\n\tb 1\n\tc 20\n\td \"\"\n\te 30\n\tf 3\n\th 4\n}"
                 },
                 {
-                    "example": "(filter\n\t{\n\t\ta 10\n\t\tb 1\n\t\tc 20\n\t\td \"\"\n\t\te 30\n\t\tf 3\n\t\tg (null)\n\t\th 4\n\t}\n)",
+                    "example": "(filter\n\t{\n\t\ta 10\n\t\tb 1\n\t\tc 20\n\t\td \"\"\n\t\te 30\n\t\tf 3\n\t\tg .null\n\t\th 4\n\t}\n)",
                     "output": "{\n\ta 10\n\tb 1\n\tc 20\n\td \"\"\n\te 30\n\tf 3\n\th 4\n}"
                 },
                 {
-                    "example": "(filter (null) [(null) 1 (null) 2 (null) 3] .false)",
+                    "example": "(filter .null [.null 1 .null 2 .null 3] .false)",
                     "output": "[1 2 3]"
                 },
                 {
-                    "example": "(filter (null) {a (null) b 1 c (null) d 2 e (null) f 3} .true)",
-                    "output": "{a (null) c (null) e (null)}"
+                    "example": "(filter .null {a .null b 1 c .null d 2 e .null f 3} .true)",
+                    "output": "{a .null c .null e .null}"
                 }
             ],
             "frequency_per_10000_opcodes": 15.5,
@@ -2110,7 +2110,7 @@
                 },
                 {
                     "example": "(first \"\")",
-                    "output": "(null)"
+                    "output": ".null"
                 }
             ],
             "frequency_per_10000_opcodes": 20,
@@ -2133,7 +2133,7 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"FlattenEntity\"\n\t\t(lambda {})\n\t)\n\t(call_entity \"FlattenEntity\" \"a\")\n\t(create_entities\n\t\t[\"FlattenEntity\" \"DeepRand\"]\n\t\t(lambda\n\t\t\t{a (rand)}\n\t\t)\n\t)\n\t(declare\n\t\t{\n\t\t\tflattened_code (flatten_entity \"FlattenEntity\" .true .true)\n\t\t}\n\t)\n\t(declare\n\t\t{first_rand (null) second_rand (null)}\n\t)\n\t(assign\n\t\t{\n\t\t\tfirst_rand (call_entity\n\t\t\t\t\t[\"FlattenEntity\" \"DeepRand\"]\n\t\t\t\t\t\"a\"\n\t\t\t\t)\n\t\t}\n\t)\n\t(let\n\t\t{\n\t\t\tnew_entity (call flattened_code)\n\t\t}\n\t\t(assign\n\t\t\t{\n\t\t\t\tsecond_rand (call_entity\n\t\t\t\t\t\t[new_entity \"DeepRand\"]\n\t\t\t\t\t\t\"a\"\n\t\t\t\t\t)\n\t\t\t}\n\t\t)\n\t)\n\t[first_rand second_rand]\n)",
+                    "example": "(seq\n\t(create_entities\n\t\t\"FlattenEntity\"\n\t\t(lambda {})\n\t)\n\t(call_entity \"FlattenEntity\" \"a\")\n\t(create_entities\n\t\t[\"FlattenEntity\" \"DeepRand\"]\n\t\t(lambda\n\t\t\t{a (rand)}\n\t\t)\n\t)\n\t(declare\n\t\t{\n\t\t\tflattened_code (flatten_entity \"FlattenEntity\" .true .true)\n\t\t}\n\t)\n\t(declare\n\t\t{first_rand .null second_rand .null}\n\t)\n\t(assign\n\t\t{\n\t\t\tfirst_rand (call_entity\n\t\t\t\t\t[\"FlattenEntity\" \"DeepRand\"]\n\t\t\t\t\t\"a\"\n\t\t\t\t)\n\t\t}\n\t)\n\t(let\n\t\t{\n\t\t\tnew_entity (call flattened_code)\n\t\t}\n\t\t(assign\n\t\t\t{\n\t\t\t\tsecond_rand (call_entity\n\t\t\t\t\t\t[new_entity \"DeepRand\"]\n\t\t\t\t\t\t\"a\"\n\t\t\t\t\t)\n\t\t\t}\n\t\t)\n\t)\n\t[first_rand second_rand]\n)",
                     "output": "[0.611779739433564 0.611779739433564]"
                 }
             ],
@@ -2265,11 +2265,11 @@
                     "output": "[\n\t{a 3 b 4}\n\t{c \"c\"}\n]"
                 },
                 {
-                    "example": "(format\n\t[\n\t\t{a 3 b 4}\n\t\t{c \"c\" d (null)}\n\t]\n\t\"code\"\n\t\"json\"\n\t(null)\n\t{sort_keys .true}\n)",
+                    "example": "(format\n\t[\n\t\t{a 3 b 4}\n\t\t{c \"c\" d .null}\n\t]\n\t\"code\"\n\t\"json\"\n\t.null\n\t{sort_keys .true}\n)",
                     "output": "\"[{\\\"a\\\":3,\\\"b\\\":4},{\\\"c\\\":\\\"c\\\",\\\"d\\\":null}]\""
                 },
                 {
-                    "example": "(format\n\t{\n\t\ta 1\n\t\tb 2\n\t\tc 3\n\t\td 4\n\t\te [\"a\" \"b\" (null) .infinity]\n\t}\n\t\"code\"\n\t\"yaml\"\n\t(null)\n\t{sort_keys .true}\n)",
+                    "example": "(format\n\t{\n\t\ta 1\n\t\tb 2\n\t\tc 3\n\t\td 4\n\t\te [\"a\" \"b\" .null .infinity]\n\t}\n\t\"code\"\n\t\"yaml\"\n\t.null\n\t{sort_keys .true}\n)",
                     "output": "\"a: 1\\nb: 2\\nc: 3\\nd: 4\\ne:\\n  - a\\n  - b\\n  - \\n  - .inf\\n\""
                 },
                 {
@@ -2405,7 +2405,7 @@
                     "output": "\"13:22:44\""
                 },
                 {
-                    "example": "(format\n\t48164\n\t\"number\"\n\t\"time:%I:%M:%S%p\"\n\t(null)\n\t{locale \"es_ES\"}\n)",
+                    "example": "(format\n\t48164\n\t\"number\"\n\t\"time:%I:%M:%S%p\"\n\t.null\n\t{locale \"es_ES\"}\n)",
                     "output": "\"01:22:44PM\""
                 },
                 {
@@ -2417,7 +2417,7 @@
                     "output": "\"12:00:00AM\""
                 },
                 {
-                    "example": "(format (null) \"number\" \"time:%I:%M:%S%p\")",
+                    "example": "(format .null \"number\" \"time:%I:%M:%S%p\")",
                     "output": "\"12:00:00AM\""
                 },
                 {
@@ -2445,7 +2445,7 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(generalized_distance\n\t(map\n\t\t10000\n\t\t(range 0 200)\n\t)\n\t(null)\n\t0.01\n)",
+                    "example": "(generalized_distance\n\t(map\n\t\t10000\n\t\t(range 0 200)\n\t)\n\t.null\n\t0.01\n)",
                     "output": "2.0874003024080013e+234"
                 },
                 {
@@ -2453,11 +2453,11 @@
                     "output": "1"
                 },
                 {
-                    "example": "(generalized_distance\n\t[3 4]\n\t(null)\n\t2\n)",
+                    "example": "(generalized_distance\n\t[3 4]\n\t.null\n\t2\n)",
                     "output": "5"
                 },
                 {
-                    "example": "(generalized_distance\n\t[3 4]\n\t(null)\n\t-.infinity\n)",
+                    "example": "(generalized_distance\n\t[3 4]\n\t.null\n\t-.infinity\n)",
                     "output": "3"
                 },
                 {
@@ -2465,63 +2465,63 @@
                     "output": "1.9210176984148622e-48"
                 },
                 {
-                    "example": "(generalized_distance\n\t[3 4]\n\t(null)\n\t2\n\t[1 1]\n)",
+                    "example": "(generalized_distance\n\t[3 4]\n\t.null\n\t2\n\t[1 1]\n)",
                     "output": "5"
                 },
                 {
-                    "example": "(generalized_distance\n\t[3 4]\n\t(null)\n\t2\n\t[0.5 0.5]\n)",
+                    "example": "(generalized_distance\n\t[3 4]\n\t.null\n\t2\n\t[0.5 0.5]\n)",
                     "output": "3.5355339059327378"
                 },
                 {
-                    "example": "(generalized_distance\n\t[3 4]\n\t(null)\n\t1\n\t[0.5 0.5]\n)",
+                    "example": "(generalized_distance\n\t[3 4]\n\t.null\n\t1\n\t[0.5 0.5]\n)",
                     "output": "3.5"
                 },
                 {
-                    "example": "(generalized_distance\n\t[3 4]\n\t(null)\n\t0.5\n\t[0.5 0.5]\n)",
+                    "example": "(generalized_distance\n\t[3 4]\n\t.null\n\t0.5\n\t[0.5 0.5]\n)",
                     "output": "3.482050807568877"
                 },
                 {
-                    "example": "(generalized_distance\n\t[3 4]\n\t(null)\n\t0.1\n\t[0.5 0.5]\n)",
+                    "example": "(generalized_distance\n\t[3 4]\n\t.null\n\t0.1\n\t[0.5 0.5]\n)",
                     "output": "3.467687001077147"
                 },
                 {
-                    "example": "(generalized_distance\n\t[3 4]\n\t(null)\n\t0.01\n\t[0.5 0.5]\n)",
+                    "example": "(generalized_distance\n\t[3 4]\n\t.null\n\t0.01\n\t[0.5 0.5]\n)",
                     "output": "3.4644599990846436"
                 },
                 {
-                    "example": "(generalized_distance\n\t[3 4]\n\t(null)\n\t0.001\n\t[0.5 0.5]\n)",
+                    "example": "(generalized_distance\n\t[3 4]\n\t.null\n\t0.001\n\t[0.5 0.5]\n)",
                     "output": "3.4641374518767565"
                 },
                 {
-                    "example": "(generalized_distance\n\t[3 4]\n\t(null)\n\t0\n\t[0.5 0.5]\n)",
+                    "example": "(generalized_distance\n\t[3 4]\n\t.null\n\t0\n\t[0.5 0.5]\n)",
                     "output": "3.4641016151377544"
                 },
                 {
-                    "example": "(generalized_distance\n\t[(null) 4]\n\t(null)\n\t2\n\t[1 1]\n)",
+                    "example": "(generalized_distance\n\t[.null 4]\n\t.null\n\t2\n\t[1 1]\n)",
                     "output": ".infinity"
                 },
                 {
-                    "example": "(generalized_distance\n\t[(null) 4]\n\t(null)\n\t0\n\t[1 1]\n)",
+                    "example": "(generalized_distance\n\t[.null 4]\n\t.null\n\t0\n\t[1 1]\n)",
                     "output": ".infinity"
                 },
                 {
-                    "example": "(generalized_distance\n\t[(null) 4]\n\t(null)\n\t2\n\t[0.5 0.5]\n)",
+                    "example": "(generalized_distance\n\t[.null 4]\n\t.null\n\t2\n\t[0.5 0.5]\n)",
                     "output": ".infinity"
                 },
                 {
-                    "example": "(generalized_distance\n\t[(null) 4]\n\t(null)\n\t0\n\t[0.5 0.5]\n)",
+                    "example": "(generalized_distance\n\t[.null 4]\n\t.null\n\t0\n\t[0.5 0.5]\n)",
                     "output": ".infinity"
                 },
                 {
-                    "example": "(generalized_distance\n\t[1 2 3]\n\t[10 2 4]\n\t1\n\t(null)\n\t[\"nominal_number\"]\n\t[1]\n)",
+                    "example": "(generalized_distance\n\t[1 2 3]\n\t[10 2 4]\n\t1\n\t.null\n\t[\"nominal_number\"]\n\t[1]\n)",
                     "output": "2"
                 },
                 {
-                    "example": "(generalized_distance\n\t[1 2 3]\n\t[10 2 10]\n\t1\n\t(null)\n\t[\"nominal_number\"]\n\t[1]\n)",
+                    "example": "(generalized_distance\n\t[1 2 3]\n\t[10 2 10]\n\t1\n\t.null\n\t[\"nominal_number\"]\n\t[1]\n)",
                     "output": "8"
                 },
                 {
-                    "example": "(generalized_distance\n\t[1 2 3]\n\t[10 2 10]\n\t1\n\t(null)\n\t[\"nominal_number\"]\n\t[1]\n)",
+                    "example": "(generalized_distance\n\t[1 2 3]\n\t[10 2 10]\n\t1\n\t.null\n\t[\"nominal_number\"]\n\t[1]\n)",
                     "output": "8"
                 },
                 {
@@ -2545,39 +2545,39 @@
                     "output": "92.57407500000001"
                 },
                 {
-                    "example": "(generalized_distance\n\t[4 4 (null)]\n\t[2 (null) (null)]\n\t2\n\t[1 0 1]\n\t[\"continuous_number\" \"nominal_number\" \"nominal_number\"]\n\t[(null) 5 5]\n\t[0.1 0.1 0.1]\n)",
+                    "example": "(generalized_distance\n\t[4 4 .null]\n\t[2 .null .null]\n\t2\n\t[1 0 1]\n\t[\"continuous_number\" \"nominal_number\" \"nominal_number\"]\n\t[.null 5 5]\n\t[0.1 0.1 0.1]\n)",
                     "output": "2.227195548101088"
                 },
                 {
-                    "example": "(generalized_distance\n\t[4 4 (null)]\n\t[2 (null) (null)]\n\t2\n\t[1 0 1]\n\t[\"continuous_number\" \"nominal_number\" \"nominal_number\"]\n\t[(null) 5 5]\n)",
+                    "example": "(generalized_distance\n\t[4 4 .null]\n\t[2 .null .null]\n\t2\n\t[1 0 1]\n\t[\"continuous_number\" \"nominal_number\" \"nominal_number\"]\n\t[.null 5 5]\n)",
                     "output": "2.23606797749979"
                 },
                 {
-                    "example": "(generalized_distance\n\t[4 4 (null) 4]\n\t[2 (null) (null) 2]\n\t2\n\t[1 0 1 1]\n\t[\"continuous_number\" \"nominal_number\" \"nominal_number\"]\n\t[(null) 5 5]\n\t[0.1 0.1 0.1 0.1]\n)",
+                    "example": "(generalized_distance\n\t[4 4 .null 4]\n\t[2 .null .null 2]\n\t2\n\t[1 0 1 1]\n\t[\"continuous_number\" \"nominal_number\" \"nominal_number\"]\n\t[.null 5 5]\n\t[0.1 0.1 0.1 0.1]\n)",
                     "output": "2.9933927271513525"
                 },
                 {
-                    "example": "(generalized_distance\n\t[4 4 (null) 4]\n\t[2 (null) (null) 2]\n\t2\n\t[1 0 1 1]\n\t[\"continuous_number\" \"nominal_number\" \"nominal_number\"]\n\t[(null) 5 5]\n)",
+                    "example": "(generalized_distance\n\t[4 4 .null 4]\n\t[2 .null .null 2]\n\t2\n\t[1 0 1 1]\n\t[\"continuous_number\" \"nominal_number\" \"nominal_number\"]\n\t[.null 5 5]\n)",
                     "output": "3"
                 },
                 {
-                    "example": "(generalized_distance\n\t[4 4 4 4 4]\n\t[2 (null) 2 2 2]\n\t1\n\t[1 0 1 1 1]\n)",
-                    "output": "(null)"
+                    "example": "(generalized_distance\n\t[4 4 4 4 4]\n\t[2 .null 2 2 2]\n\t1\n\t[1 0 1 1 1]\n)",
+                    "output": ".null"
                 },
                 {
-                    "example": "(generalized_distance\n\t[4 4 4]\n\t[2 2 2]\n\t1\n\t{x 1 y 1 z 1}\n\t{x \"nominal_number\" y \"continuous_number\" z \"continuous_number\"}\n\t{z 5}\n\t(null)\n\t(null)\n\t(null)\n\t[\"x\" \"y\" \"z\"]\n)",
+                    "example": "(generalized_distance\n\t[4 4 4]\n\t[2 2 2]\n\t1\n\t{x 1 y 1 z 1}\n\t{x \"nominal_number\" y \"continuous_number\" z \"continuous_number\"}\n\t{z 5}\n\t.null\n\t.null\n\t.null\n\t[\"x\" \"y\" \"z\"]\n)",
                     "output": "6"
                 },
                 {
-                    "example": "(generalized_distance\n\t[4 4 (null)]\n\t[2 2 (null)]\n\t1\n\t[1 1 1]\n\t[\"continuous_number\" \"nominal_number\" \"nominal_number\"]\n\t[(null) 5 5]\n)",
+                    "example": "(generalized_distance\n\t[4 4 .null]\n\t[2 2 .null]\n\t1\n\t[1 1 1]\n\t[\"continuous_number\" \"nominal_number\" \"nominal_number\"]\n\t[.null 5 5]\n)",
                     "output": "4"
                 },
                 {
-                    "example": "(generalized_distance\n\t[4 4 4 4]\n\t[2 2 2 (null)]\n\t0\n\t[1 1 1 1]\n\t[\"continuous_number\" \"nominal_number\" \"nominal_number\" \"continuous_number\"]\n\t[(null) 5 5 (null)]\n\t[\n\t\t[0 2]\n\t\t(null)\n\t\t(null)\n\t\t[0 2]\n\t]\n)",
+                    "example": "(generalized_distance\n\t[4 4 4 4]\n\t[2 2 2 .null]\n\t0\n\t[1 1 1 1]\n\t[\"continuous_number\" \"nominal_number\" \"nominal_number\" \"continuous_number\"]\n\t[.null 5 5 .null]\n\t[\n\t\t[0 2]\n\t\t.null\n\t\t.null\n\t\t[0 2]\n\t]\n)",
                     "output": "4"
                 },
                 {
-                    "example": "(generalized_distance\n\t[4 \"s\" \"s\" 4]\n\t[2 \"s\" 2 (null)]\n\t1\n\t[1 1 1 1]\n\t[\"continuous_number\" \"nominal_string\" \"nominal_string\" \"continuous_number\"]\n\t[(null) 5 5 (null)]\n\t[\n\t\t[0 1]\n\t\t(null)\n\t\t(null)\n\t\t[0 1]\n\t]\n)",
+                    "example": "(generalized_distance\n\t[4 \"s\" \"s\" 4]\n\t[2 \"s\" 2 .null]\n\t1\n\t[1 1 1 1]\n\t[\"continuous_number\" \"nominal_string\" \"nominal_string\" \"continuous_number\"]\n\t[.null 5 5 .null]\n\t[\n\t\t[0 1]\n\t\t.null\n\t\t.null\n\t\t[0 1]\n\t]\n)",
                     "output": "4"
                 },
                 {
@@ -2589,47 +2589,47 @@
                     "output": "3.3255881193876142"
                 },
                 {
-                    "example": "(generalized_distance\n\t[1 1]\n\t[1 1]\n\t1\n\t[1 1]\n\t[\"continuous_number\" \"continuous_number\"]\n\t(null)\n\t[0.5 0.5]\n\t(null)\n\t(null)\n\t.true\n)",
+                    "example": "(generalized_distance\n\t[1 1]\n\t[1 1]\n\t1\n\t[1 1]\n\t[\"continuous_number\" \"continuous_number\"]\n\t.null\n\t[0.5 0.5]\n\t.null\n\t.null\n\t.true\n)",
                     "output": "0"
                 },
                 {
-                    "example": "(generalized_distance\n\t[1 1]\n\t[1 1]\n\t1\n\t[1 1]\n\t[\"nominal_number\" \"nominal_number\"]\n\t(null)\n\t[0.5 0.5]\n\t(null)\n\t(null)\n\t.true\n)",
+                    "example": "(generalized_distance\n\t[1 1]\n\t[1 1]\n\t1\n\t[1 1]\n\t[\"nominal_number\" \"nominal_number\"]\n\t.null\n\t[0.5 0.5]\n\t.null\n\t.null\n\t.true\n)",
                     "output": "0"
                 },
                 {
-                    "example": "(generalized_distance\n\t[1 1]\n\t[2 2]\n\t1\n\t[1 1]\n\t[\"continuous_number\" \"continuous_number\"]\n\t(null)\n\t[0.5 0.5]\n\t(null)\n\t(null)\n\t.true\n)",
+                    "example": "(generalized_distance\n\t[1 1]\n\t[2 2]\n\t1\n\t[1 1]\n\t[\"continuous_number\" \"continuous_number\"]\n\t.null\n\t[0.5 0.5]\n\t.null\n\t.null\n\t.true\n)",
                     "output": "1.6766764161830636"
                 },
                 {
-                    "example": "(generalized_distance\n\t[1 1]\n\t[2 2]\n\t1\n\t[1 1]\n\t[\"nominal_number\" \"nominal_number\"]\n\t[2 2]\n\t[0.25 0.25]\n\t(null)\n\t(null)\n\t.true\n)",
+                    "example": "(generalized_distance\n\t[1 1]\n\t[2 2]\n\t1\n\t[1 1]\n\t[\"nominal_number\" \"nominal_number\"]\n\t[2 2]\n\t[0.25 0.25]\n\t.null\n\t.null\n\t.true\n)",
                     "output": "2.197224577336219"
                 },
                 {
-                    "example": "(generalized_distance\n\t[\"b\"]\n\t\n\t;vector 1\n\t[\"c\"]\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t[1 1]\n\t\n\t;weights\n\t[\"nominal_string\"]\n\t\n\t;types\n\t[4]\n\t\n\t;attributes\n\t[\n\t\t{\n\t\t\ta {a 0.00744879 b 0.996275605 c 0.996275605}\n\t\t\tb {a 0.501736111 b 0.501736111 c 0.996527778}\n\t\t\tc {a 0.996539792 b 0.996539792 c 0.006920415}\n\t\t}\n\t]\n\t\n\t;deviations\n\t(null)\n\t\n\t;names\n\t(null)\n\t\n\t;weights_selection_feature\n\t.true\n)",
+                    "example": "(generalized_distance\n\t[\"b\"]\n\t\n\t;vector 1\n\t[\"c\"]\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t[1 1]\n\t\n\t;weights\n\t[\"nominal_string\"]\n\t\n\t;types\n\t[4]\n\t\n\t;attributes\n\t[\n\t\t{\n\t\t\ta {a 0.00744879 b 0.996275605 c 0.996275605}\n\t\t\tb {a 0.501736111 b 0.501736111 c 0.996527778}\n\t\t\tc {a 0.996539792 b 0.996539792 c 0.006920415}\n\t\t}\n\t]\n\t\n\t;deviations\n\t.null\n\t\n\t;names\n\t.null\n\t\n\t;weights_selection_feature\n\t.true\n)",
                     "output": "4.966335099422683"
                 },
                 {
-                    "example": "(generalized_distance\n\t[\"b\"]\n\t\n\t;vector 1\n\t[\"a\"]\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t[1 1]\n\t\n\t;weights\n\t[\"nominal_string\"]\n\t\n\t;types\n\t[4]\n\t\n\t;attributes\n\t[\n\t\t{\n\t\t\ta {a 0.00744879 b 0.996275605 c 0.996275605}\n\t\t\tb {a 0.501736111 b 0.501736111 c 0.996527778}\n\t\t\tc {a 0.996539792 b 0.996539792 c 0.006920415}\n\t\t}\n\t]\n\t\n\t;deviations\n\t(null)\n\t\n\t;names\n\t(null)\n\t\n\t;weights_selection_feature\n\t.true\n)",
+                    "example": "(generalized_distance\n\t[\"b\"]\n\t\n\t;vector 1\n\t[\"a\"]\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t[1 1]\n\t\n\t;weights\n\t[\"nominal_string\"]\n\t\n\t;types\n\t[4]\n\t\n\t;attributes\n\t[\n\t\t{\n\t\t\ta {a 0.00744879 b 0.996275605 c 0.996275605}\n\t\t\tb {a 0.501736111 b 0.501736111 c 0.996527778}\n\t\t\tc {a 0.996539792 b 0.996539792 c 0.006920415}\n\t\t}\n\t]\n\t\n\t;deviations\n\t.null\n\t\n\t;names\n\t.null\n\t\n\t;weights_selection_feature\n\t.true\n)",
                     "output": "0"
                 },
                 {
-                    "example": "(generalized_distance\n\t[\"b\"]\n\t\n\t;vector 1\n\t[\"q\"]\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t[1 1]\n\t\n\t;weights\n\t[\"nominal_string\"]\n\t\n\t;types\n\t[4]\n\t\n\t;attributes\n\t[\n\t\t{\n\t\t\ta {a 0.00744879 b 0.996275605 c 0.996275605}\n\t\t\tb [\n\t\t\t\t\t{a 0.501736111 b 0.501736111 c 0.996527778}\n\t\t\t\t\t0.8\n\t\t\t\t]\n\t\t\tc {a 0.996539792 b 0.996539792 c 0.006920415}\n\t\t}\n\t]\n\t\n\t;deviations\n\t(null)\n\t\n\t;names\n\t(null)\n\t\n\t;weights_selection_feature\n\t.true\n)",
+                    "example": "(generalized_distance\n\t[\"b\"]\n\t\n\t;vector 1\n\t[\"q\"]\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t[1 1]\n\t\n\t;weights\n\t[\"nominal_string\"]\n\t\n\t;types\n\t[4]\n\t\n\t;attributes\n\t[\n\t\t{\n\t\t\ta {a 0.00744879 b 0.996275605 c 0.996275605}\n\t\t\tb [\n\t\t\t\t\t{a 0.501736111 b 0.501736111 c 0.996527778}\n\t\t\t\t\t0.8\n\t\t\t\t]\n\t\t\tc {a 0.996539792 b 0.996539792 c 0.006920415}\n\t\t}\n\t]\n\t\n\t;deviations\n\t.null\n\t\n\t;names\n\t.null\n\t\n\t;weights_selection_feature\n\t.true\n)",
                     "output": "0.9128124677208268"
                 },
                 {
-                    "example": "(generalized_distance\n\t[\"q\"]\n\t\n\t;vector 1\n\t[\"u\"]\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t[1 1]\n\t\n\t;weights\n\t[\"nominal_string\"]\n\t\n\t;types\n\t[2 2]\n\t\n\t;attributes\n\t[0.2]\n\t\n\t;deviations\n\t(null)\n\t\n\t;names\n\t(null)\n\t\n\t;weights_selection_feature\n\t.true\n)",
+                    "example": "(generalized_distance\n\t[\"q\"]\n\t\n\t;vector 1\n\t[\"u\"]\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t[1 1]\n\t\n\t;weights\n\t[\"nominal_string\"]\n\t\n\t;types\n\t[2 2]\n\t\n\t;attributes\n\t[0.2]\n\t\n\t;deviations\n\t.null\n\t\n\t;names\n\t.null\n\t\n\t;weights_selection_feature\n\t.true\n)",
                     "output": "1.3862943611198906"
                 },
                 {
-                    "example": "(generalized_distance\n\t[\"q\"]\n\t\n\t;vector 1\n\t[\"u\"]\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t[1 1]\n\t\n\t;weights\n\t[\"nominal_string\"]\n\t\n\t;types\n\t[4]\n\t\n\t;attributes\n\t[\n\t\t[\n\t\t\t{\n\t\t\t\ta {a 0.00744879 b 0.996275605 c 0.996275605}\n\t\t\t\tb [\n\t\t\t\t\t\t{a 0.501736111 b 0.501736111 c 0.996527778}\n\t\t\t\t\t\t0.8\n\t\t\t\t\t]\n\t\t\t\tc {a 0.996539792 b 0.996539792 c 0.006920415}\n\t\t\t}\n\t\t\t0.2\n\t\t]\n\t]\n\t\n\t;deviations\n\t(null)\n\t\n\t;names\n\t(null)\n\t\n\t;weights_selection_feature\n\t.true\n)",
+                    "example": "(generalized_distance\n\t[\"q\"]\n\t\n\t;vector 1\n\t[\"u\"]\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t[1 1]\n\t\n\t;weights\n\t[\"nominal_string\"]\n\t\n\t;types\n\t[4]\n\t\n\t;attributes\n\t[\n\t\t[\n\t\t\t{\n\t\t\t\ta {a 0.00744879 b 0.996275605 c 0.996275605}\n\t\t\t\tb [\n\t\t\t\t\t\t{a 0.501736111 b 0.501736111 c 0.996527778}\n\t\t\t\t\t\t0.8\n\t\t\t\t\t]\n\t\t\t\tc {a 0.996539792 b 0.996539792 c 0.006920415}\n\t\t\t}\n\t\t\t0.2\n\t\t]\n\t]\n\t\n\t;deviations\n\t.null\n\t\n\t;names\n\t.null\n\t\n\t;weights_selection_feature\n\t.true\n)",
                     "output": "1.3862943611198906"
                 },
                 {
-                    "example": "(generalized_distance\n\t[\"q\"]\n\t\n\t;vector 1\n\t[\"u\"]\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t[1 1]\n\t\n\t;weights\n\t[\"nominal_string\"]\n\t\n\t;types\n\t[4]\n\t\n\t;attributes\n\t[\n\t\t[\n\t\t\t[\n\t\t\t\t{\n\t\t\t\t\ta {a 0.00744879 b 0.996275605 c 0.996275605}\n\t\t\t\t\tb [\n\t\t\t\t\t\t\t{a 0.501736111 b 0.501736111 c 0.996527778}\n\t\t\t\t\t\t\t0.8\n\t\t\t\t\t\t]\n\t\t\t\t\tc {a 0.996539792 b 0.996539792 c 0.006920415}\n\t\t\t\t}\n\t\t\t\t0.2\n\t\t\t]\n\t\t\t0.2\n\t\t]\n\t]\n\t\n\t;deviations\n\t(null)\n\t\n\t;names\n\t(null)\n\t\n\t;weights_selection_feature\n\t.true\n)",
+                    "example": "(generalized_distance\n\t[\"q\"]\n\t\n\t;vector 1\n\t[\"u\"]\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t[1 1]\n\t\n\t;weights\n\t[\"nominal_string\"]\n\t\n\t;types\n\t[4]\n\t\n\t;attributes\n\t[\n\t\t[\n\t\t\t[\n\t\t\t\t{\n\t\t\t\t\ta {a 0.00744879 b 0.996275605 c 0.996275605}\n\t\t\t\t\tb [\n\t\t\t\t\t\t\t{a 0.501736111 b 0.501736111 c 0.996527778}\n\t\t\t\t\t\t\t0.8\n\t\t\t\t\t\t]\n\t\t\t\t\tc {a 0.996539792 b 0.996539792 c 0.006920415}\n\t\t\t\t}\n\t\t\t\t0.2\n\t\t\t]\n\t\t\t0.2\n\t\t]\n\t]\n\t\n\t;deviations\n\t.null\n\t\n\t;names\n\t.null\n\t\n\t;weights_selection_feature\n\t.true\n)",
                     "output": "1.3862943611198906"
                 },
                 {
-                    "example": "(generalized_distance\n\t{\n\t\tA1 1\n\t\tA2 1\n\t\tA3 1\n\t\tB 1\n\t}\n\t\n\t;vector 1\n\t{\n\t\tA1 2\n\t\tA2 2\n\t\tA3 2\n\t\tB 2\n\t}\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t{\n\t\tA1 {\n\t\t\t\tA1 0\n\t\t\t\tA2 0.372145984\n\t\t\t\tA3 0.370497589\n\t\t\t\tB 0.082723928\n\t\t\t\tsum 0.174632499\n\t\t\t}\n\t\tA2 {\n\t\t\t\tA1 0.371518433\n\t\t\t\tA2 0\n\t\t\t\tA3 0.370520996\n\t\t\t\tB 0.082668725\n\t\t\t\tsum 0.175291846\n\t\t\t}\n\t\tA3 {\n\t\t\t\tA1 0.370319458\n\t\t\t\tA2 0.370968492\n\t\t\t\tA3 0\n\t\t\t\tB 0.085480882\n\t\t\t\tsum 0.173231167\n\t\t\t}\n\t\tB {\n\t\t\t\tA1 0.061363751\n\t\t\t\tA2 0.049512288\n\t\t\t\tA3 0.05628626\n\t\t\t\tB 0\n\t\t\t\tsum 0.832837701\n\t\t\t}\n\t\tsum {\n\t\t\t\tA1 0.114003407\n\t\t\t\tA2 0.106173002\n\t\t\t\tA3 0.100958636\n\t\t\t\tB 0.678864956\n\t\t\t\tsum 0\n\t\t\t}\n\t}\n\t\n\t;weights\n\t[\"continuous_number\"]\n\t\n\t;types\n\t(null)\n\t\n\t;attributes\n\t0.5\n\t\n\t;deviations\n\t[\"A2\" \"A3\" \"B\"]\n\t\n\t;names\n\t\"sum\"\n\t\n\t;weights_selection_feature\n\t.true\n)",
+                    "example": "(generalized_distance\n\t{\n\t\tA1 1\n\t\tA2 1\n\t\tA3 1\n\t\tB 1\n\t}\n\t\n\t;vector 1\n\t{\n\t\tA1 2\n\t\tA2 2\n\t\tA3 2\n\t\tB 2\n\t}\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t{\n\t\tA1 {\n\t\t\t\tA1 0\n\t\t\t\tA2 0.372145984\n\t\t\t\tA3 0.370497589\n\t\t\t\tB 0.082723928\n\t\t\t\tsum 0.174632499\n\t\t\t}\n\t\tA2 {\n\t\t\t\tA1 0.371518433\n\t\t\t\tA2 0\n\t\t\t\tA3 0.370520996\n\t\t\t\tB 0.082668725\n\t\t\t\tsum 0.175291846\n\t\t\t}\n\t\tA3 {\n\t\t\t\tA1 0.370319458\n\t\t\t\tA2 0.370968492\n\t\t\t\tA3 0\n\t\t\t\tB 0.085480882\n\t\t\t\tsum 0.173231167\n\t\t\t}\n\t\tB {\n\t\t\t\tA1 0.061363751\n\t\t\t\tA2 0.049512288\n\t\t\t\tA3 0.05628626\n\t\t\t\tB 0\n\t\t\t\tsum 0.832837701\n\t\t\t}\n\t\tsum {\n\t\t\t\tA1 0.114003407\n\t\t\t\tA2 0.106173002\n\t\t\t\tA3 0.100958636\n\t\t\t\tB 0.678864956\n\t\t\t\tsum 0\n\t\t\t}\n\t}\n\t\n\t;weights\n\t[\"continuous_number\"]\n\t\n\t;types\n\t.null\n\t\n\t;attributes\n\t0.5\n\t\n\t;deviations\n\t[\"A2\" \"A3\" \"B\"]\n\t\n\t;names\n\t\"sum\"\n\t\n\t;weights_selection_feature\n\t.true\n)",
                     "output": "0.8383382080915319"
                 },
                 {
@@ -2641,7 +2641,7 @@
                     "output": "3.697640774259515"
                 },
                 {
-                    "example": "(generalized_distance\n\t{\n\t\tA1 1\n\t\tA2 1\n\t\tA3 1\n\t\tB 1\n\t}\n\t\n\t;vector 1\n\t{\n\t\tA1 2\n\t\tA2 2\n\t\tA3 2\n\t\tB 2\n\t}\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t{\n\t\tA1 {\n\t\t\t\tA1 0\n\t\t\t\tA2 0.372145984\n\t\t\t\tA3 0.370497589\n\t\t\t\tB 0.082723928\n\t\t\t\tsum 0.174632499\n\t\t\t}\n\t\tA2 {\n\t\t\t\tA1 0.371518433\n\t\t\t\tA2 0\n\t\t\t\tA3 0.370520996\n\t\t\t\tB 0.082668725\n\t\t\t\tsum 0.175291846\n\t\t\t}\n\t\tA3 {\n\t\t\t\tA1 0.370319458\n\t\t\t\tA2 0.370968492\n\t\t\t\tA3 0\n\t\t\t\tB 0.085480882\n\t\t\t\tsum 0.173231167\n\t\t\t}\n\t\tB {\n\t\t\t\tA1 0.061363751\n\t\t\t\tA2 0.049512288\n\t\t\t\tA3 0.05628626\n\t\t\t\tB 0\n\t\t\t\tsum 0.832837701\n\t\t\t}\n\t\tsum {\n\t\t\t\tA1 0.114003407\n\t\t\t\tA2 0.106173002\n\t\t\t\tA3 0.100958636\n\t\t\t\tB 0.678864956\n\t\t\t\tsum 0\n\t\t\t}\n\t}\n\t\n\t;weights\n\t[\"continuous_number\"]\n\t\n\t;types\n\t(null)\n\t\n\t;attributes\n\t0.5\n\t\n\t;deviations\n\t[\"A2\" \"A3\"]\n\t\n\t;names\n\t[\"sum\" \"A1\" \"B\"]\n\t\n\t;weights_selection_feature\n\t.true\n)",
+                    "example": "(generalized_distance\n\t{\n\t\tA1 1\n\t\tA2 1\n\t\tA3 1\n\t\tB 1\n\t}\n\t\n\t;vector 1\n\t{\n\t\tA1 2\n\t\tA2 2\n\t\tA3 2\n\t\tB 2\n\t}\n\t\n\t;vector 2\n\t1\n\t\n\t;p\n\t{\n\t\tA1 {\n\t\t\t\tA1 0\n\t\t\t\tA2 0.372145984\n\t\t\t\tA3 0.370497589\n\t\t\t\tB 0.082723928\n\t\t\t\tsum 0.174632499\n\t\t\t}\n\t\tA2 {\n\t\t\t\tA1 0.371518433\n\t\t\t\tA2 0\n\t\t\t\tA3 0.370520996\n\t\t\t\tB 0.082668725\n\t\t\t\tsum 0.175291846\n\t\t\t}\n\t\tA3 {\n\t\t\t\tA1 0.370319458\n\t\t\t\tA2 0.370968492\n\t\t\t\tA3 0\n\t\t\t\tB 0.085480882\n\t\t\t\tsum 0.173231167\n\t\t\t}\n\t\tB {\n\t\t\t\tA1 0.061363751\n\t\t\t\tA2 0.049512288\n\t\t\t\tA3 0.05628626\n\t\t\t\tB 0\n\t\t\t\tsum 0.832837701\n\t\t\t}\n\t\tsum {\n\t\t\t\tA1 0.114003407\n\t\t\t\tA2 0.106173002\n\t\t\t\tA3 0.100958636\n\t\t\t\tB 0.678864956\n\t\t\t\tsum 0\n\t\t\t}\n\t}\n\t\n\t;weights\n\t[\"continuous_number\"]\n\t\n\t;types\n\t.null\n\t\n\t;attributes\n\t0.5\n\t\n\t;deviations\n\t[\"A2\" \"A3\"]\n\t\n\t;names\n\t[\"sum\" \"A1\" \"B\"]\n\t\n\t;weights_selection_feature\n\t.true\n)",
                     "output": "0.8383382080915318"
                 }
             ],
@@ -2669,7 +2669,7 @@
                     "output": "3"
                 },
                 {
-                    "example": "(generalized_mean\n\t[1 2 3 4 5 (null)]\n)",
+                    "example": "(generalized_mean\n\t[1 2 3 4 5 .null]\n)",
                     "output": "3"
                 },
                 {
@@ -2689,7 +2689,7 @@
                     "output": "1.5714285714285714"
                 },
                 {
-                    "example": "(generalized_mean\n\t{\n\t\t0 1\n\t\t1 2\n\t\t2 3\n\t\t3 4\n\t\t4 5\n\t\t5 (null)\n\t}\n\t1\n\t[0.75 0 0 0 0.125]\n)",
+                    "example": "(generalized_mean\n\t{\n\t\t0 1\n\t\t1 2\n\t\t2 3\n\t\t3 4\n\t\t4 5\n\t\t5 .null\n\t}\n\t1\n\t[0.75 0 0 0 0.125]\n)",
                     "output": "1.5714285714285714"
                 }
             ],
@@ -2734,10 +2734,10 @@
                 },
                 {
                     "example": "(seq\n\t(declare\n\t\t{\n\t\t\tvar {\n\t\t\t\t\tA (associate \"B\" 2)\n\t\t\t\t\tB 2\n\t\t\t\t}\n\t\t}\n\t)\n\t[\n\t\t(get\n\t\t\tvar\n\t\t\t[\"A\" \"B\"]\n\t\t)\n\t\t(get\n\t\t\tvar\n\t\t\t[\"A\" \"C\"]\n\t\t)\n\t\t(get\n\t\t\tvar\n\t\t\t[\"B\" \"C\"]\n\t\t)\n\t]\n)",
-                    "output": "[2 (null) (null)]"
+                    "output": "[2 .null .null]"
                 },
                 {
-                    "example": "(get\n\t{(null) 3}\n\t(null)\n)",
+                    "example": "(get\n\t{.null 3}\n\t.null\n)",
                     "output": "3"
                 },
                 {
@@ -2945,7 +2945,7 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"descriptive_entity\"\n\t\t(lambda\n\t\t\t\n\t\t\t;this is a fully described entity\n\t\t\t\n\t\t\t#entity annotations\n\t\t\t{\n\t\t\t\t!privatevar \n\t\t\t\t\t;some private variable\n\t\t\t\t\t\n\t\t\t\t\t#privatevar annotation\n\t\t\t\t\t2\n\t\t\t\t^containervar \n\t\t\t\t\t;a variable accessible to contained entities\n\t\t\t\t\t\n\t\t\t\t\t#containervar annotation\n\t\t\t\t\t3\n\t\t\t\tfoo \n\t\t\t\t\t;the function foo\n\t\t\t\t\t\n\t\t\t\t\t#foo annotation\n\t\t\t\t\t(declare\n\t\t\t\t\t\t\n\t\t\t\t\t\t;a number representing the sum\n\t\t\t\t\t\t\n\t\t\t\t\t\t#return annotation\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tx \n\t\t\t\t\t\t\t\t;the value of x\n\t\t\t\t\t\t\t\t;the default value of x\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t#x annotation\n\t\t\t\t\t\t\t\t#x value annotation\n\t\t\t\t\t\t\t\t1\n\t\t\t\t\t\t\ty \n\t\t\t\t\t\t\t\t;the value of y\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t#y value annotation\n\t\t\t\t\t\t\t\t2\n\t\t\t\t\t\t}\n\t\t\t\t\t\t(+ x y)\n\t\t\t\t\t)\n\t\t\t\tget_api \n\t\t\t\t\t;returns the api details\n\t\t\t\t\t\n\t\t\t\t\t#get_api annotation\n\t\t\t\t\t(seq\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tdescription (get_entity_comments)\n\t\t\t\t\t\t\tlabels (map\n\t\t\t\t\t\t\t\t\t(lambda\n\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\tdescription (current_value 1)\n\t\t\t\t\t\t\t\t\t\t\tparameters (get_entity_comments\n\t\t\t\t\t\t\t\t\t\t\t\t\t(null)\n\t\t\t\t\t\t\t\t\t\t\t\t\t(current_index 1)\n\t\t\t\t\t\t\t\t\t\t\t\t\t.true\n\t\t\t\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t\t(get_entity_comments (null) (null) .true)\n\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t}\n\t\t\t\t\t)\n\t\t\t\tpublicvar \n\t\t\t\t\t;some public variable\n\t\t\t\t\t\n\t\t\t\t\t#publicvar annotation\n\t\t\t\t\t1\n\t\t\t}\n\t\t)\n\t)\n\t[\n\t\t(get_entity_annotations \"descriptive_entity\")\n\t\t(get_entity_annotations \"descriptive_entity\" (null) .true)\n\t\t(get_entity_annotations \"descriptive_entity\" \"foo\" .true)\n\t]\n)",
+                    "example": "(seq\n\t(create_entities\n\t\t\"descriptive_entity\"\n\t\t(lambda\n\t\t\t\n\t\t\t;this is a fully described entity\n\t\t\t\n\t\t\t#entity annotations\n\t\t\t{\n\t\t\t\t!privatevar \n\t\t\t\t\t;some private variable\n\t\t\t\t\t\n\t\t\t\t\t#privatevar annotation\n\t\t\t\t\t2\n\t\t\t\t^containervar \n\t\t\t\t\t;a variable accessible to contained entities\n\t\t\t\t\t\n\t\t\t\t\t#containervar annotation\n\t\t\t\t\t3\n\t\t\t\tfoo \n\t\t\t\t\t;the function foo\n\t\t\t\t\t\n\t\t\t\t\t#foo annotation\n\t\t\t\t\t(declare\n\t\t\t\t\t\t\n\t\t\t\t\t\t;a number representing the sum\n\t\t\t\t\t\t\n\t\t\t\t\t\t#return annotation\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tx \n\t\t\t\t\t\t\t\t;the value of x\n\t\t\t\t\t\t\t\t;the default value of x\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t#x annotation\n\t\t\t\t\t\t\t\t#x value annotation\n\t\t\t\t\t\t\t\t1\n\t\t\t\t\t\t\ty \n\t\t\t\t\t\t\t\t;the value of y\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t#y value annotation\n\t\t\t\t\t\t\t\t2\n\t\t\t\t\t\t}\n\t\t\t\t\t\t(+ x y)\n\t\t\t\t\t)\n\t\t\t\tget_api \n\t\t\t\t\t;returns the api details\n\t\t\t\t\t\n\t\t\t\t\t#get_api annotation\n\t\t\t\t\t(seq\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tdescription (get_entity_comments)\n\t\t\t\t\t\t\tlabels (map\n\t\t\t\t\t\t\t\t\t(lambda\n\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\tdescription (current_value 1)\n\t\t\t\t\t\t\t\t\t\t\tparameters (get_entity_comments\n\t\t\t\t\t\t\t\t\t\t\t\t\t.null\n\t\t\t\t\t\t\t\t\t\t\t\t\t(current_index 1)\n\t\t\t\t\t\t\t\t\t\t\t\t\t.true\n\t\t\t\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t\t(get_entity_comments .null .null .true)\n\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t}\n\t\t\t\t\t)\n\t\t\t\tpublicvar \n\t\t\t\t\t;some public variable\n\t\t\t\t\t\n\t\t\t\t\t#publicvar annotation\n\t\t\t\t\t1\n\t\t\t}\n\t\t)\n\t)\n\t[\n\t\t(get_entity_annotations \"descriptive_entity\")\n\t\t(get_entity_annotations \"descriptive_entity\" .null .true)\n\t\t(get_entity_annotations \"descriptive_entity\" \"foo\" .true)\n\t]\n)",
                     "output": "[\n\t\"entity annotations\"\n\t{\n\t\t^containervar \"containervar annotation\"\n\t\tfoo \"foo annotation\"\n\t\tget_api \"get_api annotation\"\n\t\tpublicvar \"publicvar annotation\"\n\t}\n\t[\n\t\t{\n\t\t\tx [\"x annotation\\r\\nx value annotation\" 1]\n\t\t\ty [\"y value annotation\" 2]\n\t\t}\n\t\t\"return annotation\"\n\t]\n]"
                 }
             ],
@@ -2969,7 +2969,7 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"descriptive_entity\"\n\t\t(lambda\n\t\t\t\n\t\t\t;this is a fully described entity\n\t\t\t\n\t\t\t#entity annotations\n\t\t\t{\n\t\t\t\t!privatevar \n\t\t\t\t\t;some private variable\n\t\t\t\t\t\n\t\t\t\t\t#privatevar annotation\n\t\t\t\t\t2\n\t\t\t\t^containervar \n\t\t\t\t\t;a variable accessible to contained entities\n\t\t\t\t\t\n\t\t\t\t\t#containervar annotation\n\t\t\t\t\t3\n\t\t\t\tfoo \n\t\t\t\t\t;the function foo\n\t\t\t\t\t\n\t\t\t\t\t#foo annotation\n\t\t\t\t\t(declare\n\t\t\t\t\t\t\n\t\t\t\t\t\t;a number representing the sum\n\t\t\t\t\t\t\n\t\t\t\t\t\t#return annotation\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tx \n\t\t\t\t\t\t\t\t;the value of x\n\t\t\t\t\t\t\t\t;the default value of x\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t#x annotation\n\t\t\t\t\t\t\t\t#x value annotation\n\t\t\t\t\t\t\t\t1\n\t\t\t\t\t\t\ty \n\t\t\t\t\t\t\t\t;the value of y\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t#y value annotation\n\t\t\t\t\t\t\t\t2\n\t\t\t\t\t\t}\n\t\t\t\t\t\t(+ x y)\n\t\t\t\t\t)\n\t\t\t\tget_api \n\t\t\t\t\t;returns the api details\n\t\t\t\t\t\n\t\t\t\t\t#get_api annotation\n\t\t\t\t\t(seq\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tdescription (get_entity_comments)\n\t\t\t\t\t\t\tlabels (map\n\t\t\t\t\t\t\t\t\t(lambda\n\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\tdescription (current_value 1)\n\t\t\t\t\t\t\t\t\t\t\tparameters (get_entity_comments\n\t\t\t\t\t\t\t\t\t\t\t\t\t(null)\n\t\t\t\t\t\t\t\t\t\t\t\t\t(current_index 1)\n\t\t\t\t\t\t\t\t\t\t\t\t\t.true\n\t\t\t\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t\t(get_entity_comments (null) (null) .true)\n\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t}\n\t\t\t\t\t)\n\t\t\t\tpublicvar \n\t\t\t\t\t;some public variable\n\t\t\t\t\t\n\t\t\t\t\t#publicvar annotation\n\t\t\t\t\t1\n\t\t\t}\n\t\t)\n\t)\n\t[\n\t\t(get_entity_comments \"descriptive_entity\")\n\t\t(get_entity_comments \"descriptive_entity\" (null) .true)\n\t\t(get_entity_comments \"descriptive_entity\" \"foo\" .true)\n\t]\n)",
+                    "example": "(seq\n\t(create_entities\n\t\t\"descriptive_entity\"\n\t\t(lambda\n\t\t\t\n\t\t\t;this is a fully described entity\n\t\t\t\n\t\t\t#entity annotations\n\t\t\t{\n\t\t\t\t!privatevar \n\t\t\t\t\t;some private variable\n\t\t\t\t\t\n\t\t\t\t\t#privatevar annotation\n\t\t\t\t\t2\n\t\t\t\t^containervar \n\t\t\t\t\t;a variable accessible to contained entities\n\t\t\t\t\t\n\t\t\t\t\t#containervar annotation\n\t\t\t\t\t3\n\t\t\t\tfoo \n\t\t\t\t\t;the function foo\n\t\t\t\t\t\n\t\t\t\t\t#foo annotation\n\t\t\t\t\t(declare\n\t\t\t\t\t\t\n\t\t\t\t\t\t;a number representing the sum\n\t\t\t\t\t\t\n\t\t\t\t\t\t#return annotation\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tx \n\t\t\t\t\t\t\t\t;the value of x\n\t\t\t\t\t\t\t\t;the default value of x\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t#x annotation\n\t\t\t\t\t\t\t\t#x value annotation\n\t\t\t\t\t\t\t\t1\n\t\t\t\t\t\t\ty \n\t\t\t\t\t\t\t\t;the value of y\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t#y value annotation\n\t\t\t\t\t\t\t\t2\n\t\t\t\t\t\t}\n\t\t\t\t\t\t(+ x y)\n\t\t\t\t\t)\n\t\t\t\tget_api \n\t\t\t\t\t;returns the api details\n\t\t\t\t\t\n\t\t\t\t\t#get_api annotation\n\t\t\t\t\t(seq\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tdescription (get_entity_comments)\n\t\t\t\t\t\t\tlabels (map\n\t\t\t\t\t\t\t\t\t(lambda\n\t\t\t\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\t\t\t\tdescription (current_value 1)\n\t\t\t\t\t\t\t\t\t\t\tparameters (get_entity_comments\n\t\t\t\t\t\t\t\t\t\t\t\t\t.null\n\t\t\t\t\t\t\t\t\t\t\t\t\t(current_index 1)\n\t\t\t\t\t\t\t\t\t\t\t\t\t.true\n\t\t\t\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t\t(get_entity_comments .null .null .true)\n\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t}\n\t\t\t\t\t)\n\t\t\t\tpublicvar \n\t\t\t\t\t;some public variable\n\t\t\t\t\t\n\t\t\t\t\t#publicvar annotation\n\t\t\t\t\t1\n\t\t\t}\n\t\t)\n\t)\n\t[\n\t\t(get_entity_comments \"descriptive_entity\")\n\t\t(get_entity_comments \"descriptive_entity\" .null .true)\n\t\t(get_entity_comments \"descriptive_entity\" \"foo\" .true)\n\t]\n)",
                     "output": "[\n\t\"this is a fully described entity\"\n\t{\n\t\t^containervar \"a variable accessible to contained entities\"\n\t\tfoo \"the function foo\"\n\t\tget_api \"returns the api details\"\n\t\tpublicvar \"some public variable\"\n\t}\n\t[\n\t\t{\n\t\t\tx [\"the value of x\\r\\nthe default value of x\" 1]\n\t\t\ty [\"the value of y\" 2]\n\t\t}\n\t\t\"a number representing the sum\"\n\t]\n]"
                 }
             ],
@@ -3197,7 +3197,7 @@
                     "output": "\"if 2\""
                 },
                 {
-                    "example": "(if\n\t(null) 1\n\t0 2\n\t0 3\n\t4\n )",
+                    "example": "(if\n\t.null 1\n\t0 2\n\t0 3\n\t4\n )",
                     "output": "4"
                 }
             ],
@@ -3229,12 +3229,12 @@
                     "output": "[2 5]"
                 },
                 {
-                    "example": "(index_max (null) 34 -66)",
+                    "example": "(index_max .null 34 -66)",
                     "output": "[1]"
                 },
                 {
-                    "example": "(index_max (null) (null) (null))",
-                    "output": "(null)"
+                    "example": "(index_max .null .null .null)",
+                    "output": ".null"
                 },
                 {
                     "example": "(index_max\n\t{1 2 3 5 tomato 4444}\n)",
@@ -3269,7 +3269,7 @@
                     "output": "[0 1 4]"
                 },
                 {
-                    "example": "(index_min (null) 34 -66)",
+                    "example": "(index_min .null 34 -66)",
                     "output": "[2]"
                 },
                 {
@@ -3354,7 +3354,7 @@
                 },
                 {
                     "example": "(intersect\n\t(lambda\n\t\t[\n\t\t\t1\n\t\t\t(associate \"a\" 3 \"b\" 4)\n\t\t]\n\t)\n\t(lambda\n\t\t[\n\t\t\t1\n\t\t\t(associate \"c\" 3 \"b\" 4)\n\t\t]\n\t)\n)",
-                    "output": "[\n\t1\n\t(associate (null) 3 \"b\" 4)\n]"
+                    "output": "[\n\t1\n\t(associate .null 3 \"b\" 4)\n]"
                 },
                 {
                     "example": "(intersect\n\t(lambda\n\t\t(replace 4 2 6 1 7)\n\t)\n\t(lambda\n\t\t(replace 4 1 7 2 6)\n\t)\n)",
@@ -3393,8 +3393,8 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(seq\n\t(seq\n\t\t(create_entities\n\t\t\t\"MergeEntity1\"\n\t\t\t{a 3 b 4 c \"c1\"}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\" \"MergeEntityChild1\"]\n\t\t\t{x 3 y 4}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\" \"MergeEntityChild2\"]\n\t\t\t{p 3 q 4}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\"]\n\t\t\t{E 3 F 4}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\"]\n\t\t\t{\n\t\t\t\te 3\n\t\t\t\tf 4\n\t\t\t\tg 5\n\t\t\t\th 6\n\t\t\t}\n\t\t)\n\t\t(create_entities\n\t\t\t\"MergeEntity2\"\n\t\t\t{b 4 c \"c2\"}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\" \"MergeEntityChild1\"]\n\t\t\t{x 3 y 4 z 5}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\" \"MergeEntityChild2\"]\n\t\t\t{\n\t\t\t\tp 3\n\t\t\t\tq 4\n\t\t\t\tu 5\n\t\t\t\tv 6\n\t\t\t\tw 7\n\t\t\t}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\"]\n\t\t\t{\n\t\t\t\tE 3\n\t\t\t\tF 4\n\t\t\t\tG 5\n\t\t\t\tH 6\n\t\t\t}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\"]\n\t\t\t{e 3 f 4}\n\t\t)\n\t\t(intersect_entities \"MergeEntity1\" \"MergeEntity2\" (null) \"IntersectedEntity\")\n\t\t[\n\t\t\t(retrieve_entity_root \"IntersectedEntity\")\n\t\t\t(sort\n\t\t\t\t(contained_entities \"IntersectedEntity\")\n\t\t\t)\n\t\t]\n\t)\n)",
-                    "output": "[\n\t{b 4 c (null)}\n\t[\"MergeEntityChild1\" \"MergeEntityChild2\" \"_2bW5faQkVxs\" \"_ldZa276M1io\"]\n]"
+                    "example": "(seq\n\t(seq\n\t\t(create_entities\n\t\t\t\"MergeEntity1\"\n\t\t\t{a 3 b 4 c \"c1\"}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\" \"MergeEntityChild1\"]\n\t\t\t{x 3 y 4}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\" \"MergeEntityChild2\"]\n\t\t\t{p 3 q 4}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\"]\n\t\t\t{E 3 F 4}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\"]\n\t\t\t{\n\t\t\t\te 3\n\t\t\t\tf 4\n\t\t\t\tg 5\n\t\t\t\th 6\n\t\t\t}\n\t\t)\n\t\t(create_entities\n\t\t\t\"MergeEntity2\"\n\t\t\t{b 4 c \"c2\"}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\" \"MergeEntityChild1\"]\n\t\t\t{x 3 y 4 z 5}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\" \"MergeEntityChild2\"]\n\t\t\t{\n\t\t\t\tp 3\n\t\t\t\tq 4\n\t\t\t\tu 5\n\t\t\t\tv 6\n\t\t\t\tw 7\n\t\t\t}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\"]\n\t\t\t{\n\t\t\t\tE 3\n\t\t\t\tF 4\n\t\t\t\tG 5\n\t\t\t\tH 6\n\t\t\t}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\"]\n\t\t\t{e 3 f 4}\n\t\t)\n\t\t(intersect_entities \"MergeEntity1\" \"MergeEntity2\" .null \"IntersectedEntity\")\n\t\t[\n\t\t\t(retrieve_entity_root \"IntersectedEntity\")\n\t\t\t(sort\n\t\t\t\t(contained_entities \"IntersectedEntity\")\n\t\t\t)\n\t\t]\n\t)\n)",
+                    "output": "[\n\t{b 4 c .null}\n\t[\"MergeEntityChild1\" \"MergeEntityChild2\" \"_2bW5faQkVxs\" \"_ldZa276M1io\"]\n]"
                 }
             ],
             "frequency_per_10000_opcodes": 0.01,
@@ -3522,7 +3522,7 @@
                 },
                 {
                     "example": "(last \"\")",
-                    "output": "(null)"
+                    "output": ".null"
                 }
             ],
             "frequency_per_10000_opcodes": 13,
@@ -3625,24 +3625,24 @@
                     "output": "(seq\n\t(print \"hello\")\n)"
                 },
                 {
-                    "example": "(seq\n\t(store\n\t\t\"file.json\"\n\t\t[\n\t\t\t1\n\t\t\t2\n\t\t\t3\n\t\t\t{a 1 b 2 c (null)}\n\t\t]\n\t)\n\t(load \"file.json\")\n)",
-                    "output": "[\n\t1\n\t2\n\t3\n\t{a 1 b 2 c (null)}\n]"
+                    "example": "(seq\n\t(store\n\t\t\"file.json\"\n\t\t[\n\t\t\t1\n\t\t\t2\n\t\t\t3\n\t\t\t{a 1 b 2 c .null}\n\t\t]\n\t)\n\t(load \"file.json\")\n)",
+                    "output": "[\n\t1\n\t2\n\t3\n\t{a 1 b 2 c .null}\n]"
                 },
                 {
-                    "example": "(seq\n\t(store\n\t\t\"file.yaml\"\n\t\t[\n\t\t\t1\n\t\t\t2\n\t\t\t3\n\t\t\t{a 1 b 2 c (null)}\n\t\t]\n\t)\n\t(load \"file.yaml\")\n)",
-                    "output": "[\n\t1\n\t2\n\t3\n\t{a 1 b 2 c (null)}\n]"
+                    "example": "(seq\n\t(store\n\t\t\"file.yaml\"\n\t\t[\n\t\t\t1\n\t\t\t2\n\t\t\t3\n\t\t\t{a 1 b 2 c .null}\n\t\t]\n\t)\n\t(load \"file.yaml\")\n)",
+                    "output": "[\n\t1\n\t2\n\t3\n\t{a 1 b 2 c .null}\n]"
                 },
                 {
                     "example": "(seq\n\t(store \"file.txt\" \"This is text.\")\n\t(load \"test.txt\")\n)",
-                    "output": "(null)"
+                    "output": ".null"
                 },
                 {
                     "example": "(seq\n\t(store\n\t\t\"file.caml\"\n\t\t(lambda\n\t\t\t(seq\n\t\t\t\t(print \"hello\")\n\t\t\t)\n\t\t)\n\t)\n\t(load \"file.caml\")\n)",
                     "output": "(seq\n\t(print \"hello\")\n)"
                 },
                 {
-                    "example": "(seq\n\t(declare\n\t\t{\n\t\t\tcsv_data [\n\t\t\t\t\t[6.4 2.8 5.6 2.2 \"virginica\"]\n\t\t\t\t\t[4.9 2.5 4.5 1.7 \"virg\\\"inica\"]\n\t\t\t\t\t[]\n\t\t\t\t\t[\"\" \"\" \"\" (null)]\n\t\t\t\t\t[4.9 3.1 1.5 0.1 \"set\\nosa\" 3]\n\t\t\t\t\t[4.4 3.2 1.3 0.2 \"setosa\"]\n\t\t\t\t]\n\t\t}\n\t)\n\t(store \"file.csv\" csv_data)\n\t(load \"file.csv\")\n)",
-                    "output": "[\n\t[6.4 2.8 5.6 2.2 \"virginica\"]\n\t[4.9 2.5 4.5 1.7 \"virg\\\"inica\"]\n\t[(null)]\n\t[(null) (null) (null) (null)]\n\t[4.9 3.1 1.5 0.1 \"set\\nosa\" 3]\n\t[4.4 3.2 1.3 0.2 \"setosa\"]\n]"
+                    "example": "(seq\n\t(declare\n\t\t{\n\t\t\tcsv_data [\n\t\t\t\t\t[6.4 2.8 5.6 2.2 \"virginica\"]\n\t\t\t\t\t[4.9 2.5 4.5 1.7 \"virg\\\"inica\"]\n\t\t\t\t\t[]\n\t\t\t\t\t[\"\" \"\" \"\" .null]\n\t\t\t\t\t[4.9 3.1 1.5 0.1 \"set\\nosa\" 3]\n\t\t\t\t\t[4.4 3.2 1.3 0.2 \"setosa\"]\n\t\t\t\t]\n\t\t}\n\t)\n\t(store \"file.csv\" csv_data)\n\t(load \"file.csv\")\n)",
+                    "output": "[\n\t[6.4 2.8 5.6 2.2 \"virginica\"]\n\t[4.9 2.5 4.5 1.7 \"virg\\\"inica\"]\n\t[.null]\n\t[.null .null .null .null]\n\t[4.9 3.1 1.5 0.1 \"set\\nosa\" 3]\n\t[4.4 3.2 1.3 0.2 \"setosa\"]\n]"
                 }
             ],
             "frequency_per_10000_opcodes": 8.5,
@@ -3666,11 +3666,11 @@
             "examples": [
                 {
                     "example": "(seq\n\t(seq\n\t\t(create_entities\n\t\t\t\"Entity\"\n\t\t\t{a 1 b 2}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"Entity\" \"Contained1\"]\n\t\t\t{c 3}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"Entity\" \"Contained1\" \"Contained2_1\"]\n\t\t\t{d 4}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"Entity\" \"Contained1\" \"Contained2_2\"]\n\t\t\t{e 5}\n\t\t)\n\t\t(store_entity \"entity.amlg\" \"Entity\")\n\t\t(load_entity \"entity.amlg\" \"EntityCopy\")\n\t\t(difference_entities \"Entity\" \"EntityCopy\")\n\t)\n)",
-                    "output": "(declare\n\t{_ (null) new_entity (null)}\n\t(clone_entities _ new_entity)\n)"
+                    "output": "(declare\n\t{_ .null new_entity .null}\n\t(clone_entities _ new_entity)\n)"
                 },
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"Entity\"\n\t\t[1 2 3 4]\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\"]\n\t\t[5 6 7]\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_1\"]\n\t\t{eight 8 nine 9}\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_3\"]\n\t\t[12 13]\n\t)\n\t(store_entity\n\t\t\"entity.caml\"\n\t\t\"Entity\"\n\t\t(null)\n\t\t.true\n\t\t{flatten .true transactional .true}\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_2\"]\n\t\t[10 11]\n\t)\n\t(destroy_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_3\"]\n\t)\n\t(assign_to_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_1\"]\n\t\t{eight 88}\n\t)\n\t(load_entity\n\t\t\"entity.caml\"\n\t\t\"EntityCopy\"\n\t\t(null)\n\t\t.false\n\t\t{execute_on_load .true require_version_compatibility .true transactional .true}\n\t)\n\t(declare\n\t\t{\n\t\t\tdiff (difference_entities \"EntityCopy\" \"Entity\")\n\t\t}\n\t)\n\t(destroy_entities \"EntityCopy\" \"Entity\")\n\tdiff\n)",
-                    "output": "(declare\n\t{_ (null) new_entity (null)}\n\t(clone_entities _ new_entity)\n)"
+                    "example": "(seq\n\t(create_entities\n\t\t\"Entity\"\n\t\t[1 2 3 4]\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\"]\n\t\t[5 6 7]\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_1\"]\n\t\t{eight 8 nine 9}\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_3\"]\n\t\t[12 13]\n\t)\n\t(store_entity\n\t\t\"entity.caml\"\n\t\t\"Entity\"\n\t\t.null\n\t\t.true\n\t\t{flatten .true transactional .true}\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_2\"]\n\t\t[10 11]\n\t)\n\t(destroy_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_3\"]\n\t)\n\t(assign_to_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_1\"]\n\t\t{eight 88}\n\t)\n\t(load_entity\n\t\t\"entity.caml\"\n\t\t\"EntityCopy\"\n\t\t.null\n\t\t.false\n\t\t{execute_on_load .true require_version_compatibility .true transactional .true}\n\t)\n\t(declare\n\t\t{\n\t\t\tdiff (difference_entities \"EntityCopy\" \"Entity\")\n\t\t}\n\t)\n\t(destroy_entities \"EntityCopy\" \"Entity\")\n\tdiff\n)",
+                    "output": "(declare\n\t{_ .null new_entity .null}\n\t(clone_entities _ new_entity)\n)"
                 }
             ],
             "frequency_per_10000_opcodes": 1,
@@ -3738,11 +3738,11 @@
                 },
                 {
                     "example": "(map\n\t(lambda\n\t\t(+\n\t\t\t(get (current_value) 0)\n\t\t\t(get (current_value) 1)\n\t\t)\n\t)\n\t[1 2 3 4 5]\n\t[2 2 2 2 2 2]\n)",
-                    "output": "[3 4 5 6 7 (null)]"
+                    "output": "[3 4 5 6 7 .null]"
                 },
                 {
                     "example": "(map\n\t(lambda\n\t\t(+\n\t\t\t(get (current_value) 0)\n\t\t\t(get (current_value) 1)\n\t\t\t(get (current_value) 2)\n\t\t)\n\t)\n\t(associate 0 0 1 1 \"a\" 3)\n\t(associate 0 1 \"a\" 4)\n\t[2 2 2 2]\n)",
-                    "output": "{\n\t0 3\n\t1 (null)\n\t2 (null)\n\t3 (null)\n\ta (null)\n}"
+                    "output": "{\n\t0 3\n\t1 .null\n\t2 .null\n\t3 .null\n\ta .null\n}"
                 }
             ],
             "frequency_per_10000_opcodes": 39,
@@ -3769,12 +3769,12 @@
                     "output": "9"
                 },
                 {
-                    "example": "(max (null) 4 8)",
+                    "example": "(max .null 4 8)",
                     "output": "8"
                 },
                 {
-                    "example": "(max (null))",
-                    "output": "(null)"
+                    "example": "(max .null)",
+                    "output": ".null"
                 }
             ],
             "frequency_per_10000_opcodes": 2,
@@ -3801,7 +3801,7 @@
                     "output": "-5"
                 },
                 {
-                    "example": "(min (null) 4 8)",
+                    "example": "(min .null 4 8)",
                     "output": "4"
                 }
             ],
@@ -3965,7 +3965,7 @@
                     "output": "[]"
                 },
                 {
-                    "example": "(mode\n\t[\n\t\t1\n\t\t1\n\t\t2\n\t\t3\n\t\t4\n\t\t5\n\t\t(null)\n\t]\n)",
+                    "example": "(mode\n\t[\n\t\t1\n\t\t1\n\t\t2\n\t\t3\n\t\t4\n\t\t5\n\t\t.null\n\t]\n)",
                     "output": "1"
                 },
                 {
@@ -4034,7 +4034,7 @@
             "examples": [
                 {
                     "example": "(mutate\n\t(lambda\n\t\t[\n\t\t\t1\n\t\t\t2\n\t\t\t3\n\t\t\t4\n\t\t\t5\n\t\t\t6\n\t\t\t7\n\t\t\t8\n\t\t\t9\n\t\t\t10\n\t\t\t11\n\t\t\t12\n\t\t\t13\n\t\t\t14\n\t\t\t(associate \"a\" 1 \"b\" 2)\n\t\t]\n\t)\n\t0.4\n)",
-                    "output": "[\n\t1\n\t(and)\n\t3\n\t{}\n\t5\n\t6\n\t(tail)\n\t(get)\n\t(acos)\n\t(floor)\n\t(let)\n\t12\n\tzbiqZH\n\t14\n\t(associate (null))\n]"
+                    "output": "[\n\t1\n\t(and)\n\t3\n\t{}\n\t5\n\t6\n\t(tail)\n\t(get)\n\t(acos)\n\t(floor)\n\t(let)\n\t12\n\tzbiqZH\n\t14\n\t(associate .null)\n]"
                 },
                 {
                     "example": "(mutate\n\t(lambda\n\t\t[\n\t\t\t1\n\t\t\t2\n\t\t\t3\n\t\t\t4\n\t\t\t(associate \"alpha\" 5 \"beta\" 6)\n\t\t\t(associate\n\t\t\t\t\"nest\"\n\t\t\t\t(associate\n\t\t\t\t\t\"count\"\n\t\t\t\t\t[7 8 9]\n\t\t\t\t)\n\t\t\t\t\"end\"\n\t\t\t\t[10 11 12]\n\t\t\t)\n\t\t]\n\t)\n\t0.2\n\t(associate \"+\" 0.5 \"-\" 0.3 \"*\" 0.2)\n\t(associate \"change_type\" 0.08 \"delete\" 0.02 \"insert\" 0.9)\n)",
@@ -4143,38 +4143,6 @@
             "value_newness": "new"
         }
     },
-    "null": {
-        "prefix": "(null",
-        "body": [
-            "(null"
-        ],
-        "description": " || Evaluates to the immediate null value, regardless of any parameters.",
-        "$doc": {
-            "allows_concurrency": false,
-            "examples": [
-                {
-                    "example": "(null)",
-                    "output": "(null)"
-                },
-                {
-                    "example": "(lambda\n\t(null\n\t\t(+ 3 5)\n\t\t7\n\t)\n)",
-                    "output": "(null\n\t(+ 3 5)\n\t7\n)"
-                },
-                {
-                    "example": "(lambda\n\t\n\t#annotation\n\t(null)\n)",
-                    "output": "#annotation\n(null)"
-                }
-            ],
-            "frequency_per_10000_opcodes": 81,
-            "new_scope": false,
-            "new_target_scope": false,
-            "opcode_group": "Primitive Types",
-            "permissions": "none",
-            "requires_entity": false,
-            "returns": "null",
-            "value_newness": "null"
-        }
-    },
     "opcode_stack": {
         "prefix": "(opcode_stack",
         "body": [
@@ -4252,7 +4220,7 @@
         "body": [
             "(parse"
         ],
-        "description": "string str [bool transactional] [bool return_warnings] || String `str` is parsed into code, and the result is returned.  If `transactional` is false, the default, it will attempt to parse the whole string and will return the closest code possible if there are any parse issues.  If `transactional` is true, it will parse the string transactionally, meaning that any node that has a parse error or is incomplete will be omitted along with all child nodes except for the top node.  If any performance constraints are given or `return_warnings` is true, the result will be a tuple of the form [value, warnings, performance_constraint_violation], where warnings is an assoc mapping all warnings to their number of occurrences, and perf_constraint violation is a string denoting the constraint exceeded (or (null) if none)), unless `return_warnings` is false, in which case just the value will be returned.",
+        "description": "string str [bool transactional] [bool return_warnings] || String `str` is parsed into code, and the result is returned.  If `transactional` is false, the default, it will attempt to parse the whole string and will return the closest code possible if there are any parse issues.  If `transactional` is true, it will parse the string transactionally, meaning that any node that has a parse error or is incomplete will be omitted along with all child nodes except for the top node.  If any performance constraints are given or `return_warnings` is true, the result will be a tuple of the form [value, warnings, performance_constraint_violation], where warnings is an assoc mapping all warnings to their number of occurrences, and perf_constraint violation is a string denoting the constraint exceeded (or .null if none)), unless `return_warnings` is false, in which case just the value will be returned.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
@@ -4330,11 +4298,11 @@
             "examples": [
                 {
                     "example": "(while\n\t(< (current_index) 3)\n\t(append (previous_result) (current_index))\n)",
-                    "output": "[(null) 0 1 2]"
+                    "output": "[.null 0 1 2]"
                 },
                 {
                     "example": "(while\n\t(< (current_index) 3)\n\t(if\n\t\t(= (current_index) 0)\n\t\t3\n\t\t(append\n\t\t\t(previous_result 0 .true)\n\t\t\t(previous_result 0)\n\t\t\t(previous_result 0)\n\t\t)\n\t)\n)",
-                    "output": "[\n\t3\n\t3\n\t(null)\n\t3\n\t3\n\t(null)\n\t(null)\n]"
+                    "output": "[\n\t3\n\t3\n\t.null\n\t3\n\t3\n\t.null\n\t.null\n]"
                 }
             ],
             "frequency_per_10000_opcodes": 1,
@@ -4358,11 +4326,11 @@
             "examples": [
                 {
                     "example": "(print \"hello world\\n\")",
-                    "output": "(null)"
+                    "output": ".null"
                 },
                 {
                     "example": "(print\n\t1\n\t2\n\t[3 4]\n\t\"5\"\n\t\"\\n\"\n)",
-                    "output": "(null)"
+                    "output": ".null"
                 }
             ],
             "frequency_per_10000_opcodes": 43,
@@ -4371,7 +4339,7 @@
             "opcode_group": "System and Runtime",
             "permissions": "std_out_and_std_err",
             "requires_entity": false,
-            "returns": "null",
+            "returns": ".null",
             "value_newness": "null"
         }
     },
@@ -4389,7 +4357,7 @@
                     "output": "3"
                 },
                 {
-                    "example": "(quantile\n\t[1 2 3 4 5 (null)]\n\t0.5\n)",
+                    "example": "(quantile\n\t[1 2 3 4 5 .null]\n\t0.5\n)",
                     "output": "3"
                 },
                 {
@@ -4409,7 +4377,7 @@
                     "output": "1.5714285714285716"
                 },
                 {
-                    "example": "(quantile\n\t{\n\t\t0 1\n\t\t1 2\n\t\t2 3\n\t\t3 4\n\t\t4 5\n\t\t5 (null)\n\t}\n\t0.5\n\t[0.75 0 0 0 0.125]\n)",
+                    "example": "(quantile\n\t{\n\t\t0 1\n\t\t1 2\n\t\t2 3\n\t\t3 4\n\t\t4 5\n\t\t5 .null\n\t}\n\t0.5\n\t[0.75 0 0 0 0.125]\n)",
                     "output": "1.1666666666666667"
                 }
             ],
@@ -4481,7 +4449,7 @@
             "allows_concurrency": true,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t(compute_on_contained_entities\n\t\t(query_distance_contributions\n\t\t\t2\n\t\t\t[\"x\" \"y\"]\n\t\t\t[\n\t\t\t\t[1 2]\n\t\t\t]\n\t\t\t2\n\t\t\t(null)\n\t\t\t(null)\n\t\t\t(null)\n\t\t\t(null)\n\t\t\t(null)\n\t\t\t-1\n\t\t\t(null)\n\t\t\t\"random seed 1234\"\n\t\t)\n\t)\n)",
+                    "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t(compute_on_contained_entities\n\t\t(query_distance_contributions\n\t\t\t2\n\t\t\t[\"x\" \"y\"]\n\t\t\t[\n\t\t\t\t[1 2]\n\t\t\t]\n\t\t\t2\n\t\t\t.null\n\t\t\t.null\n\t\t\t.null\n\t\t\t.null\n\t\t\t.null\n\t\t\t-1\n\t\t\t.null\n\t\t\t\"random seed 1234\"\n\t\t)\n\t)\n)",
                     "output": "[1.17157287525381]"
                 }
             ],
@@ -4505,7 +4473,7 @@
             "allows_concurrency": true,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t[\n\t\t(compute_on_contained_entities\n\t\t\t(query_entity_convictions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t(null)\n\t\t\t\t2\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t-1\n\t\t\t\t(null)\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_entity_convictions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t[\"vert0\" \"vert1\" \"vert2\"]\n\t\t\t\t2\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t-1\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_exists \"object\")\n\t\t\t(query_entity_convictions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t(null)\n\t\t\t\t2\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t-1\n\t\t\t\t(null)\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_exists \"object\")\n\t\t\t(query_entity_convictions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t(contained_entities\n\t\t\t\t\t(query_exists \"object\")\n\t\t\t\t)\n\t\t\t\t2\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t-1\n\t\t\t\t(null)\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t]\n)",
+                    "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t[\n\t\t(compute_on_contained_entities\n\t\t\t(query_entity_convictions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t.null\n\t\t\t\t2\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t-1\n\t\t\t\t.null\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_entity_convictions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t[\"vert0\" \"vert1\" \"vert2\"]\n\t\t\t\t2\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t-1\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_exists \"object\")\n\t\t\t(query_entity_convictions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t.null\n\t\t\t\t2\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t-1\n\t\t\t\t.null\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_exists \"object\")\n\t\t\t(query_entity_convictions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t(contained_entities\n\t\t\t\t\t(query_exists \"object\")\n\t\t\t\t)\n\t\t\t\t2\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t-1\n\t\t\t\t.null\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t]\n)",
                     "output": "[\n\t{\n\t\tvert0 20.64507068846579\n\t\tvert1 10.936029135274522\n\t\tvert2 0.7220080663101216\n\t\tvert3 20.64507068846579\n\t\tvert4 0.6024424202611007\n\t\tvert5 0.361435163373361\n\t}\n\t{vert0 10.493921488434916 vert1 5.558800590831786 vert2 0.3669978212333347}\n\t{\n\t\tvert0 20.64507068846579\n\t\tvert1 10.936029135274522\n\t\tvert2 0.7220080663101216\n\t\tvert3 20.64507068846579\n\t\tvert4 0.6024424202611007\n\t\tvert5 0.361435163373361\n\t}\n\t{\n\t\tvert0 20.64507068846579\n\t\tvert1 10.936029135274522\n\t\tvert2 0.7220080663101216\n\t\tvert3 20.64507068846579\n\t\tvert4 0.6024424202611007\n\t\tvert5 0.361435163373361\n\t}\n]"
                 }
             ],
@@ -4529,7 +4497,7 @@
             "allows_concurrency": true,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"entity1\"\n\t\t{alpha 3 b 0.17 c 1}\n\t)\n\t(create_entities\n\t\t\"entity2\"\n\t\t{alpha 4 b 0.12 c 0}\n\t)\n\t(create_entities\n\t\t\"entity3\"\n\t\t{\n\t\t\talpha 5\n\t\t\tb 0.1\n\t\t\tc 0\n\t\t\tx 16\n\t\t}\n\t)\n\t(create_entities\n\t\t\"entity4\"\n\t\t{\n\t\t\talpha 1\n\t\t\tb 0.14\n\t\t\tc 1\n\t\t\tx 8\n\t\t}\n\t)\n\t(create_entities\n\t\t\"entity5\"\n\t\t{\n\t\t\talpha 9\n\t\t\tb 0.11\n\t\t\tc 1\n\t\t\tx 32\n\t\t}\n\t)\n\t(compute_on_contained_entities\n\t\t[\n\t\t\t(query_entity_cumulative_nearest_entity_weights\n\t\t\t\t2\n\t\t\t\t[\"alpha\" \"b\" \"c\"]\n\t\t\t\t(null)\n\t\t\t\t0.5\n\t\t\t\t(null)\n\t\t\t\t[0 0 1]\n\t\t\t)\n\t\t]\n\t)\n)",
+                    "example": "(seq\n\t(create_entities\n\t\t\"entity1\"\n\t\t{alpha 3 b 0.17 c 1}\n\t)\n\t(create_entities\n\t\t\"entity2\"\n\t\t{alpha 4 b 0.12 c 0}\n\t)\n\t(create_entities\n\t\t\"entity3\"\n\t\t{\n\t\t\talpha 5\n\t\t\tb 0.1\n\t\t\tc 0\n\t\t\tx 16\n\t\t}\n\t)\n\t(create_entities\n\t\t\"entity4\"\n\t\t{\n\t\t\talpha 1\n\t\t\tb 0.14\n\t\t\tc 1\n\t\t\tx 8\n\t\t}\n\t)\n\t(create_entities\n\t\t\"entity5\"\n\t\t{\n\t\t\talpha 9\n\t\t\tb 0.11\n\t\t\tc 1\n\t\t\tx 32\n\t\t}\n\t)\n\t(compute_on_contained_entities\n\t\t[\n\t\t\t(query_entity_cumulative_nearest_entity_weights\n\t\t\t\t2\n\t\t\t\t[\"alpha\" \"b\" \"c\"]\n\t\t\t\t.null\n\t\t\t\t0.5\n\t\t\t\t.null\n\t\t\t\t[0 0 1]\n\t\t\t)\n\t\t]\n\t)\n)",
                     "output": "{\n\tentity1 2.3019715434701133\n\tentity2 1.5822400592793713\n\tentity3 0.7781961968246989\n\tentity4 0.33759220042581645\n}"
                 }
             ],
@@ -4553,7 +4521,7 @@
             "allows_concurrency": true,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t[\n\t\t(compute_on_contained_entities\n\t\t\t(query_entity_distance_contributions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t(null)\n\t\t\t\t2\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t-1\n\t\t\t\t(null)\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_entity_distance_contributions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t[\"vert0\" \"vert1\" \"vert2\"]\n\t\t\t\t2\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t-1\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_exists \"object\")\n\t\t\t(query_entity_distance_contributions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t(null)\n\t\t\t\t2\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t-1\n\t\t\t\t(null)\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_exists \"object\")\n\t\t\t(query_entity_distance_contributions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t(contained_entities\n\t\t\t\t\t(query_exists \"object\")\n\t\t\t\t)\n\t\t\t\t2\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t-1\n\t\t\t\t(null)\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t]\n)",
+                    "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t[\n\t\t(compute_on_contained_entities\n\t\t\t(query_entity_distance_contributions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t.null\n\t\t\t\t2\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t-1\n\t\t\t\t.null\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_entity_distance_contributions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t[\"vert0\" \"vert1\" \"vert2\"]\n\t\t\t\t2\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t-1\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_exists \"object\")\n\t\t\t(query_entity_distance_contributions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t.null\n\t\t\t\t2\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t-1\n\t\t\t\t.null\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_exists \"object\")\n\t\t\t(query_entity_distance_contributions\n\t\t\t\t2\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t(contained_entities\n\t\t\t\t\t(query_exists \"object\")\n\t\t\t\t)\n\t\t\t\t2\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t-1\n\t\t\t\t.null\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t]\n)",
                     "output": "[\n\t{\n\t\tvert0 0.8284271247461902\n\t\tvert1 0.8284271247461902\n\t\tvert2 0.8284271247461902\n\t\tvert3 0.8284271247461902\n\t\tvert4 0.7071067811865476\n\t\tvert5 1.17157287525381\n\t}\n\t{vert0 0.8284271247461902 vert1 0.8284271247461902 vert2 0.8284271247461902}\n\t{\n\t\tvert0 0.8284271247461902\n\t\tvert1 0.8284271247461902\n\t\tvert2 0.8284271247461902\n\t\tvert3 0.8284271247461902\n\t\tvert4 0.7071067811865476\n\t\tvert5 1.17157287525381\n\t}\n\t{\n\t\tvert0 0.8284271247461902\n\t\tvert1 0.8284271247461902\n\t\tvert2 0.8284271247461902\n\t\tvert3 0.8284271247461902\n\t\tvert4 0.7071067811865476\n\t\tvert5 1.17157287525381\n\t}\n]"
                 }
             ],
@@ -4577,7 +4545,7 @@
             "allows_concurrency": true,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t(compute_on_contained_entities\n\t\t(query_exists \"object\")\n\t\t(query_entity_group_kl_divergence\n\t\t\t2\n\t\t\t[\"x\" \"y\"]\n\t\t\t(contained_entities\n\t\t\t\t(query_equals \"object\" 2)\n\t\t\t)\n\t\t\t2\n\t\t\t(null)\n\t\t\t(null)\n\t\t\t(null)\n\t\t\t(null)\n\t\t\t(null)\n\t\t\t-1\n\t\t\t(null)\n\t\t\t\"random seed 1234\"\n\t\t)\n\t)\n)",
+                    "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t(compute_on_contained_entities\n\t\t(query_exists \"object\")\n\t\t(query_entity_group_kl_divergence\n\t\t\t2\n\t\t\t[\"x\" \"y\"]\n\t\t\t(contained_entities\n\t\t\t\t(query_equals \"object\" 2)\n\t\t\t)\n\t\t\t2\n\t\t\t.null\n\t\t\t.null\n\t\t\t.null\n\t\t\t.null\n\t\t\t.null\n\t\t\t-1\n\t\t\t.null\n\t\t\t\"random seed 1234\"\n\t\t)\n\t)\n)",
                     "output": "0.01228960638554566"
                 }
             ],
@@ -4601,7 +4569,7 @@
             "allows_concurrency": true,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t[\n\t\t(compute_on_contained_entities\n\t\t\t[\n\t\t\t\t(query_exists \"object\")\n\t\t\t\t(query_entity_kl_divergences\n\t\t\t\t\t2\n\t\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t\t(null)\n\t\t\t\t\t2\n\t\t\t\t\t(null)\n\t\t\t\t\t(null)\n\t\t\t\t\t(null)\n\t\t\t\t\t(null)\n\t\t\t\t\t(null)\n\t\t\t\t\t-1\n\t\t\t\t\t(null)\n\t\t\t\t\t\"random seed 1234\"\n\t\t\t\t)\n\t\t\t]\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t[\n\t\t\t\t(query_exists \"object\")\n\t\t\t\t(query_entity_kl_divergences\n\t\t\t\t\t2\n\t\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t\t(contained_entities\n\t\t\t\t\t\t(query_exists \"object\")\n\t\t\t\t\t)\n\t\t\t\t\t2\n\t\t\t\t\t(null)\n\t\t\t\t\t(null)\n\t\t\t\t\t(null)\n\t\t\t\t\t(null)\n\t\t\t\t\t(null)\n\t\t\t\t\t-1\n\t\t\t\t\t(null)\n\t\t\t\t\t\"random seed 1234\"\n\t\t\t\t)\n\t\t\t]\n\t\t)\n\t]\n)",
+                    "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t[\n\t\t(compute_on_contained_entities\n\t\t\t[\n\t\t\t\t(query_exists \"object\")\n\t\t\t\t(query_entity_kl_divergences\n\t\t\t\t\t2\n\t\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t\t.null\n\t\t\t\t\t2\n\t\t\t\t\t.null\n\t\t\t\t\t.null\n\t\t\t\t\t.null\n\t\t\t\t\t.null\n\t\t\t\t\t.null\n\t\t\t\t\t-1\n\t\t\t\t\t.null\n\t\t\t\t\t\"random seed 1234\"\n\t\t\t\t)\n\t\t\t]\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t[\n\t\t\t\t(query_exists \"object\")\n\t\t\t\t(query_entity_kl_divergences\n\t\t\t\t\t2\n\t\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t\t(contained_entities\n\t\t\t\t\t\t(query_exists \"object\")\n\t\t\t\t\t)\n\t\t\t\t\t2\n\t\t\t\t\t.null\n\t\t\t\t\t.null\n\t\t\t\t\t.null\n\t\t\t\t\t.null\n\t\t\t\t\t.null\n\t\t\t\t\t-1\n\t\t\t\t\t.null\n\t\t\t\t\t\"random seed 1234\"\n\t\t\t\t)\n\t\t\t]\n\t\t)\n\t]\n)",
                     "output": "[\n\t{\n\t\tvert0 0.00018681393615961172\n\t\tvert1 0.0003526679446349979\n\t\tvert2 0.005341750456218763\n\t\tvert3 0.00018681393615961172\n\t\tvert4 0.006401917906003654\n\t\tvert5 0.010670757326457676\n\t}\n\t{\n\t\tvert0 0.00018681393615961172\n\t\tvert1 0.0003526679446349979\n\t\tvert2 0.005341750456218763\n\t\tvert3 0.00018681393615961172\n\t\tvert4 0.006401917906003654\n\t\tvert5 0.010670757326457676\n\t}\n]"
                 }
             ],
@@ -4673,7 +4641,7 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"E1\"\n\t\t{a 1 weight 5}\n\t\t\"E2\"\n\t\t{a 2 weight 4}\n\t\t\"E3\"\n\t\t{a 3 weight 3}\n\t\t\"E4\"\n\t\t{a 4 weight 2}\n\t\t\"E5\"\n\t\t{a 5 weight 1}\n\t)\n\t(declare\n\t\t{\n\t\t\tmean (compute_on_contained_entities\n\t\t\t\t\t(query_generalized_mean \"a\" 1)\n\t\t\t\t)\n\t\t}\n\t)\n\t[\n\t\tmean\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"weight\" 0)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"weight\" -1)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 2)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 1 \"weight\")\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"weight\" 0 \"weight\")\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 1 (null) mean .true .true)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 2 (null) mean .true)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 3 (null) mean .false)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 4 (null) mean .true)\n\t\t)\n\t]\n)",
+                    "example": "(seq\n\t(create_entities\n\t\t\"E1\"\n\t\t{a 1 weight 5}\n\t\t\"E2\"\n\t\t{a 2 weight 4}\n\t\t\"E3\"\n\t\t{a 3 weight 3}\n\t\t\"E4\"\n\t\t{a 4 weight 2}\n\t\t\"E5\"\n\t\t{a 5 weight 1}\n\t)\n\t(declare\n\t\t{\n\t\t\tmean (compute_on_contained_entities\n\t\t\t\t\t(query_generalized_mean \"a\" 1)\n\t\t\t\t)\n\t\t}\n\t)\n\t[\n\t\tmean\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"weight\" 0)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"weight\" -1)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 2)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 1 \"weight\")\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"weight\" 0 \"weight\")\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 1 .null mean .true .true)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 2 .null mean .true)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 3 .null mean .false)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 4 .null mean .true)\n\t\t)\n\t]\n)",
                     "output": "[\n\t3\n\t2.6051710846973517\n\t2.18978102189781\n\t3.3166247903554\n\t2.3333333333333335\n\t86400000.00000006\n\t1.2\n\t2\n\t0\n\t6.8\n]"
                 }
             ],
@@ -4841,7 +4809,7 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"E0.1\"\n\t\t{a 0.1}\n\t\t\"E1\"\n\t\t{a 1}\n\t\t\"E2\"\n\t\t{a 2}\n\t\t\"E3\"\n\t\t{a 3}\n\t\t\"E4\"\n\t\t{a 4}\n\t\t\"E5\"\n\t\t{a 5}\n\t\t\"E5.5\"\n\t\t{a 5.5}\n\t\t\"E5.5_2\"\n\t\t{a 5.5}\n\t)\n\t[\n\t\t(compute_on_contained_entities\n\t\t\t(query_min_difference \"a\")\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_min_difference \"a\" (null) .true)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_min_difference \"a\" 5.5 .false)\n\t\t)\n\t]\n)",
+                    "example": "(seq\n\t(create_entities\n\t\t\"E0.1\"\n\t\t{a 0.1}\n\t\t\"E1\"\n\t\t{a 1}\n\t\t\"E2\"\n\t\t{a 2}\n\t\t\"E3\"\n\t\t{a 3}\n\t\t\"E4\"\n\t\t{a 4}\n\t\t\"E5\"\n\t\t{a 5}\n\t\t\"E5.5\"\n\t\t{a 5.5}\n\t\t\"E5.5_2\"\n\t\t{a 5.5}\n\t)\n\t[\n\t\t(compute_on_contained_entities\n\t\t\t(query_min_difference \"a\")\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_min_difference \"a\" .null .true)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_min_difference \"a\" 5.5 .false)\n\t\t)\n\t]\n)",
                     "output": "[0.5 0 0.1]"
                 }
             ],
@@ -4889,7 +4857,7 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t[\n\t\t(compute_on_contained_entities\n\t\t\t(query_nearest_generalized_distance\n\t\t\t\t3\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t[1 2]\n\t\t\t\t2\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t1\n\t\t\t\t(null)\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_nearest_generalized_distance\n\t\t\t\t[0.2 1]\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t[1 2]\n\t\t\t\t2\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t(null)\n\t\t\t\t1\n\t\t\t\t(null)\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t]\n)",
+                    "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t[\n\t\t(compute_on_contained_entities\n\t\t\t(query_nearest_generalized_distance\n\t\t\t\t3\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t[1 2]\n\t\t\t\t2\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t1\n\t\t\t\t.null\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_nearest_generalized_distance\n\t\t\t\t[0.2 1]\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t[1 2]\n\t\t\t\t2\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t1\n\t\t\t\t.null\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t]\n)",
                     "output": "[\n\t{vert2 1 vert3 1.4142135623730951 vert5 1.4142135623730951}\n\t{\n\t\tvert2 1\n\t\tvert3 1.4142135623730951\n\t\tvert4 1.5811388300841898\n\t\tvert5 1.4142135623730951\n\t}\n]"
                 }
             ],
@@ -5057,7 +5025,7 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"E1\"\n\t\t{a 1 weight 0.4}\n\t\t\"E2\"\n\t\t{a 2 weight 0.5}\n\t\t\"E3\"\n\t\t{a 3 weight 0.01}\n\t\t\"E4\"\n\t\t{a 4 weight 0.01}\n\t\t\"E5\"\n\t\t{a 5 q 5 weight 3.5}\n\t)\n\t[\n\t\t(contained_entities (query_sample))\n\t\t(contained_entities\n\t\t\t(query_sample 2)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_sample 1 (null) (rand))\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_sample 1 (null) (null))\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_sample 1 \"weight\")\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_sample 1 \"weight\")\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_sample 5 \"weight\" (rand))\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_sample 5 \"weight\" (null))\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_not_in_entity_list\n\t\t\t\t[\"E1\" \"E2\" \"E5\"]\n\t\t\t)\n\t\t\t(query_sample 5 \"weight\" (rand))\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_sample 10 \"weight\" (rand))\n\t\t\t(query_not_in_entity_list\n\t\t\t\t[\"E5\"]\n\t\t\t)\n\t\t)\n\t]\n)",
+                    "example": "(seq\n\t(create_entities\n\t\t\"E1\"\n\t\t{a 1 weight 0.4}\n\t\t\"E2\"\n\t\t{a 2 weight 0.5}\n\t\t\"E3\"\n\t\t{a 3 weight 0.01}\n\t\t\"E4\"\n\t\t{a 4 weight 0.01}\n\t\t\"E5\"\n\t\t{a 5 q 5 weight 3.5}\n\t)\n\t[\n\t\t(contained_entities (query_sample))\n\t\t(contained_entities\n\t\t\t(query_sample 2)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_sample 1 .null (rand))\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_sample 1 .null .null)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_sample 1 \"weight\")\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_sample 1 \"weight\")\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_sample 5 \"weight\" (rand))\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_sample 5 \"weight\" .null)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_not_in_entity_list\n\t\t\t\t[\"E1\" \"E2\" \"E5\"]\n\t\t\t)\n\t\t\t(query_sample 5 \"weight\" (rand))\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_sample 10 \"weight\" (rand))\n\t\t\t(query_not_in_entity_list\n\t\t\t\t[\"E5\"]\n\t\t\t)\n\t\t)\n\t]\n)",
                     "output": "[\n\t[\"E1\"]\n\t[\"E2\" \"E3\"]\n\t[\"E4\"]\n\t[\"E3\"]\n\t[\"E5\"]\n\t[\"E5\"]\n\t[\"E2\" \"E5\" \"E2\" \"E5\" \"E5\"]\n\t[\"E5\" \"E2\" \"E2\" \"E5\" \"E1\"]\n\t[\"E3\" \"E4\" \"E3\" \"E3\" \"E4\"]\n\t[\"E1\" \"E2\"]\n]"
                 }
             ],
@@ -5081,7 +5049,7 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"E1\"\n\t\t{a 1}\n\t\t\"E2\"\n\t\t{a 2}\n\t\t\"E3\"\n\t\t{a 3}\n\t\t\"E4\"\n\t\t{a 4}\n\t\t\"E5\"\n\t\t{a 5 q 5}\n\t)\n\t[\n\t\t(contained_entities\n\t\t\t(query_select 3)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_select 3 1)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_select 100 2)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_select 2 0 1)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_select 2 2 1)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_select 2 4 1)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_select 4 (null) (rand))\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_select 4 (null) (rand))\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_not_exists \"q\")\n\t\t\t(query_select 2 3)\n\t\t)\n\t]\n)",
+                    "example": "(seq\n\t(create_entities\n\t\t\"E1\"\n\t\t{a 1}\n\t\t\"E2\"\n\t\t{a 2}\n\t\t\"E3\"\n\t\t{a 3}\n\t\t\"E4\"\n\t\t{a 4}\n\t\t\"E5\"\n\t\t{a 5 q 5}\n\t)\n\t[\n\t\t(contained_entities\n\t\t\t(query_select 3)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_select 3 1)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_select 100 2)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_select 2 0 1)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_select 2 2 1)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_select 2 4 1)\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_select 4 .null (rand))\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_select 4 .null (rand))\n\t\t)\n\t\t(contained_entities\n\t\t\t(query_not_exists \"q\")\n\t\t\t(query_select 2 3)\n\t\t)\n\t]\n)",
                     "output": "[\n\t[\"E1\" \"E2\" \"E3\"]\n\t[\"E2\" \"E3\" \"E4\"]\n\t[\"E3\" \"E4\" \"E5\"]\n\t[\"E2\" \"E3\"]\n\t[\"E4\" \"E5\"]\n\t[\"E1\"]\n\t[\"E1\" \"E2\" \"E3\" \"E4\"]\n\t[\"E1\" \"E2\" \"E3\" \"E4\"]\n\t[\"E4\"]\n]"
                 }
             ],
@@ -5153,7 +5121,7 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t(compute_on_contained_entities\n\t\t(query_within_generalized_distance\n\t\t\t1.5\n\t\t\t[\"x\" \"y\"]\n\t\t\t[1 2]\n\t\t\t2\n\t\t\t(null)\n\t\t\t(null)\n\t\t\t(null)\n\t\t\t(null)\n\t\t\t(null)\n\t\t\t1\n\t\t\t(null)\n\t\t\t\"random seed 1234\"\n\t\t)\n\t)\n)",
+                    "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t(compute_on_contained_entities\n\t\t(query_within_generalized_distance\n\t\t\t1.5\n\t\t\t[\"x\" \"y\"]\n\t\t\t[1 2]\n\t\t\t2\n\t\t\t.null\n\t\t\t.null\n\t\t\t.null\n\t\t\t.null\n\t\t\t.null\n\t\t\t1\n\t\t\t.null\n\t\t\t\"random seed 1234\"\n\t\t)\n\t)\n)",
                     "output": "{vert2 1 vert3 1.4142135623730951 vert5 1.4142135623730951}"
                 }
             ],
@@ -5297,12 +5265,12 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(reclaim_resources (null) .true [\"x\"] .true .true )",
-                    "output": "(null)"
+                    "example": "(reclaim_resources .null .true [\"x\"] .true .true )",
+                    "output": ".null"
                 },
                 {
-                    "example": "(reclaim_resources (null) .true .true .true .true )",
-                    "output": "(null)"
+                    "example": "(reclaim_resources .null .true .true .true .true )",
+                    "output": ".null"
                 }
             ],
             "frequency_per_10000_opcodes": 1,
@@ -5434,11 +5402,11 @@
                 },
                 {
                     "example": "(replace\n\t[\n\t\t(associate \"a\" 1)\n\t]\n\t[2]\n\t1\n\t[0]\n\t[4 5 6]\n)",
-                    "output": "[\n\t[4 5 6]\n\t(null)\n\t1\n]"
+                    "output": "[\n\t[4 5 6]\n\t.null\n\t1\n]"
                 },
                 {
                     "example": "(replace\n\t[\n\t\t(associate \"a\" 1)\n\t]\n\t2\n\t1\n\t0\n\t[4 5 6]\n)",
-                    "output": "[\n\t[4 5 6]\n\t(null)\n\t1\n]"
+                    "output": "[\n\t[4 5 6]\n\t.null\n\t1\n]"
                 },
                 {
                     "example": "(replace\n\t[\n\t\t(associate \"a\" 1)\n\t]\n\t[0]\n\t(lambda\n\t\t(set (current_value) \"b\" 2)\n\t)\n)",
@@ -5897,7 +5865,7 @@
                     "output": "1.2345555499999999e+100"
                 },
                 {
-                    "example": "(set_digits\n\t1.2345678e+100\n\t10\n\t[5 (null) 5 (null) 5]\n\t4\n\t8\n\t.false\n)",
+                    "example": "(set_digits\n\t1.2345678e+100\n\t10\n\t[5 .null 5 .null 5]\n\t4\n\t8\n\t.false\n)",
                     "output": "1.23456585e+100"
                 },
                 {
@@ -6189,11 +6157,11 @@
                     "output": "[\n\t\"2020-06-08 lunes 11.32.36\"\n\t\"2020-06-08 lunes 11.32.37\"\n\t\"2020-06-08 lunes 11.32.38\"\n\t\"2020-06-08 lunes 11.32.39\"\n\t\"2020-06-08 lunes 11.32.46\"\n\t\"2020-06-08 lunes 11.32.47\"\n\t\"2020-06-08 lunes 11.32.48\"\n\t\"2020-06-08 lunes 11.32.49\"\n\t\"2020-06-08 lunes 11.32.56\"\n\t\"2020-06-08 lunes 11.32.57\"\n\t\"2020-06-08 lunes 11.32.58\"\n\t\"2020-06-08 lunes 11.32.59\"\n\t\"2020-06-08 lunes 11.33.36\"\n\t\"2020-06-08 lunes 11.33.37\"\n\t\"2020-06-08 lunes 11.33.38\"\n\t\"2020-06-08 lunes 11.33.39\"\n\t\"2020-06-08 lunes 11.33.40\"\n\t\"2020-06-08 lunes 11.33.41\"\n\t\"2020-06-08 lunes 11.33.42\"\n\t\"2020-06-08 lunes 11.33.43\"\n\t\"2020-06-08 lunes 11.33.44\"\n\t\"2020-06-08 lunes 11.33.45\"\n\t\"2020-06-08 lunes 11.33.46\"\n\t\"2020-06-08 lunes 11.33.47\"\n\t\"2020-06-08 lunes 11.33.48\"\n]"
                 },
                 {
-                    "example": "(sort\n\t(null)\n\t[4 9 3 5 1]\n\t2\n)",
+                    "example": "(sort\n\t.null\n\t[4 9 3 5 1]\n\t2\n)",
                     "output": "[1 3]"
                 },
                 {
-                    "example": "(sort\n\t(null)\n\t[4 9 3 5 1]\n\t-2\n)",
+                    "example": "(sort\n\t.null\n\t[4 9 3 5 1]\n\t-2\n)",
                     "output": "[5 9]"
                 },
                 {
@@ -6241,7 +6209,7 @@
                     "output": "[\"hello\" \"world !\"]"
                 },
                 {
-                    "example": "(split \"hello to the world\" \"to\" (null) 2)",
+                    "example": "(split \"hello to the world\" \"to\" .null 2)",
                     "output": "[\"hello \" \" the world\"]"
                 },
                 {
@@ -6261,7 +6229,7 @@
                     "output": "[\"abc\" \"de fghij\"]"
                 },
                 {
-                    "example": "(split \"abc de fghij\" \" de \" (null) 4)",
+                    "example": "(split \"abc de fghij\" \" de \" .null 4)",
                     "output": "[\"abc de fghij\"]"
                 }
             ],
@@ -6341,24 +6309,24 @@
                     "output": "(seq\n\t(print \"hello\")\n)"
                 },
                 {
-                    "example": "(seq\n\t(store\n\t\t\"file.json\"\n\t\t[\n\t\t\t1\n\t\t\t2\n\t\t\t3\n\t\t\t{a 1 b 2 c (null)}\n\t\t]\n\t)\n\t(load \"file.json\")\n)",
-                    "output": "[\n\t1\n\t2\n\t3\n\t{a 1 b 2 c (null)}\n]"
+                    "example": "(seq\n\t(store\n\t\t\"file.json\"\n\t\t[\n\t\t\t1\n\t\t\t2\n\t\t\t3\n\t\t\t{a 1 b 2 c .null}\n\t\t]\n\t)\n\t(load \"file.json\")\n)",
+                    "output": "[\n\t1\n\t2\n\t3\n\t{a 1 b 2 c .null}\n]"
                 },
                 {
-                    "example": "(seq\n\t(store\n\t\t\"file.yaml\"\n\t\t[\n\t\t\t1\n\t\t\t2\n\t\t\t3\n\t\t\t{a 1 b 2 c (null)}\n\t\t]\n\t)\n\t(load \"file.yaml\")\n)",
-                    "output": "[\n\t1\n\t2\n\t3\n\t{a 1 b 2 c (null)}\n]"
+                    "example": "(seq\n\t(store\n\t\t\"file.yaml\"\n\t\t[\n\t\t\t1\n\t\t\t2\n\t\t\t3\n\t\t\t{a 1 b 2 c .null}\n\t\t]\n\t)\n\t(load \"file.yaml\")\n)",
+                    "output": "[\n\t1\n\t2\n\t3\n\t{a 1 b 2 c .null}\n]"
                 },
                 {
                     "example": "(seq\n\t(store \"file.txt\" \"This is text.\")\n\t(load \"test.txt\")\n)",
-                    "output": "(null)"
+                    "output": ".null"
                 },
                 {
                     "example": "(seq\n\t(store\n\t\t\"file.caml\"\n\t\t(lambda\n\t\t\t(seq\n\t\t\t\t(print \"hello\")\n\t\t\t)\n\t\t)\n\t)\n\t(load \"file.caml\")\n)",
                     "output": "(seq\n\t(print \"hello\")\n)"
                 },
                 {
-                    "example": "(seq\n\t(declare\n\t\t{\n\t\t\tcsv_data [\n\t\t\t\t\t[6.4 2.8 5.6 2.2 \"virginica\"]\n\t\t\t\t\t[4.9 2.5 4.5 1.7 \"virg\\\"inica\"]\n\t\t\t\t\t[]\n\t\t\t\t\t[\"\" \"\" \"\" (null)]\n\t\t\t\t\t[4.9 3.1 1.5 0.1 \"set\\nosa\" 3]\n\t\t\t\t\t[4.4 3.2 1.3 0.2 \"setosa\"]\n\t\t\t\t]\n\t\t}\n\t)\n\t(store \"file.csv\" csv_data)\n\t(load \"file.csv\")\n)",
-                    "output": "[\n\t[6.4 2.8 5.6 2.2 \"virginica\"]\n\t[4.9 2.5 4.5 1.7 \"virg\\\"inica\"]\n\t[(null)]\n\t[(null) (null) (null) (null)]\n\t[4.9 3.1 1.5 0.1 \"set\\nosa\" 3]\n\t[4.4 3.2 1.3 0.2 \"setosa\"]\n]"
+                    "example": "(seq\n\t(declare\n\t\t{\n\t\t\tcsv_data [\n\t\t\t\t\t[6.4 2.8 5.6 2.2 \"virginica\"]\n\t\t\t\t\t[4.9 2.5 4.5 1.7 \"virg\\\"inica\"]\n\t\t\t\t\t[]\n\t\t\t\t\t[\"\" \"\" \"\" .null]\n\t\t\t\t\t[4.9 3.1 1.5 0.1 \"set\\nosa\" 3]\n\t\t\t\t\t[4.4 3.2 1.3 0.2 \"setosa\"]\n\t\t\t\t]\n\t\t}\n\t)\n\t(store \"file.csv\" csv_data)\n\t(load \"file.csv\")\n)",
+                    "output": "[\n\t[6.4 2.8 5.6 2.2 \"virginica\"]\n\t[4.9 2.5 4.5 1.7 \"virg\\\"inica\"]\n\t[.null]\n\t[.null .null .null .null]\n\t[4.9 3.1 1.5 0.1 \"set\\nosa\" 3]\n\t[4.4 3.2 1.3 0.2 \"setosa\"]\n]"
                 }
             ],
             "frequency_per_10000_opcodes": 0.5,
@@ -6382,11 +6350,11 @@
             "examples": [
                 {
                     "example": "(seq\n\t(seq\n\t\t(create_entities\n\t\t\t\"Entity\"\n\t\t\t{a 1 b 2}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"Entity\" \"Contained1\"]\n\t\t\t{c 3}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"Entity\" \"Contained1\" \"Contained2_1\"]\n\t\t\t{d 4}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"Entity\" \"Contained1\" \"Contained2_2\"]\n\t\t\t{e 5}\n\t\t)\n\t\t(store_entity \"entity.amlg\" \"Entity\")\n\t\t(load_entity \"entity.amlg\" \"EntityCopy\")\n\t\t(difference_entities \"Entity\" \"EntityCopy\")\n\t)\n)",
-                    "output": "(declare\n\t{_ (null) new_entity (null)}\n\t(clone_entities _ new_entity)\n)"
+                    "output": "(declare\n\t{_ .null new_entity .null}\n\t(clone_entities _ new_entity)\n)"
                 },
                 {
-                    "example": "(seq\n\t(create_entities\n\t\t\"Entity\"\n\t\t[1 2 3 4]\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\"]\n\t\t[5 6 7]\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_1\"]\n\t\t{eight 8 nine 9}\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_3\"]\n\t\t[12 13]\n\t)\n\t(store_entity\n\t\t\"entity.caml\"\n\t\t\"Entity\"\n\t\t(null)\n\t\t.true\n\t\t{flatten .true transactional .true}\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_2\"]\n\t\t[10 11]\n\t)\n\t(destroy_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_3\"]\n\t)\n\t(assign_to_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_1\"]\n\t\t{eight 88}\n\t)\n\t(load_entity\n\t\t\"entity.caml\"\n\t\t\"EntityCopy\"\n\t\t(null)\n\t\t.false\n\t\t{execute_on_load .true require_version_compatibility .true transactional .true}\n\t)\n\t(declare\n\t\t{\n\t\t\tdiff (difference_entities \"EntityCopy\" \"Entity\")\n\t\t}\n\t)\n\t(destroy_entities \"EntityCopy\" \"Entity\")\n\tdiff\n)",
-                    "output": "(declare\n\t{_ (null) new_entity (null)}\n\t(clone_entities _ new_entity)\n)"
+                    "example": "(seq\n\t(create_entities\n\t\t\"Entity\"\n\t\t[1 2 3 4]\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\"]\n\t\t[5 6 7]\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_1\"]\n\t\t{eight 8 nine 9}\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_3\"]\n\t\t[12 13]\n\t)\n\t(store_entity\n\t\t\"entity.caml\"\n\t\t\"Entity\"\n\t\t.null\n\t\t.true\n\t\t{flatten .true transactional .true}\n\t)\n\t(create_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_2\"]\n\t\t[10 11]\n\t)\n\t(destroy_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_3\"]\n\t)\n\t(assign_to_entities\n\t\t[\"Entity\" \"Contained1\" \"Contained1_1\"]\n\t\t{eight 88}\n\t)\n\t(load_entity\n\t\t\"entity.caml\"\n\t\t\"EntityCopy\"\n\t\t.null\n\t\t.false\n\t\t{execute_on_load .true require_version_compatibility .true transactional .true}\n\t)\n\t(declare\n\t\t{\n\t\t\tdiff (difference_entities \"EntityCopy\" \"Entity\")\n\t\t}\n\t)\n\t(destroy_entities \"EntityCopy\" \"Entity\")\n\tdiff\n)",
+                    "output": "(declare\n\t{_ .null new_entity .null}\n\t(clone_entities _ new_entity)\n)"
                 }
             ],
             "frequency_per_10000_opcodes": 0.1,
@@ -6433,7 +6401,7 @@
                     "output": "\"orl\""
                 },
                 {
-                    "example": "(substr \"hello world\" -4 -1 (null) 1)",
+                    "example": "(substr \"hello world\" -4 -1 .null 1)",
                     "output": "\"orl\""
                 },
                 {
@@ -6481,7 +6449,7 @@
                     "output": "[]"
                 },
                 {
-                    "example": "(substr \"hello world\" \"(e|o)\" (null) \"[$&]\")",
+                    "example": "(substr \"hello world\" \"(e|o)\" .null \"[$&]\")",
                     "output": "\"h[e]ll[o] w[o]rld\""
                 },
                 {
@@ -6513,7 +6481,7 @@
                     "output": "\"gij\""
                 },
                 {
-                    "example": "(substr \"abcdefgijk\" -4 -1 (null) 1)",
+                    "example": "(substr \"abcdefgijk\" -4 -1 .null 1)",
                     "output": "\"gij\""
                 },
                 {
@@ -6536,7 +6504,7 @@
         "body": [
             "(system"
         ],
-        "description": "string command [* optional1] ... [* optionalN] || Executes system command specified by `command`.  The available system commands are as follows:\n - exit:                Exits the application.\n - readline:            Reads a line of input from the terminal and returns the string.\n - printline:           Prints a line of string output of the second argument directly to the terminal and returns null.\n - cwd:                 If no additional parameter is specified, returns the current working directory. If an additional parameter is specified, it attempts to change the current working directory to that parameter, returning true on success and false on failure.\n - system:              Executes the the second argument as a system command (i.e., a string that would normally be run on the command line). Returns `(null)` if the command was not found. If found, it returns a list, where the first value is the exit code and the second value is a string containing everything printed to stdout.\n - os:                  Returns a string describing the operating system.\n - sleep:               Sleeps for the amount of seconds specified by the second argument.\n - version:             Returns a string representing the current Amalgam version.\n - est_mem_reserved:    Returns data involving the estimated memory reserved.\n - est_mem_used:        Returns data involving the estimated memory used (excluding memory management overhead, caching, etc.).\n - mem_diagnostics:     Returns data involving memory diagnostics.\n - rand:                Returns the number of bytes specified by the additional parameter of secure random data intended for cryptographic use.\n - sign_key_pair:       Returns a list of two values, first a public key and second a secret key, for use with cryptographic signatures using the Ed25519 algorithm, generated via securely generated random numbers.\n - encrypt_key_pair:    Returns a list of two values, first a public key and second a secret key, for use with cryptographic encryption using the XSalsa20 and Curve25519 algorithms, generated via securely generated random numbers.\n - debugging_info:      Returns a list of two values. The first is true if a debugger is present, false if it is not. The second is true if debugging sources is enabled, which means that source code location information is prepended to opcodes comments for any opcodes loaded from a file.\n - get_max_num_threads: Returns the current maximum number of threads.\n - set_max_num_threads: Attempts to set the current maximum number of threads, where 0 means to use the number of processor cores reported by the operating system. Returns the maximum number of threads after it has been set.\n - built_in_data:       Returns built-in data compiled along with the version information.",
+        "description": "string command [* optional1] ... [* optionalN] || Executes system command specified by `command`.  The available system commands are as follows:\n - exit:                Exits the application.\n - readline:            Reads a line of input from the terminal and returns the string.\n - printline:           Prints a line of string output of the second argument directly to the terminal and returns null.\n - cwd:                 If no additional parameter is specified, returns the current working directory. If an additional parameter is specified, it attempts to change the current working directory to that parameter, returning true on success and false on failure.\n - system:              Executes the the second argument as a system command (i.e., a string that would normally be run on the command line). Returns `.null` if the command was not found. If found, it returns a list, where the first value is the exit code and the second value is a string containing everything printed to stdout.\n - os:                  Returns a string describing the operating system.\n - sleep:               Sleeps for the amount of seconds specified by the second argument.\n - version:             Returns a string representing the current Amalgam version.\n - est_mem_reserved:    Returns data involving the estimated memory reserved.\n - est_mem_used:        Returns data involving the estimated memory used (excluding memory management overhead, caching, etc.).\n - mem_diagnostics:     Returns data involving memory diagnostics.\n - rand:                Returns the number of bytes specified by the additional parameter of secure random data intended for cryptographic use.\n - sign_key_pair:       Returns a list of two values, first a public key and second a secret key, for use with cryptographic signatures using the Ed25519 algorithm, generated via securely generated random numbers.\n - encrypt_key_pair:    Returns a list of two values, first a public key and second a secret key, for use with cryptographic encryption using the XSalsa20 and Curve25519 algorithms, generated via securely generated random numbers.\n - debugging_info:      Returns a list of two values. The first is true if a debugger is present, false if it is not. The second is true if debugging sources is enabled, which means that source code location information is prepended to opcodes comments for any opcodes loaded from a file.\n - get_max_num_threads: Returns the current maximum number of threads.\n - set_max_num_threads: Attempts to set the current maximum number of threads, where 0 means to use the number of processor cores reported by the operating system. Returns the maximum number of threads after it has been set.\n - built_in_data:       Returns built-in data compiled along with the version information.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
@@ -6678,7 +6646,7 @@
                 },
                 {
                     "example": "(tail \"\")",
-                    "output": "(null)"
+                    "output": ".null"
                 }
             ],
             "frequency_per_10000_opcodes": 2.5,
@@ -6950,7 +6918,7 @@
                 },
                 {
                     "example": "(trunc \"\")",
-                    "output": "(null)"
+                    "output": ".null"
                 }
             ],
             "frequency_per_10000_opcodes": 5.5,
@@ -6990,7 +6958,7 @@
                 },
                 {
                     "example": "(union\n\t(lambda\n\t\t[\n\t\t\t1\n\t\t\t(associate \"a\" 3 \"b\" 4)\n\t\t]\n\t)\n\t(lambda\n\t\t[\n\t\t\t1\n\t\t\t(associate \"c\" 3 \"b\" 4)\n\t\t]\n\t)\n)",
-                    "output": "[\n\t1\n\t(associate (null) 3 \"b\" 4)\n]"
+                    "output": "[\n\t1\n\t(associate .null 3 \"b\" 4)\n]"
                 },
                 {
                     "example": "(union\n\t[3 2]\n\t[3 4]\n)",
@@ -7041,8 +7009,8 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(seq\n\t(seq\n\t\t(create_entities\n\t\t\t\"MergeEntity1\"\n\t\t\t{a 3 b 4 c \"c1\"}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\" \"MergeEntityChild1\"]\n\t\t\t{x 3 y 4}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\" \"MergeEntityChild2\"]\n\t\t\t{p 3 q 4}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\"]\n\t\t\t{E 3 F 4}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\"]\n\t\t\t{\n\t\t\t\te 3\n\t\t\t\tf 4\n\t\t\t\tg 5\n\t\t\t\th 6\n\t\t\t}\n\t\t)\n\t\t(create_entities\n\t\t\t\"MergeEntity2\"\n\t\t\t{b 4 c \"c2\"}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\" \"MergeEntityChild1\"]\n\t\t\t{x 3 y 4 z 5}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\" \"MergeEntityChild2\"]\n\t\t\t{\n\t\t\t\tp 3\n\t\t\t\tq 4\n\t\t\t\tu 5\n\t\t\t\tv 6\n\t\t\t\tw 7\n\t\t\t}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\"]\n\t\t\t{\n\t\t\t\tE 3\n\t\t\t\tF 4\n\t\t\t\tG 5\n\t\t\t\tH 6\n\t\t\t}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\"]\n\t\t\t{e 3 f 4}\n\t\t)\n\t\t(union_entities \"MergeEntity1\" \"MergeEntity2\" (null) \"UnionedEntity\")\n\t\t[\n\t\t\t(retrieve_entity_root \"UnionedEntity\")\n\t\t\t(sort\n\t\t\t\t(contained_entities \"UnionedEntity\")\n\t\t\t)\n\t\t]\n\t)\n)",
-                    "output": "[\n\t{a 3 b 4 c (null)}\n\t[\"MergeEntityChild1\" \"MergeEntityChild2\" \"_2bW5faQkVxs\" \"_ldZa276M1io\"]\n]"
+                    "example": "(seq\n\t(seq\n\t\t(create_entities\n\t\t\t\"MergeEntity1\"\n\t\t\t{a 3 b 4 c \"c1\"}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\" \"MergeEntityChild1\"]\n\t\t\t{x 3 y 4}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\" \"MergeEntityChild2\"]\n\t\t\t{p 3 q 4}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\"]\n\t\t\t{E 3 F 4}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity1\"]\n\t\t\t{\n\t\t\t\te 3\n\t\t\t\tf 4\n\t\t\t\tg 5\n\t\t\t\th 6\n\t\t\t}\n\t\t)\n\t\t(create_entities\n\t\t\t\"MergeEntity2\"\n\t\t\t{b 4 c \"c2\"}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\" \"MergeEntityChild1\"]\n\t\t\t{x 3 y 4 z 5}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\" \"MergeEntityChild2\"]\n\t\t\t{\n\t\t\t\tp 3\n\t\t\t\tq 4\n\t\t\t\tu 5\n\t\t\t\tv 6\n\t\t\t\tw 7\n\t\t\t}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\"]\n\t\t\t{\n\t\t\t\tE 3\n\t\t\t\tF 4\n\t\t\t\tG 5\n\t\t\t\tH 6\n\t\t\t}\n\t\t)\n\t\t(create_entities\n\t\t\t[\"MergeEntity2\"]\n\t\t\t{e 3 f 4}\n\t\t)\n\t\t(union_entities \"MergeEntity1\" \"MergeEntity2\" .null \"UnionedEntity\")\n\t\t[\n\t\t\t(retrieve_entity_root \"UnionedEntity\")\n\t\t\t(sort\n\t\t\t\t(contained_entities \"UnionedEntity\")\n\t\t\t)\n\t\t]\n\t)\n)",
+                    "output": "[\n\t{a 3 b 4 c .null}\n\t[\"MergeEntityChild1\" \"MergeEntityChild2\" \"_2bW5faQkVxs\" \"_ldZa276M1io\"]\n]"
                 }
             ],
             "frequency_per_10000_opcodes": 0.01,
@@ -7113,8 +7081,8 @@
                     "output": "\"(print \\\"hello\\\")\""
                 },
                 {
-                    "example": "(parse (unparse (list (sqrt -1) (null) .infinity -.infinity)))",
-                    "output": "[(null) (null) .infinity -.infinity]"
+                    "example": "(parse (unparse (list (sqrt -1) .null .infinity -.infinity)))",
+                    "output": "[.null .null .infinity -.infinity]"
                 },
                 {
                     "example": "(unparse (associate \"a\" 1 \"b\" 2 \"c\" (list \"alpha\" \"beta\" \"gamma\")))",
@@ -7221,15 +7189,15 @@
                     "output": "[1 2 3 4 5 6]"
                 },
                 {
-                    "example": "(weave\n\t(null)\n\t[2 4 6]\n\t(null)\n)",
-                    "output": "[2 (null) 4 (null) 6 (null)]"
+                    "example": "(weave\n\t.null\n\t[2 4 6]\n\t.null\n)",
+                    "output": "[2 .null 4 .null 6 .null]"
                 },
                 {
                     "example": "(weave\n\t\"a\"\n\t[2 4 6]\n)",
                     "output": "[\"a\" 2 @(target .true 0) 4 @(target .true 0) 6]"
                 },
                 {
-                    "example": "(weave\n\t(null)\n\t[1 4 7]\n\t[2 5 8]\n\t[3 6 9]\n)",
+                    "example": "(weave\n\t.null\n\t[1 4 7]\n\t[2 5 8]\n\t[3 6 9]\n)",
                     "output": "[\n\t1\n\t2\n\t3\n\t4\n\t5\n\t6\n\t7\n\t8\n\t9\n]"
                 },
                 {
@@ -7253,7 +7221,7 @@
                     "output": "[\n\t1\n\t2\n\t3\n\t5\n\t4\n\t5\n\t6\n\t6\n\t7\n]"
                 },
                 {
-                    "example": "(weave\n\t(lambda\n\t\t(if\n\t\t\t(>=\n\t\t\t\t(first (current_value))\n\t\t\t\t3\n\t\t\t)\n\t\t\t[\n\t\t\t\t(first\n\t\t\t\t\t(current_value 1)\n\t\t\t\t)\n\t\t\t]\n\t\t\t[]\n\t\t)\n\t)\n\t[1 2 3 4 5]\n\t(null)\n)",
+                    "example": "(weave\n\t(lambda\n\t\t(if\n\t\t\t(>=\n\t\t\t\t(first (current_value))\n\t\t\t\t3\n\t\t\t)\n\t\t\t[\n\t\t\t\t(first\n\t\t\t\t\t(current_value 1)\n\t\t\t\t)\n\t\t\t]\n\t\t\t[]\n\t\t)\n\t)\n\t[1 2 3 4 5]\n\t.null\n)",
                     "output": "[3 4 5]"
                 }
             ],
@@ -7342,7 +7310,7 @@
                 },
                 {
                     "example": "(unparse\n\t(zip\n\t\t[\"a\" \"b\" \"c\" \"d\"]\n\t)\n)",
-                    "output": "\"{a (null) b (null) c (null) d (null)}\""
+                    "output": "\"{a .null b .null c .null d .null}\""
                 },
                 {
                     "example": "(unparse\n\t(zip\n\t\t[\"a\" \"b\" \"c\" \"d\"]\n\t\t3\n\t)\n)",

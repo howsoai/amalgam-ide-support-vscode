@@ -10,7 +10,7 @@
 		)
 		"code"
 		"json"
-		(null)
+		.null
 		{"sort_keys" .true}
 	)
 )
