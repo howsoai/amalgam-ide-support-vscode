@@ -135,7 +135,9 @@ export class AmalgamDocumentSymbolProvider implements vscode.DocumentSymbolProvi
       return vscode.SymbolKind.Number;
     } else if (/^\.(?:true|false)(?:\s*;.*)?$/i.test(text)) {
       return vscode.SymbolKind.Boolean;
-    } else if (/^\(list(?:\s.*)?$/i.test(text)) {
+    } else if (/^\.null(?:\s*;.*)?$/i.test(text)) {
+      return vscode.SymbolKind.Null;
+    } else if (/^\((?:list|unordered_list)(?:\s.*)?$/i.test(text)) {
       return vscode.SymbolKind.Array;
     } else if (/^\[.*/i.test(text)) {
       return vscode.SymbolKind.Array;
@@ -143,8 +145,6 @@ export class AmalgamDocumentSymbolProvider implements vscode.DocumentSymbolProvi
       return vscode.SymbolKind.Object;
     } else if (/^{.*/i.test(text)) {
       return vscode.SymbolKind.Object;
-    } else if (/^\.null(?:\s*;.*)?$/i.test(text)) {
-      return vscode.SymbolKind.Variable;
     }
     return defaultKind;
   }
