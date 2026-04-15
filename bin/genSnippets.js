@@ -10,7 +10,7 @@ import { spawnSync } from "node:child_process";
 
 const TARGET_FILE = path.resolve(import.meta.dirname + "/../snippets/amalgam.snippets.json");
 const TMLANGUAGE_FILE = path.resolve(import.meta.dirname + "/../syntaxes/amalgam.tmLanguage.json");
-const LITERALS = ["string", "number", "bool", "symbol"];
+const LITERALS = ["string", "number", "bool", "symbol", "null"];
 
 function getDefinedOpcodes() {
   // Get opcodes defined in the tmLanguage file
