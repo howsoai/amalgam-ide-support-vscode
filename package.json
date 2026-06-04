@@ -1,6 +1,6 @@
 {
     "name": "amalgam-lang",
-    "version": "3.6.0",
+    "version": "3.7.0",
     "type": "commonjs",
     "publisher": "howso",
     "displayName": "Amalgam Language",
@@ -47,7 +47,7 @@
         "@types/vscode": "^1.105.0",
         "@typescript-eslint/eslint-plugin": "^5.48.1",
         "@typescript-eslint/parser": "^5.48.1",
-        "@vscode/vsce": "^3.7.1",
+        "@vscode/vsce": "^3.9.2",
         "eslint": "^8.38.0",
         "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-prettier": "^4.2.1",

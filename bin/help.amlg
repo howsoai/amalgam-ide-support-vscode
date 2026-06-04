@@ -4,7 +4,7 @@
 		(sort
 			(lambda (> (get (current_value) "opcode") (get (current_value 1) "opcode")))
 			(map
-				(lambda (set (help (current_value)) "opcode" (current_value)))
+				(lambda (modify (help (current_value)) "opcode" (current_value)))
 				(help "opcodes")
 			)
 		)
