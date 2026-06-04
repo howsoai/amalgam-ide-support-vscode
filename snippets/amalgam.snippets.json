@@ -104,7 +104,7 @@
         "body": [
             "(+"
         ],
-        "description": "[number x1] [number x2] ... [number xN] || Sums all numbers.",
+        "description": "[number x1] [number x2] ... [number xN] || Evaluates to the sum of all numbers.",
         "$doc": {
             "allows_concurrency": true,
             "examples": [
@@ -128,7 +128,7 @@
         "body": [
             "(-"
         ],
-        "description": "[number x1] [number x2] ... [number xN] || Evaluates to `x1` - `x2` - ... - `xN`.  If only one parameter is passed, then it is treated as negative",
+        "description": "[number x1] [number x2] ... [number xN] || Evaluates to `x1` - `x2` - ... - `xN`.  If only one parameter is passed, then it is treated as its negative",
         "$doc": {
             "allows_concurrency": true,
             "examples": [
@@ -544,7 +544,7 @@
         "body": [
             "(append"
         ],
-        "description": "[list|assoc|* collection1] [list|assoc|* collection2] ... [list|assoc|* collectionN] || Evaluates to a new list or assoc which merges all lists, `collection1` through `collectionN`, based on parameter order. If any assoc is passed in, then returns an assoc (lists will be automatically converted to an assoc with the indices as keys and the list elements as values). If a non-list and non-assoc is specified, then it just adds that one element to the list",
+        "description": "[list|assoc|* collection1] [list|assoc|* collection2] ... [list|assoc|* collectionN] || Evaluates to a new list or assoc which merges all lists, `collection1` through `collectionN`, based on parameter order. If any assoc is passed in, then returns an assoc (lists will be automatically converted to an assoc with the indices as keys and the list elements as values). If a non-list and non-assoc is specified, then it just adds that one element to the list.  In order to append a list or assoc to the first collection, it must be wrapped in an additional layer.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
@@ -580,7 +580,7 @@
         "body": [
             "(apply"
         ],
-        "description": "* to_apply [list|assoc collection] || Creates a new list of the values of the elements of the `collection`, applies the type specified by `to_apply`, which is either the type corresponding to a string or the type of `to_apply`, and then evaluates it.  If `to_apply` has any parameters, i.e., it is a node with one or more elements, these are prepended to the `collection` as the first parameters.  When no extra parameters are passed, it is a more efficient equivalent to `(call (set_type type collection))`.",
+        "description": "* to_apply [list|assoc collection] || Creates a new list of the values of the elements of the `collection`, and changes the type to that specified by `to_apply` and then evaluates it.  The parameter `to_apply` can either be a string representing the type or an opcode of the specified type.  If `to_apply` is an opcode and has parameters, i.e., it is a node with one or more elements, these are prepended to the `collection` as the first parameters.  When no extra parameters are passed, it is a more efficient equivalent to `(call (set_type type collection))`.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
@@ -1269,7 +1269,7 @@
                     "output": "\"success\""
                 },
                 {
-                    "example": "(seq\n\t1\n\t(declare\n\t\t{}\n\t\t(while\n\t\t\t1\n\t\t\t(if .true (conclude))\n\t\t)\n\t\t4\n\t)\n\t2\n)",
+                    "example": "(seq\n\t1\n\t(declare {}\n\t\t(while .true\n\t\t\t(if .true (conclude))\n\t\t)\n\t\t4\n\t)\n\t2\n)",
                     "output": "2"
                 }
             ],
@@ -1386,7 +1386,7 @@
             "new_target_scope": false,
             "opcode_group": "Entity Access and Manipulation",
             "permissions": "none",
-            "requires_entity": false,
+            "requires_entity": true,
             "returns": "bool",
             "value_newness": "new"
         }
@@ -1710,35 +1710,35 @@
             "examples": [
                 {
                     "example": "(difference\n\t(lambda\n\t\t{\n\t\t\ta 1\n\t\t\tb 2\n\t\t\tc 4\n\t\t\td 7\n\t\t\te 10\n\t\t\tf 12\n\t\t\tg 13\n\t\t}\n\t)\n\t(lambda\n\t\t[\n\t\t\ta\n\t\t\t2\n\t\t\tc\n\t\t\t4\n\t\t\td\n\t\t\t6\n\t\t\tq\n\t\t\t8\n\t\t\te\n\t\t\t10\n\t\t\tf\n\t\t\t12\n\t\t\tg\n\t\t\t14\n\t\t]\n\t)\n)",
-                    "output": "(declare\n\t{_ .null}\n\t(replace\n\t\t_\n\t\t[]\n\t\t(lambda\n\t\t\t[\n\t\t\t\ta\n\t\t\t\t2\n\t\t\t\tc\n\t\t\t\t4\n\t\t\t\td\n\t\t\t\t6\n\t\t\t\tq\n\t\t\t\t8\n\t\t\t\te\n\t\t\t\t10\n\t\t\t\tf\n\t\t\t\t12\n\t\t\t\tg\n\t\t\t\t14\n\t\t\t]\n\t\t)\n\t)\n)"
+                    "output": "(declare\n\t{_ .null}\n\t(modify\n\t\t_\n\t\t[]\n\t\t(lambda\n\t\t\t[\n\t\t\t\ta\n\t\t\t\t2\n\t\t\t\tc\n\t\t\t\t4\n\t\t\t\td\n\t\t\t\t6\n\t\t\t\tq\n\t\t\t\t8\n\t\t\t\te\n\t\t\t\t10\n\t\t\t\tf\n\t\t\t\t12\n\t\t\t\tg\n\t\t\t\t14\n\t\t\t]\n\t\t)\n\t)\n)"
                 },
                 {
                     "example": "(difference\n\t{\n\t\ta 1\n\t\tb 2\n\t\tc 4\n\t\td 7\n\t\te 10\n\t\tf 12\n\t\tg 13\n\t}\n\t{\n\t\ta 2\n\t\tc 4\n\t\td 6\n\t\te 10\n\t\tf 12\n\t\tg 14\n\t\tq 8\n\t}\n)",
-                    "output": "(declare\n\t{_ .null}\n\t(replace\n\t\t_\n\t\t[]\n\t\t(lambda\n\t\t\t{\n\t\t\t\ta 2\n\t\t\t\tc (get\n\t\t\t\t\t\t(current_value 1)\n\t\t\t\t\t\t\"c\"\n\t\t\t\t\t)\n\t\t\t\td 6\n\t\t\t\te (get\n\t\t\t\t\t\t(current_value 1)\n\t\t\t\t\t\t\"e\"\n\t\t\t\t\t)\n\t\t\t\tf (get\n\t\t\t\t\t\t(current_value 1)\n\t\t\t\t\t\t\"f\"\n\t\t\t\t\t)\n\t\t\t\tg 14\n\t\t\t\tq 8\n\t\t\t}\n\t\t)\n\t)\n)"
+                    "output": "(declare\n\t{_ .null}\n\t(modify\n\t\t_\n\t\t[]\n\t\t(lambda\n\t\t\t{\n\t\t\t\ta 2\n\t\t\t\tc (get\n\t\t\t\t\t\t(current_value 1)\n\t\t\t\t\t\t\"c\"\n\t\t\t\t\t)\n\t\t\t\td 6\n\t\t\t\te (get\n\t\t\t\t\t\t(current_value 1)\n\t\t\t\t\t\t\"e\"\n\t\t\t\t\t)\n\t\t\t\tf (get\n\t\t\t\t\t\t(current_value 1)\n\t\t\t\t\t\t\"f\"\n\t\t\t\t\t)\n\t\t\t\tg 14\n\t\t\t\tq 8\n\t\t\t}\n\t\t)\n\t)\n)"
                 },
                 {
                     "example": "(difference\n\t(lambda\n\t\t[\n\t\t\t1\n\t\t\t2\n\t\t\t4\n\t\t\t7\n\t\t\t10\n\t\t\t12\n\t\t\t13\n\t\t]\n\t)\n\t(lambda\n\t\t[\n\t\t\t2\n\t\t\t4\n\t\t\t6\n\t\t\t8\n\t\t\t10\n\t\t\t12\n\t\t\t14\n\t\t]\n\t)\n)",
-                    "output": "(declare\n\t{_ .null}\n\t(replace\n\t\t_\n\t\t[]\n\t\t(lambda\n\t\t\t[\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t1\n\t\t\t\t)\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t2\n\t\t\t\t)\n\t\t\t\t6\n\t\t\t\t8\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t4\n\t\t\t\t)\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t5\n\t\t\t\t)\n\t\t\t\t14\n\t\t\t]\n\t\t)\n\t)\n)"
+                    "output": "(declare\n\t{_ .null}\n\t(modify\n\t\t_\n\t\t[]\n\t\t(lambda\n\t\t\t[\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t1\n\t\t\t\t)\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t2\n\t\t\t\t)\n\t\t\t\t6\n\t\t\t\t8\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t4\n\t\t\t\t)\n\t\t\t\t(get\n\t\t\t\t\t(current_value 1)\n\t\t\t\t\t5\n\t\t\t\t)\n\t\t\t\t14\n\t\t\t]\n\t\t)\n\t)\n)"
                 },
                 {
                     "example": "(unparse\n\t(difference\n\t\t(lambda\n\t\t\t{\n\t\t\t\ta 1\n\t\t\t\tb 2\n\t\t\t\tc 4\n\t\t\t\td 7\n\t\t\t\te 10\n\t\t\t\tf 12\n\t\t\t\tg 13\n\t\t\t}\n\t\t)\n\t\t(lambda\n\t\t\t{\n\t\t\t\ta 2\n\t\t\t\tc 4\n\t\t\t\td 6\n\t\t\t\te 10\n\t\t\t\tf 12\n\t\t\t\tg 14\n\t\t\t\tq 8\n\t\t\t}\n\t\t)\n\t)\n\t.true\n\t.true\n\t.true\n)",
-                    "output": "\"(declare\\r\\n\\t{_ .null}\\r\\n\\t(replace\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\ta 2\\r\\n\\t\\t\\t\\tc (get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t\\\"c\\\"\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\td 6\\r\\n\\t\\t\\t\\te (get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t\\\"e\\\"\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\tf (get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t\\\"f\\\"\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\tg 14\\r\\n\\t\\t\\t\\tq 8\\r\\n\\t\\t\\t}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
+                    "output": "\"(declare\\r\\n\\t{_ .null}\\r\\n\\t(modify\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\ta 2\\r\\n\\t\\t\\t\\tc (get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t\\\"c\\\"\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\td 6\\r\\n\\t\\t\\t\\te (get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t\\\"e\\\"\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\tf (get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t\\\"f\\\"\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\tg 14\\r\\n\\t\\t\\t\\tq 8\\r\\n\\t\\t\\t}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
                 },
                 {
                     "example": "(unparse\n\t(difference\n\t\t(lambda\n\t\t\t(associate\n\t\t\t\ta\n\t\t\t\t1\n\t\t\t\tg\n\t\t\t\t[1 2]\n\t\t\t)\n\t\t)\n\t\t(lambda\n\t\t\t(associate\n\t\t\t\ta\n\t\t\t\t2\n\t\t\t\tg\n\t\t\t\t[1 4]\n\t\t\t)\n\t\t)\n\t)\n\t.true\n\t.true\n\t.true\n)",
-                    "output": "\"(declare\\r\\n\\t{_ .null}\\r\\n\\t(replace\\r\\n\\t\\t_\\r\\n\\t\\t[3]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t[\\r\\n\\t\\t\\t\\t(get\\r\\n\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t0\\r\\n\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\t4\\r\\n\\t\\t\\t]\\r\\n\\t\\t)\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t(set_type\\r\\n\\t\\t\\t\\t[\\r\\n\\t\\t\\t\\t\\ta\\r\\n\\t\\t\\t\\t\\t2\\r\\n\\t\\t\\t\\t\\tg\\r\\n\\t\\t\\t\\t\\t(get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t3\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\\"associate\\\"\\r\\n\\t\\t\\t)\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
+                    "output": "\"(declare\\r\\n\\t{_ .null}\\r\\n\\t(modify\\r\\n\\t\\t_\\r\\n\\t\\t[3]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t[\\r\\n\\t\\t\\t\\t(get\\r\\n\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t0\\r\\n\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\t4\\r\\n\\t\\t\\t]\\r\\n\\t\\t)\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t(set_type\\r\\n\\t\\t\\t\\t[\\r\\n\\t\\t\\t\\t\\ta\\r\\n\\t\\t\\t\\t\\t2\\r\\n\\t\\t\\t\\t\\tg\\r\\n\\t\\t\\t\\t\\t(get\\r\\n\\t\\t\\t\\t\\t\\t(current_value 1)\\r\\n\\t\\t\\t\\t\\t\\t3\\r\\n\\t\\t\\t\\t\\t)\\r\\n\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\\"associate\\\"\\r\\n\\t\\t\\t)\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
                 },
                 {
                     "example": "(unparse\n\t(difference\n\t\t(zip\n\t\t\t[1 2 3 4 5]\n\t\t)\n\t\t(append\n\t\t\t(zip\n\t\t\t\t[2 6 5]\n\t\t\t)\n\t\t\t{a 1}\n\t\t)\n\t)\n\t.true\n\t.true\n\t.true\n)",
-                    "output": "\"(declare\\r\\n\\t{_ .null}\\r\\n\\t(replace\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t2 .null\\r\\n\\t\\t\\t\\t5 .null\\r\\n\\t\\t\\t\\t6 .null\\r\\n\\t\\t\\t\\ta 1\\r\\n\\t\\t\\t}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
+                    "output": "\"(declare\\r\\n\\t{_ .null}\\r\\n\\t(modify\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t2 .null\\r\\n\\t\\t\\t\\t5 .null\\r\\n\\t\\t\\t\\t6 .null\\r\\n\\t\\t\\t\\ta 1\\r\\n\\t\\t\\t}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
                 },
                 {
                     "example": "(unparse\n\t(difference\n\t\t(zip\n\t\t\t[1 2 3 4 5]\n\t\t)\n\t\t(zip\n\t\t\t[2 6 5]\n\t\t)\n\t)\n\t.true\n\t.true\n\t.true\n)",
-                    "output": "\"(declare\\r\\n\\t{_ .null}\\r\\n\\t(replace\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{2 .null 5 .null 6 .null}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
+                    "output": "\"(declare\\r\\n\\t{_ .null}\\r\\n\\t(modify\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{2 .null 5 .null 6 .null}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
                 },
                 {
                     "example": "(unparse\n\t(difference\n\t\t(zip\n\t\t\t[1 2 5]\n\t\t)\n\t\t(zip\n\t\t\t[2 6 5]\n\t\t)\n\t)\n\t.true\n\t.true\n\t.true\n)",
-                    "output": "\"(declare\\r\\n\\t{_ .null}\\r\\n\\t(replace\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{2 .null 5 .null 6 .null}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
+                    "output": "\"(declare\\r\\n\\t{_ .null}\\r\\n\\t(modify\\r\\n\\t\\t_\\r\\n\\t\\t[]\\r\\n\\t\\t(lambda\\r\\n\\t\\t\\t{2 .null 5 .null 6 .null}\\r\\n\\t\\t)\\r\\n\\t)\\r\\n)\\r\\n\""
                 },
                 {
                     "example": "(let\n\t{\n\t\tx (lambda\n\t\t\t\t[\n\t\t\t\t\t6\n\t\t\t\t\t[1 2]\n\t\t\t\t]\n\t\t\t)\n\t\ty (lambda\n\t\t\t\t[\n\t\t\t\t\t7\n\t\t\t\t\t[1 4]\n\t\t\t\t]\n\t\t\t)\n\t}\n\t(call\n\t\t(difference x y)\n\t\t{_ x}\n\t)\n)",
@@ -2860,7 +2860,7 @@
         "body": [
             "(get_concurrency"
         ],
-        "description": "* node || Returns true if `node` has a preference to be processed in a manner where its operations are run concurrentl, false if it is not.  Note that concurrency is potentially subject to race conditions or inconsistent results if tasks write to the same locations without synchronization.",
+        "description": "* node || Returns true if `node` has a preference to be processed in a manner where its operations are run concurrently, false if it is not.  Note that concurrency is potentially subject to race conditions or inconsistent results if tasks write to the same locations without synchronization.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
@@ -3218,7 +3218,7 @@
             "examples": [
                 {
                     "example": "(help \"+\")",
-                    "output": "{\n\tallows_concurrency .true\n\tdescription \"Sums all numbers.\"\n\texamples [\n\t\t\t{example \"(+ 1 2 3 4)\" output \"10\"}\n\t\t]\n\tfrequency_per_10000_opcodes 18\n\tnew_scope .false\n\tnew_target_scope .false\n\topcode_group \"Basic Math\"\n\tparameters \"[number x1] [number x2] ... [number xN]\"\n\tpermissions \"none\"\n\trequires_entity .false\n\treturns \"number\"\n\tvalue_newness \"new\"\n}"
+                    "output": "{\n\tallows_concurrency .true\n\tdescription \"Evaluates to the sum of all numbers.\"\n\texamples [\n\t\t\t{example \"(+ 1 2 3 4)\" output \"10\"}\n\t\t]\n\tfrequency_per_10000_opcodes 18\n\tnew_scope .false\n\tnew_target_scope .false\n\topcode_group \"Basic Math\"\n\tparameters \"[number x1] [number x2] ... [number xN]\"\n\tpermissions \"none\"\n\trequires_entity .false\n\treturns \"number\"\n\tvalue_newness \"new\"\n}"
                 }
             ],
             "frequency_per_10000_opcodes": 0.01,
@@ -3409,8 +3409,8 @@
                     "output": "[\n\t1\n\t(associate .null 3 \"b\" 4)\n]"
                 },
                 {
-                    "example": "(intersect\n\t(lambda\n\t\t(replace 4 2 6 1 7)\n\t)\n\t(lambda\n\t\t(replace 4 1 7 2 6)\n\t)\n)",
-                    "output": "(replace 4 2 6 1 7)"
+                    "example": "(intersect\n\t(lambda\n\t\t(modify 4 2 6 1 7)\n\t)\n\t(lambda\n\t\t(modify 4 1 7 2 6)\n\t)\n)",
+                    "output": "(modify 4 2 6 1 7)"
                 },
                 {
                     "example": "(unparse\n\t(intersect\n\t\t(lambda\n\t\t\t[\n\t\t\t\t\n\t\t\t\t;comment 1\n\t\t\t\t;comment 2\n\t\t\t\t;comment 3\n\t\t\t\t1\n\t\t\t\t3\n\t\t\t\t5\n\t\t\t\t7\n\t\t\t\t9\n\t\t\t\t11\n\t\t\t\t13\n\t\t\t]\n\t\t)\n\t\t(lambda\n\t\t\t[\n\t\t\t\t\n\t\t\t\t;comment 2\n\t\t\t\t;comment 3\n\t\t\t\t;comment 4\n\t\t\t\t1\n\t\t\t\t4\n\t\t\t\t6\n\t\t\t\t8\n\t\t\t\t10\n\t\t\t\t12\n\t\t\t\t14\n\t\t\t]\n\t\t)\n\t)\n\t.true\n\t.true\n\t.true\n)",
@@ -3972,7 +3972,7 @@
         "body": [
             "(mod"
         ],
-        "description": "[number x1] [number x2] ... [number xN] || Evaluates the modulus of `x1` % `x2` % ... % `xN`.",
+        "description": "[number x1] [number x2] ... [number xN] || Evaluates the modulus of `x1` mod `x2` mod ... mod `xN`.",
         "$doc": {
             "allows_concurrency": true,
             "examples": [
@@ -4049,6 +4049,54 @@
             "requires_entity": false,
             "returns": "any",
             "value_newness": "existing"
+        }
+    },
+    "modify": {
+        "prefix": "(modify",
+        "body": [
+            "(modify"
+        ],
+        "description": "* data [number|string|list walk_path1] [* function1] [number|string|list walk_path2] [* function2] ... [number|string|list walk_pathN] [* functionN] || Performs a deep copy on `data` (a copy of all data structures referenced by it and its references).  If any additional parameters are specified, it treats them as pairs of locations and values or functions to replace within the new copy.  For each pair of replacements, the first element is any of: a number, representing an index, with negative numbers representing backward traversal from the end of the list; a string, representing the index; or a list, representing a way to walk into the structure as the aforementioned values. `function1` to `functionN` represent a function that will be used to replace in place of whatever is in the location of the corresponding walk_path, and will be passed the current node in (current_value).  The function can optionally be just be an immediate value or any code that can be evaluated.  If a particular location does not exist, it will be created assuming the most generic type that will support the index (as a null, list, or assoc). Note that the `(target)` will evaluate to the new copy of data, which is the base of the newly constructed data; this is useful for creating circular references.",
+        "$doc": {
+            "allows_concurrency": false,
+            "examples": [
+                {
+                    "example": "(modify\n\t(associate\n\t\t\"a\"\n\t\t1\n\t\t\"b\"\n\t\t2\n\t\t\"c\"\n\t\t3\n\t\t4\n\t\t\"d\"\n\t)\n\t\"e\"\n\t5\n)",
+                    "output": "{\n\t4 \"d\"\n\ta 1\n\tb 2\n\tc 3\n\te 5\n}"
+                },
+                {
+                    "example": "(modify\n\t[0 1 2 3 4]\n\t2\n\t10\n)",
+                    "output": "[0 1 10 3 4]"
+                },
+                {
+                    "example": "(modify\n\t(associate \"a\" 1 \"b\" 2)\n\t\"a\"\n\t3\n)",
+                    "output": "{a 3 b 2}"
+                },
+                {
+                    "example": "(modify\n\t[\n\t\t(associate \"a\" 13)\n\t]\n)",
+                    "output": "[\n\t{a 13}\n]"
+                },
+                {
+                    "example": "(modify\n\t[\n\t\t(associate \"a\" 1)\n\t]\n\t[2]\n\t1\n\t[0]\n\t[4 5 6]\n)",
+                    "output": "[\n\t[4 5 6]\n\t.null\n\t1\n]"
+                },
+                {
+                    "example": "(modify\n\t[\n\t\t(associate \"a\" 1)\n\t]\n\t2\n\t1\n\t0\n\t[4 5 6]\n)",
+                    "output": "[\n\t[4 5 6]\n\t.null\n\t1\n]"
+                },
+                {
+                    "example": "(modify\n\t[\n\t\t(associate \"a\" 1)\n\t]\n\t[0]\n\t(lambda\n\t\t(modify (current_value) \"b\" 2)\n\t)\n)",
+                    "output": "[\n\t{a 1 b 2}\n]"
+                }
+            ],
+            "frequency_per_10000_opcodes": 8.3,
+            "new_scope": false,
+            "new_target_scope": true,
+            "opcode_group": "Container Manipulation",
+            "permissions": "none",
+            "requires_entity": false,
+            "returns": "any",
+            "value_newness": "new"
         }
     },
     "move_entities": {
@@ -4281,19 +4329,19 @@
                     "output": "(seq\n\t(+ 1 2)\n)"
                 },
                 {
-                    "example": "(parse \"(seq (+ 1 2) (+ \" .true))",
+                    "example": "(parse \"(seq (+ 1 2) (+ \" .true)",
                     "output": "(seq\n\t(+ 1 2)\n)"
                 },
                 {
-                    "example": "(parse \"(seq (+ 1 2) (+ \" .false .true))\"",
+                    "example": "(parse \"(seq (+ 1 2) (+ \" .false .true)\"",
                     "output": "[\n\t(seq\n\t\t(+ 1 2)\n\t\t(+)\n\t)\n\t[\"Warning: 2 missing closing parenthesis at line 1, column 17\"]\n]"
                 },
                 {
-                    "example": "(parse \"(seq (+ 1 2) (+ \" .true .true))\"",
+                    "example": "(parse \"(seq (+ 1 2) (+ \" .true .true)\"",
                     "output": "[\n\t(seq\n\t\t(+ 1 2)\n\t)\n\t[\"Warning: 1 missing closing parenthesis at line 1, column 17\"]\n]"
                 },
                 {
-                    "example": "(parse \"(seq (+ 1 2) (+ (a ) 3) \" .true .true))\"",
+                    "example": "(parse \"(seq (+ 1 2) (+ (a ) 3) \" .true .true)\"",
                     "output": "[\n\t(seq\n\t\t(+ 1 2)\n\t)\n\t[\"Warning: Invalid opcode \\\"a\\\"; transforming to apply opcode using the invalid opcode type at line 1, column 19\"]\n]"
                 },
                 {
@@ -4372,7 +4420,7 @@
         "body": [
             "(print"
         ],
-        "description": "[* node1] [* node2] ... [* nodeN] || Prints each of the parameters in order in a manner interpretable as if they were code, except strings are printed without quotes.  Output is pretty-printed.",
+        "description": "[* node1] [* node2] ... [* nodeN] || Prints each of the parameters in order in a manner interpretable as if they were code, except strings are printed without quotes.  Output is pretty-printed.  Printing is safe for cyclic and graph data structures and will emit appropriate opcodes using the `@` prefix so that parsing will reconstruct the cyclic or graph relationships.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
@@ -4694,7 +4742,7 @@
             "examples": [
                 {
                     "example": "(seq\n\t(create_entities\n\t\t\"E1\"\n\t\t{a 1 weight 5}\n\t\t\"E2\"\n\t\t{a 2 weight 4}\n\t\t\"E3\"\n\t\t{a 3 weight 3}\n\t\t\"E4\"\n\t\t{a 4 weight 2}\n\t\t\"E5\"\n\t\t{a 5 weight 1}\n\t)\n\t(declare\n\t\t{\n\t\t\tmean (compute_on_contained_entities\n\t\t\t\t\t(query_generalized_mean \"a\" 1)\n\t\t\t\t)\n\t\t}\n\t)\n\t[\n\t\tmean\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"weight\" 0)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"weight\" -1)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 2)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 1 \"weight\")\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"weight\" 0 \"weight\")\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 1 .null mean .true .true)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 2 .null mean .true)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 3 .null mean .false)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_generalized_mean \"a\" 4 .null mean .true)\n\t\t)\n\t]\n)",
-                    "output": "[\n\t3\n\t2.6051710846973517\n\t2.18978102189781\n\t3.3166247903554\n\t2.3333333333333335\n\t86400000.00000006\n\t1.2\n\t2\n\t0\n\t6.8\n]"
+                    "output": "[\n\t3\n\t2.6051710846973517\n\t2.18978102189781\n\t3.3166247903554\n\t2.3333333333333335\n\t3.381434008029686\n\t1.2\n\t2\n\t0\n\t6.8\n]"
                 }
             ],
             "frequency_per_10000_opcodes": 0.25,
@@ -4911,6 +4959,10 @@
                 {
                     "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t[\n\t\t(compute_on_contained_entities\n\t\t\t(query_nearest_generalized_distance\n\t\t\t\t3\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t[1 2]\n\t\t\t\t2\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t1\n\t\t\t\t.null\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_nearest_generalized_distance\n\t\t\t\t[0.2 1]\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t[1 2]\n\t\t\t\t2\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t1\n\t\t\t\t.null\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t]\n)",
                     "output": "[\n\t{vert2 1 vert3 1.4142135623730951 vert5 1.4142135623730951}\n\t{\n\t\tvert2 1\n\t\tvert3 1.4142135623730951\n\t\tvert4 1.5811388300841898\n\t\tvert5 1.4142135623730951\n\t}\n]"
+                },
+                {
+                    "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{x 2 y 1}\n\t)\n\n\t(compute_on_contained_entities\n\t\t(query_nearest_generalized_distance\n\t\t\t3\n\t\t\t[\"x\" \"y\"]\n\t\t\t[1 2]\n\t\t\t1\n\t\t\t.null\n\t\t\t{\n\t\t\t\tx\n\t\t\t\t{\n\t\t\t\t\tdifference_type \"continuous\"\n\t\t\t\t\tdata_type \"number\"\n\t\t\t\t}\n\t\t\t\ty\n\t\t\t\t{\n\t\t\t\t\tdifference_type \"continuous\"\n\t\t\t\t\tdata_type \"number\"\n\t\t\t\t\tcall_entity\n\t\t\t\t\t(lambda \n\t\t\t\t\t\t(call_on_entity\n\t\t\t\t\t\t\t.null \n\t\t\t\t\t\t\t(* y to_multiply)\n\t\t\t\t\t\t\t{to_multiply 10}\n\t\t\t\t\t\t\t20\n\t\t\t\t\t\t)\n\t\t\t\t\t)\n\t\t\t\t}\n\t\t\t}\n\t\t\t.null\n\t\t\t.null\n\t\t\t.null\n\t\t\t1\n\t\t\t.null\n\t\t\t\"random seed 1234\"\n\t\t)\n\t)\n)",
+                    "output": "{vert0 3 vert1 2 vert4 3.5}"
                 }
             ],
             "frequency_per_10000_opcodes": 2,
@@ -5192,7 +5244,7 @@
         "body": [
             "(rand"
         ],
-        "description": "[list|assoc|number range] [number number_to_generate] [bool unique] || Generates random values based on its parameters.  The random values are drawn from a random stream specific to each execution flow for each entity.  With no range, evaluates to a random number between 0.0 and 1.0.  If range is a list, it will uniformly randomly choose and evaluate to one element of the list.  If range is a number, it will evaluate to a value greater than or equal to zero and less than the number specified.  If range is an assoc, then it will randomly evaluate to one of the keys using the values as the weights for the probabilities.  If  number_to_generate is specified, it will generate a list of multiple values (even if number_to_generate is 1).  If unique is true (it defaults to false), then it will only return unique values, the same as selecting from the list or assoc without replacement.  Note that if unique only applies to list and assoc ranges.  If unique is true and there are not enough values in a list or assoc, it will only generate the number of elements in range.",
+        "description": "[list|assoc|number range] [number number_to_generate] [bool unique] || Generates random values based on the parameters.  The random values are drawn from a random stream specific to each execution flow for each entity.  When `range` is not specified, it evaluates to a random number between 0.0 and 1.0.  If `range` is a list, it will uniformly randomly choose and evaluate to one element of the list.  If `range` is a number, it will evaluate to a value greater than or equal to zero and less than the number specified.  If `range` is an assoc, then it will randomly evaluate to one of the keys using the values as the weights for the probabilities.  If  `number_to_generate` is specified, it will generate a list of multiple values (even if `number_to_generate` is 1).  If `unique` is true (it defaults to false), then it will only return unique values, the same as selecting from the list or assoc without replacement.  Note that the `unique` parameter only applies when `range` is a list or assoc.  If `unique` is true and there are not enough values in a list or assoc, it will only generate the number of elements in `range`.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
@@ -5436,42 +5488,6 @@
             "permissions": "none",
             "requires_entity": true,
             "returns": "bool",
-            "value_newness": "new"
-        }
-    },
-    "replace": {
-        "prefix": "(replace",
-        "body": [
-            "(replace"
-        ],
-        "description": "* data [number|string|list walk_path1] [* function1] [number|string|list walk_path2] [* function2] ... [number|string|list walk_pathN] [* functionN] || Performs a deep copy on `data` (a copy of all data structures referenced by it and its references), then looks at the remaining parameters as pairs.  For each pair, the first is any of: a number, representing an index, with negative numbers representing backward traversal from the end of the list; a string, representing the index; or a list, representing a way to walk into the structure as the aforementioned values. `function1` to `functionN` represent a function that will be used to replace in place of whatever is in the location of the corresponding walk_path, and will be passed the current node in (current_value).  The function can optionally be just be an immediate value or any code that can be evaluated.  If a particular location does not exist, it will be created assuming the most generic type that will support the index (as a null, list, or assoc). Note that the `(target)` will evaluate to the new copy of data, which is the base of the newly constructed data; this is useful for creating circular references.",
-        "$doc": {
-            "allows_concurrency": false,
-            "examples": [
-                {
-                    "example": "(replace\n\t[\n\t\t(associate \"a\" 13)\n\t]\n)",
-                    "output": "[\n\t{a 13}\n]"
-                },
-                {
-                    "example": "(replace\n\t[\n\t\t(associate \"a\" 1)\n\t]\n\t[2]\n\t1\n\t[0]\n\t[4 5 6]\n)",
-                    "output": "[\n\t[4 5 6]\n\t.null\n\t1\n]"
-                },
-                {
-                    "example": "(replace\n\t[\n\t\t(associate \"a\" 1)\n\t]\n\t2\n\t1\n\t0\n\t[4 5 6]\n)",
-                    "output": "[\n\t[4 5 6]\n\t.null\n\t1\n]"
-                },
-                {
-                    "example": "(replace\n\t[\n\t\t(associate \"a\" 1)\n\t]\n\t[0]\n\t(lambda\n\t\t(set (current_value) \"b\" 2)\n\t)\n)",
-                    "output": "[\n\t{a 1 b 2}\n]"
-                }
-            ],
-            "frequency_per_10000_opcodes": 5.5,
-            "new_scope": false,
-            "new_target_scope": true,
-            "opcode_group": "Container Manipulation",
-            "permissions": "none",
-            "requires_entity": false,
-            "returns": "any",
             "value_newness": "new"
         }
     },
@@ -5751,38 +5767,6 @@
             "value_newness": "existing"
         }
     },
-    "set": {
-        "prefix": "(set",
-        "body": [
-            "(set"
-        ],
-        "description": "* data [number|string|list walk_path1] [* new_value1] [number|string|list walk_path2] [* new_value2] ... [number|string|list walk_pathN] [* new_valueN] || Performs a deep copy on `data` (a copy of all data structures referenced by it and its references), then looks at the remaining parameters as pairs.  For each pair, the first is any of: a number, representing an index, with negative numbers representing backward traversal from the end of the list; a string, representing the index; or a list, representing a way to walk into the structure as the aforementioned values as a walk path of indices. `new_value1` to `new_valueN` represent a value that will be used to replace  whatever is in the location the preceding location parameter specifies.  If a particular location does not exist, it will be created assuming the most generic type that will support the index (as a null, list, or assoc); however, it will not change the type of immediate values to an assoc or list. Note that `(target)` will evaluate to the new copy of data, which is the base of the newly constructed data; this is useful for creating circular references.",
-        "$doc": {
-            "allows_concurrency": false,
-            "examples": [
-                {
-                    "example": "(set\n\t(associate\n\t\t\"a\"\n\t\t1\n\t\t\"b\"\n\t\t2\n\t\t\"c\"\n\t\t3\n\t\t4\n\t\t\"d\"\n\t)\n\t\"e\"\n\t5\n)",
-                    "output": "{\n\t4 \"d\"\n\ta 1\n\tb 2\n\tc 3\n\te 5\n}"
-                },
-                {
-                    "example": "(set\n\t[0 1 2 3 4]\n\t2\n\t10\n)",
-                    "output": "[0 1 10 3 4]"
-                },
-                {
-                    "example": "(set\n\t(associate \"a\" 1 \"b\" 2)\n\t\"a\"\n\t3\n)",
-                    "output": "{a 3 b 2}"
-                }
-            ],
-            "frequency_per_10000_opcodes": 3,
-            "new_scope": false,
-            "new_target_scope": false,
-            "opcode_group": "Container Manipulation",
-            "permissions": "none",
-            "requires_entity": false,
-            "returns": "any",
-            "value_newness": "new"
-        }
-    },
     "set_annotations": {
         "prefix": "(set_annotations",
         "body": [
@@ -5972,7 +5956,7 @@
         "body": [
             "(set_entity_rand_seed"
         ],
-        "description": "[id_path entity] * node [bool deep] || Sets the random number seed and state for the random number generator of `entity`, or the current entity if null or not specified, to the state specified by `node`.  If `node` is already a string in the proper format output by `(get_entity_rand_seed)`, then it will set the random generator to that current state, picking up where the previous state left off.  If `node` is anything else, it uses the value as a random seed to start the generator.  Note that this will not affect the state of the current random number stream, only future random streams created by `entity` for new calls.  The parameter `deep` defaults to false, but if it is true, all contained entities are recursively set with random seeds based on the specified random seed and a hash of their relative id path to the entity being set.",
+        "description": "[id_path entity] * node [bool deep] || Sets the random number seed and state for the random number generator of `entity`, or the current entity if null or not specified, to the state specified by `node`.  If `node` is already a string in the proper format output by `(get_entity_rand_seed)`, then it will set the random generator to that current state, picking up where the previous state left off.  If `node` is anything else, it uses the value as a random seed to start the generator.  Note that this will not affect the state of the current random number stream, only future random streams created by `entity` for new calls.  The parameter `deep` defaults to false, but if it is true, all contained entities are recursively set with random seeds based on a hash of a combination of the specified random seed and their relative id path to the entity being set.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
@@ -6024,7 +6008,7 @@
         "body": [
             "(set_type"
         ],
-        "description": "* node [string|* type] || Creates a copy of `node`, setting the type of the node of to `type`.  If `type` is a string, it will look that up as the type, or if `type` is a node that is not a string, it will set the type to match the top node of `type`.  It will convert opcode parameters as necessary.",
+        "description": "* node [string|* type] || Creates a copy of `node`, setting the type of the node of to `type`.  If `type` is a string, it will look that up as the type, or if `type` is a node that is not a string, it will set the type to match the top node of `type`.  It will convert opcode parameters as necessary.  If `node` is an immediate type being changed to another immediate type, it will attempt to coerce the value.  If `node` is not an immediate type, such as a `list` or `assoc` or other opcode, and is being changed to another non-immediate type, it will preserve all of values.  That is, a list's first element will be the key of the number 0, second element will be the key of the number 1, etc.  If converting from an `assoc` to a type with ordered values, it will set the values in the same order as the `values` opcode.  If one of `node` and `type` is immediate and the other not, it will yield null.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
@@ -6034,15 +6018,15 @@
                 },
                 {
                     "example": "(sort\n\t(set_type\n\t\t(associate \"a\" 4 \"b\" 3)\n\t\t\"list\"\n\t)\n)",
-                    "output": "[3 4 \"a\" \"b\"]"
+                    "output": "[3 4]"
                 },
                 {
                     "example": "(sort\n\t(set_type\n\t\t(associate \"a\" 4 \"b\" 3)\n\t\t[]\n\t)\n)",
-                    "output": "[3 4 \"a\" \"b\"]"
+                    "output": "[3 4]"
                 },
                 {
-                    "example": "(unparse\n\t(set_type\n\t\t[\"a\" 4 \"b\" 3]\n\t\t\"assoc\"\n\t)\n)",
-                    "output": "\"{a 4 b 3}\""
+                    "example": "(unparse\n\t(set_type\n\t\t[3 4]\n\t\t\"assoc\"\n\t)\n)",
+                    "output": "\"{0 3 1 4}\""
                 },
                 {
                     "example": "(call\n\t(set_type\n\t\t[1 0.5 \"3.2\" 4]\n\t\t\"+\"\n\t)\n)",
@@ -6050,7 +6034,7 @@
                 },
                 {
                     "example": "(set_type\n\t[\n\t\t(set_annotations\n\t\t\t(lambda\n\t\t\t\t(+ 3 4)\n\t\t\t)\n\t\t\t\"react\"\n\t\t)\n\t]\n\t\"unordered_list\"\n)",
-                    "output": "(unordered_list\n\t\n\t#react\n\t(+ 3 4)\n)"
+                    "output": "(unordered_list\n\t#react\n\t(+ 3 4)\n)"
                 }
             ],
             "frequency_per_10000_opcodes": 0.25,
@@ -6172,7 +6156,7 @@
         "body": [
             "(sort"
         ],
-        "description": "[* function] list|assoc collection [number k] || Returns a new list containing the elements from `collection` sorted in increasing order, regardless of whether `collection` is an assoc or list.  If `function` is null or true it sorts ascending, if false it sorts descending, and if any other value it pushes a pair of new scope onto the stack with `(current_value)` and `(current_value 1)` accessing a pair of elements from the list, and evaluates `function`.  The function should return a number, positive if `(current_value)` is greater, negative if `(current_value 1)` is greater, or 0 if equal.  If `k` is specified in addition to `function` and not null, then it will only return the `k` smallest values sorted in order, or, if `k` is negative, it will return the highest `k` values using the absolute value of `k`.",
+        "description": "[* function] list|assoc collection [number k] || Returns a new list containing the elements from `collection` sorted in increasing order, regardless of whether `collection` is an assoc or list.  If `function` is null or true it sorts ascending, if false it sorts descending, and if any other value it pushes a pair of new scope onto the stack with `(current_value)` and `(current_value 1)` accessing a pair of elements from the list, and evaluates `function`.  The function should return a number, positive if `(current_value)` is greater meaning that `(current_value)` should come after `(current_value 1)`, negative if `(current_value 1)` is greater and should come after `(current_value)`, or 0 if equal.  If `k` is specified in addition to `function` and not null, then it will only return the `k` smallest values sorted in order, or, if `k` is negative, it will return the highest `k` values using the absolute value of `k`.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
@@ -6424,7 +6408,7 @@
         "body": [
             "(substr"
         ],
-        "description": "string str [number|string location] [number|string param] [string replacement] [number stride] || Finds a substring `str`.  If `location` is a number, then evaluates to a new string representing the substring starting at the offset specified by `location`.  If `location` is a string, then it will treat `location` as a regular expression.  If `param` is specified, then it may change the interpretation of `location`.  If `param` is specified and `location` is a number it will go until that length beyond the offset specified by `location`.  If `param` is specified and `location` is a regular expression, `param` will represent one of the following: if null or \"first\", then it will return the first match of the regular expression; or if `param` is a number or the string \"all\", then substr will evaluate to a list of up to param matches (which may be infinite yielding the same result as \"all\").  If `param` is a negative number or the string \"submatches\", then it will return a list of list of strings, for each match up to the count of the negative number or all matches.  If `param` is \"submatches\", each inner list will represent the full regular expression match followed by each submatch as captured by parenthesis in the regular expression, ordered from an outer to inner, left-to-right manner.  If `location` is a negative number, then it will measure from the end of the string rather than the beginning.  If `replacement` is specified and not null, it will return the original string rather than the substring, but the substring will be replaced by replacement regardless of what `location` is.  And if replacement is specified, then it will override some of the logic for the `param` type and always return just a string and not a list.  If `stride` is zero or unspecified, then it explodes the string by character per UTF-8 parsing.  If `stride` is specified, then it breaks it into chunks of that many bytes.  For example, a `stride` of 1 would break it into bytes, whereas a `stride` of 4 would break it into 32-bit chunks.",
+        "description": "string str [number|string location] [number|string param] [string replacement] [number stride] || Extracts and optionally replaces a substring of string `str`.  If `location` is a number, then evaluates to a new string representing the substring starting at the offset specified by `location`.  If `location` is a string, then it will treat `location` as a regular expression.  If `param` is specified, then it may change the interpretation of `location`.  If `param` is specified and `location` is a number it will go until that length beyond the offset specified by `location`.  If `param` is specified and `location` is a regular expression, `param` will represent one of the following: if null or \"first\", then it will return the first match of the regular expression; or if `param` is a number or the string \"all\", then substr will evaluate to a list of up to param matches (which may be infinite yielding the same result as \"all\").  If `param` is a negative number or the string \"submatches\", then it will return a list of list of strings, for each match up to the count of the negative number or all matches.  If `param` is \"submatches\", each inner list will represent the full regular expression match followed by each submatch as captured by parenthesis in the regular expression, ordered from an outer to inner, left-to-right manner.  If `location` is a negative number, then it will measure from the end of the string rather than the beginning.  If `replacement` is specified and not null, it will return the original string rather than the substring, but the substring will be replaced by replacement regardless of what `location` is.  And if replacement is specified, then it will override some of the logic for the `param` type and always return just a string and not a list.  If `stride` is zero or unspecified, then it explodes the string by character per UTF-8 parsing.  If `stride` is specified, then it breaks it into chunks of that many bytes.  For example, a `stride` of 1 would break it into bytes, whereas a `stride` of 4 would break it into 32-bit chunks.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
@@ -7148,7 +7132,7 @@
         "body": [
             "(unparse"
         ],
-        "description": "code c [bool pretty_print] [bool sort_keys] [bool include_attributes] || Code is unparsed and the representative string is returned. If `pretty_print` is true, the output will be in pretty-print format, otherwise by default it will be inlined.  If `sort_keys` is true, the default, then it will print assoc structures and anything that could come in different orders in a natural sorted order by key, otherwise it will default to whatever order it is stored in memory.  If `include_attributes` is true, it will print out attributes like comments, but by default it will not.",
+        "description": "code c [bool pretty_print] [bool sort_keys] [bool include_attributes] || Code is unparsed and the representative string is returned. If `pretty_print` is true, the output will be in pretty-print format, otherwise by default it will be inlined.  If `sort_keys` is true, the default, then it will print assoc structures and anything that could come in different orders in a natural sorted order by key, otherwise it will default to whatever order it is stored in memory.  If `include_attributes` is true, it will print out attributes like comments, but by default it will not.  Unparsing is safe for cyclic and graph data structures and will emit appropriate opcodes using the `@` prefix so that parsing will reconstruct the cyclic or graph relationships.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
