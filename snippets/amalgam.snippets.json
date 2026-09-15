@@ -3640,7 +3640,7 @@
         "body": [
             "(list"
         ],
-        "description": "any node1 any node2 ... || Evaluates to a list with the parameters as elements.  Pushes a new target scope such that `(target)`, `(current_index)`, and `(current_value)` access the list itself, the current index, and the current value.  If `[]`'s are used instead of parenthesis, the keyword `list` may be omitted.  `[]` are considered identical to `(list)`.  Note that because this is an opcode that constructs a new list rather than modifying one, it will not retain metadata of the constructing list.",
+        "description": "[any node1] [any node2] ... || Evaluates to a list with the parameters as elements.  Pushes a new target scope such that `(target)`, `(current_index)`, and `(current_value)` access the list itself, the current index, and the current value.  If `[]`'s are used instead of parenthesis, the keyword `list` may be omitted.  `[]` are considered identical to `(list)`.  Note that because this is an opcode that constructs a new list rather than modifying one, it will not retain metadata of the constructing list.",
         "$doc": {
             "allows_concurrency": true,
             "examples": [
