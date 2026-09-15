@@ -175,7 +175,7 @@
       "name": "keyword.control.amalgam"
     },
     "zero-arg-opcodes": {
-      "match": "(\\(assoc\\)|\\(list\\)|\\(conclude\\)|\\(return\\)|\\(system_time\\)|\\(target\\)|\\(stack\\)|\\(opcode_stack\\)|\\(args\\)|\\(contained_entities\\)|\\(retrieve_entity_root\\)|\\(help\\)|\\(get_entity_annotations\\))",
+      "match": "(\\(assoc\\)|\\(list\\)|\\(conclude\\)|\\(return\\)|\\(system_time\\)|\\(target\\)|\\(stack\\)|\\(opcode_stack\\)|\\(args\\)|\\(contained_entities\\)|\\(retrieve_entity_root\\)|\\(help\\)|\\(get_entity_annotations\\)|\\(get_entity_comments\\)|\\(get_entity_permissions\\)|\\(get_entity_rand_seed\\)|\\(reclaim_resources\\))",
       "name": "keyword.control.amalgam"
     },
     "constants": {
