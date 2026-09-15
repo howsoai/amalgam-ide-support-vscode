@@ -175,11 +175,11 @@
       "name": "keyword.control.amalgam"
     },
     "zero-arg-opcodes": {
-      "match": "(\\(assoc\\)|\\(list\\)|\\(conclude\\)|\\(return\\)|\\(system_time\\)|\\(target\\)|\\(stack\\)|\\(opcode_stack\\)|\\(args\\)|\\(contained_entities\\)|\\(retrieve_entity_root\\)|\\(help\\)|\\(get_entity_annotations\\)|\\(get_entity_comments\\)|\\(get_entity_permissions\\)|\\(get_entity_rand_seed\\)|\\(reclaim_resources\\))",
+      "match": "(\\(assoc\\)|\\(list\\)|\\(conclude\\)|\\(return\\)|\\(system_time\\)|\\(target\\)|\\(stack\\)|\\(opcode_stack\\)|\\(args\\)|\\(contained_entities\\)|\\(retrieve_entity_root\\)|\\(help\\)|\\(get_entity_annotations\\)|\\(get_entity_comments\\)|\\(get_entity_permissions\\)|\\(get_entity_rand_seed\\)|\\(get_rand_seed\\)|\\(reclaim_resources\\)|\\(rand\\))",
       "name": "keyword.control.amalgam"
     },
     "constants": {
-      "match": "(argv|interpreter|\\.infinity|-\\.infinity|\\.true|\\.false|\\.null|(?<=\\()rand)",
+      "match": "(argv|interpreter|\\.infinity|-\\.infinity|\\.true|\\.false|\\.null)",
       "name": "constant.language.amalgam"
     },
     "loop-vars": {
