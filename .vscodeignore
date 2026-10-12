@@ -18,3 +18,7 @@ webpack.config.js
 .DS_Store
 .gitignore
 CONTRIBUTING.md
+.claude/
+.devcontainer/
+scratch/
+plans/

@@ -126,7 +126,7 @@ export type IRuntimeResult<T extends IRuntimeCommand = IRuntimeCommand> = T exte
   : T extends "br"
   ? { type: "br"; breakpoints: IRuntimeInternalBreakpoint[] }
   : T extends "threads"
-  ? { type: "threads"; threads: string[] }
+  ? { type: "threads"; threads: Set<string> }
   : { type: IRuntimeCommand };
 
 export type IRuntimeVariableType = string | RuntimeVariable[] | undefined;
@@ -194,9 +194,10 @@ export class AmalgamRuntime extends EventEmitter {
     stackFrameOpcode: /^ {2}opcode: (?<opcode>.+?)(?: ?;src: (?<line>\d+) (?<column>\d+) (?<file>.+))?$/gm,
     breakpointAction: /^(?<action>Added|Removed) breakpoint for (?:.+)?$/gm,
     breakpointLine: /^ {2}(?<line>\d+)(?: (?<file>.+))?$/gm,
-    // Breakpoints and stack are matched via the header line and existing subsequent nested lines
+    // Breakpoints, stack, and threads are matched via the header line and existing subsequent nested lines
     breakpoints: /^(?<type>Line) Breakpoints:\n(?<brs>^(?:\s{2}.+)+)$/gm,
     stack: /^(?<type>Interpret node|Opcode) stack:\n(?<frames>^(?:\s{2}.+)+)$/gm,
+    threads: /^All available threads:\n(?<ids>(?:\s{2}.+)+)$/gm,
     // Expression results match all lines
     expression: /^(?<value>[\s\S]+)$/gm,
     // Results match all lines starting with 2 spaces
@@ -573,7 +574,7 @@ export class AmalgamRuntime extends EventEmitter {
    * Retrieve all thread IDs.
    * @returns The list of thread IDs.
    */
-  public async getThreadIds(): Promise<string[]> {
+  public async getThreadIds(): Promise<Set<string>> {
     const { threads } = await this.sendCommand("threads");
     return threads;
   }
@@ -792,8 +793,10 @@ export class AmalgamRuntime extends EventEmitter {
       lines = lines.substring(0, eot.index) + lines.substring(eot.index + eot[0].length + 1);
     }
 
+    const threads = new Set<string>();
     if (eot.groups?.thread != null) {
       this._currentThread = parseInt(eot.groups?.thread);
+      threads.add(eot.groups?.thread);
     }
 
     if (command == null) {
@@ -908,12 +911,17 @@ export class AmalgamRuntime extends EventEmitter {
     }
 
     // Match threads
-    const threads: string[] = [];
     if (command === "threads") {
-      reg = new RegExp(this.matchers.lines);
+      reg = new RegExp(this.matchers.threads);
       while ((matches = reg.exec(lines)) != null) {
         if (matches.groups) {
-          threads.push(matches.groups.line);
+          let idMatches: RegExpExecArray | null;
+          const sectionReg = new RegExp(this.matchers.lines);
+          while ((idMatches = sectionReg.exec(matches.groups.ids))) {
+            if (idMatches.groups) {
+              threads.add(idMatches.groups.line);
+            }
+          }
         }
       }
     }
