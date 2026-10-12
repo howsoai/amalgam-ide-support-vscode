@@ -26,7 +26,7 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
             request: "launch",
             program: targetResource.fsPath,
           },
-          { noDebug: true }
+          { noDebug: true },
         );
       }
     }),
@@ -44,7 +44,7 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
           stopOnEntry: false,
         });
       }
-    })
+    }),
   );
 
   context.subscriptions.push(
@@ -53,7 +53,7 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
         placeHolder: "Please enter the name of an Amalgam file in the workspace folder",
         value: "myfile.amlg",
       });
-    })
+    }),
   );
 
   // register a configuration provider for 'amalgam' debug type
@@ -91,8 +91,8 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
           ];
         },
       },
-      vscode.DebugConfigurationProviderTriggerKind.Dynamic
-    )
+      vscode.DebugConfigurationProviderTriggerKind.Dynamic,
+    ),
   );
 
   // Override default implementation of the debug hover, here we attempt to only match words that may be
@@ -101,7 +101,7 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
     vscode.languages.registerEvaluatableExpressionProvider("amalgam", {
       provideEvaluatableExpression(
         document: vscode.TextDocument,
-        position: vscode.Position
+        position: vscode.Position,
       ): vscode.ProviderResult<vscode.EvaluatableExpression> {
         const VARIABLE_REGEXP =
           /(?<![(#"'a-z0-9_.])(?<name>(?:[_!^a-z]+[_a-z0-9]*)|(?:\((?:current_index|current_value)\s*(?:\s+\w+\s*)*?\)))(?!["'a-z0-9])/gi;
@@ -121,7 +121,7 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
                 position.line,
                 qMatches.index,
                 position.line,
-                qMatches.index + qMatches[0].length
+                qMatches.index + qMatches[0].length,
               );
               if (qRange.contains(varRange)) {
                 continue top;
@@ -136,7 +136,7 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
                 position.line,
                 cMatches.index,
                 position.line,
-                cMatches.index + cMatches[0].length
+                cMatches.index + cMatches[0].length,
               );
               if (cRange.contains(varRange)) {
                 continue top;
@@ -151,7 +151,7 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
         }
         return undefined;
       },
-    })
+    }),
   );
 
   context.subscriptions.push(
@@ -159,7 +159,7 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
       provideHover: function (
         document: vscode.TextDocument,
         position: vscode.Position,
-        token: vscode.CancellationToken
+        token: vscode.CancellationToken,
       ): ProviderResult<vscode.Hover> {
         const range = document.getWordRangeAtPosition(position, /\([\w<>!+-~=*/]+/);
         if (range) {
@@ -185,7 +185,7 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
               position.line,
               qMatches.index,
               position.line,
-              qMatches.index + qMatches[0].length
+              qMatches.index + qMatches[0].length,
             );
             if (qRange.contains(range)) {
               // range is in a string
@@ -242,7 +242,7 @@ export async function activateDebug(context: vscode.ExtensionContext, factory: v
         }
         return undefined;
       },
-    })
+    }),
   );
 
   context.subscriptions.push(vscode.debug.registerDebugAdapterDescriptorFactory("amalgam", factory));

@@ -8,7 +8,7 @@ export class AmalgamConfigurationProvider implements vscode.DebugConfigurationPr
    */
   resolveDebugConfiguration(
     folder: WorkspaceFolder | undefined,
-    config: DebugConfiguration
+    config: DebugConfiguration,
   ): ProviderResult<DebugConfiguration> {
     // If launch.json is missing or empty
     if (!config.type && !config.request && !config.name) {

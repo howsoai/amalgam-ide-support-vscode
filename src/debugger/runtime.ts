@@ -118,16 +118,16 @@ export interface IRuntimeTask {
 export type IRuntimeResult<T extends IRuntimeCommand = IRuntimeCommand> = T extends "stack"
   ? { type: "stack"; stack: IRuntimeStack | undefined }
   : T extends "eval" | "pv" | "pp" | "p" | "r" | "rp" | "entity"
-  ? { type: "eval" | "pv" | "pp" | "p" | "r" | "rp" | "entity"; value: string | undefined }
-  : T extends "vars" | "labels" | "entities"
-  ? { type: "vars" | "labels" | "entities"; values: string[] }
-  : T extends "bn"
-  ? { type: "bn"; action: IRuntimeBreakpointAction }
-  : T extends "br"
-  ? { type: "br"; breakpoints: IRuntimeInternalBreakpoint[] }
-  : T extends "threads"
-  ? { type: "threads"; threads: Set<string> }
-  : { type: IRuntimeCommand };
+    ? { type: "eval" | "pv" | "pp" | "p" | "r" | "rp" | "entity"; value: string | undefined }
+    : T extends "vars" | "labels" | "entities"
+      ? { type: "vars" | "labels" | "entities"; values: string[] }
+      : T extends "bn"
+        ? { type: "bn"; action: IRuntimeBreakpointAction }
+        : T extends "br"
+          ? { type: "br"; breakpoints: IRuntimeInternalBreakpoint[] }
+          : T extends "threads"
+            ? { type: "threads"; threads: Set<string> }
+            : { type: IRuntimeCommand };
 
 export type IRuntimeVariableType = string | RuntimeVariable[] | undefined;
 export type IRuntimeVariableCategory = "var" | "label" | "entity";
@@ -150,7 +150,11 @@ export class RuntimeVariable {
     return this._lazy;
   }
 
-  constructor(public readonly name: string, private _value: IRuntimeVariableType, private _lazy = false) {}
+  constructor(
+    public readonly name: string,
+    private _value: IRuntimeVariableType,
+    private _lazy = false,
+  ) {}
 }
 
 export class RuntimeLabel extends RuntimeVariable {
@@ -417,7 +421,7 @@ export class AmalgamRuntime extends EventEmitter {
             value = collapseWhitespace(value);
           }
           return new RuntimeVariable(v, value);
-        })
+        }),
       );
 
       // Get the last opcode return value
