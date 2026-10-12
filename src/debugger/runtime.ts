@@ -126,7 +126,7 @@ export type IRuntimeResult<T extends IRuntimeCommand = IRuntimeCommand> = T exte
         : T extends "br"
           ? { type: "br"; breakpoints: IRuntimeInternalBreakpoint[] }
           : T extends "threads"
-            ? { type: "threads"; threads: Set<string> }
+            ? { type: "threads"; threads: number[] }
             : { type: IRuntimeCommand };
 
 export type IRuntimeVariableType = string | RuntimeVariable[] | undefined;
@@ -578,7 +578,7 @@ export class AmalgamRuntime extends EventEmitter {
    * Retrieve all thread IDs.
    * @returns The list of thread IDs.
    */
-  public async getThreadIds(): Promise<Set<string>> {
+  public async getThreadIds(): Promise<number[]> {
     const { threads } = await this.sendCommand("threads");
     return threads;
   }
@@ -797,10 +797,10 @@ export class AmalgamRuntime extends EventEmitter {
       lines = lines.substring(0, eot.index) + lines.substring(eot.index + eot[0].length + 1);
     }
 
-    const threads = new Set<string>();
+    const threads = new Set<number>();
     if (eot.groups?.thread != null) {
       this._currentThread = parseInt(eot.groups?.thread);
-      threads.add(eot.groups?.thread);
+      threads.add(this._currentThread);
     }
 
     if (command == null) {
@@ -923,7 +923,7 @@ export class AmalgamRuntime extends EventEmitter {
           const sectionReg = new RegExp(this.matchers.lines);
           while ((idMatches = sectionReg.exec(matches.groups.ids))) {
             if (idMatches.groups) {
-              threads.add(idMatches.groups.line);
+              threads.add(parseInt(idMatches.groups.line));
             }
           }
         }
@@ -945,7 +945,7 @@ export class AmalgamRuntime extends EventEmitter {
       case "threads": {
         this.commandDone.notify({
           type: command,
-          threads,
+          threads: [...threads].sort(),
         });
         break;
       }

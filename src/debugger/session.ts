@@ -592,9 +592,9 @@ export class AmalgamDebugSession extends LoggingDebugSession {
 
   protected async threadsRequest(response: DebugProtocol.ThreadsResponse): Promise<void> {
     const threadIds = await this.runtime.getThreadIds();
-    if (threadIds.size > 0) {
+    if (threadIds.length > 0) {
       response.body = {
-        threads: [...threadIds].map((threadId) => new Thread(parseInt(threadId), `thread ${threadId}`)),
+        threads: threadIds.map((threadId) => new Thread(threadId, `thread 0x${threadId.toString(16)}`)),
       };
     } else {
       response.body = {
