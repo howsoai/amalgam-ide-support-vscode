@@ -46,7 +46,7 @@ export async function loadOpcodeDocumentation(context: vscode.ExtensionContext):
       }
       return map;
     }, {});
-  } catch (reason) {
+  } catch {
     console.warn("Failed to read Amalgam snippets");
   }
   return {};

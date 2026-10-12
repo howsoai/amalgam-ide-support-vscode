@@ -137,7 +137,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
           evt.body.column = this.convertDebuggerColumnToClient(column);
         }
         this.sendEvent(evt);
-      }
+      },
     );
   }
 
@@ -158,7 +158,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
 
   protected async stepOutRequest(
     response: DebugProtocol.StepOutResponse,
-    args: DebugProtocol.StepOutArguments
+    args: DebugProtocol.StepOutArguments,
   ): Promise<void> {
     this.sendResponse(response);
     await this.runtime.stepOut(args.granularity === "instruction");
@@ -166,7 +166,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
 
   protected async setBreakPointsRequest(
     response: DebugProtocol.SetBreakpointsResponse,
-    args: DebugProtocol.SetBreakpointsArguments
+    args: DebugProtocol.SetBreakpointsArguments,
   ): Promise<void> {
     const sourcePath = this.convertPathToRuntime(args.source.path as string);
     const clientBreakpoints = args.breakpoints || [];
@@ -180,17 +180,17 @@ export class AmalgamDebugSession extends LoggingDebugSession {
         const { verified, line, column, path, id } = await this.runtime.setBreakPoint(
           sourcePath,
           this.convertClientLineToDebugger(br.line),
-          br.column ? this.convertClientColumnToDebugger(br.column) : 0
+          br.column ? this.convertClientColumnToDebugger(br.column) : 0,
         );
         const bp = new Breakpoint(
           verified,
           this.convertDebuggerLineToClient(line),
           this.convertDebuggerColumnToClient(column),
-          this.createSource(path)
+          this.createSource(path),
         );
         bp.setId(id);
         return bp;
-      })
+      }),
     );
 
     // send back the actual breakpoint positions
@@ -202,7 +202,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
 
   protected async stackTraceRequest(
     response: DebugProtocol.StackTraceResponse,
-    args: DebugProtocol.StackTraceArguments
+    args: DebugProtocol.StackTraceArguments,
   ): Promise<void> {
     // Stack only available for current thread
     if (this.runtime.currentThread != args.threadId) {
@@ -219,7 +219,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
           f.name,
           this.createSource(f.file),
           this.convertDebuggerLineToClient(f.line),
-          this.convertDebuggerColumnToClient(f.column)
+          this.convertDebuggerColumnToClient(f.column),
         );
         // if (typeof f.instruction === "number") {
         //   const address = f.instruction;
@@ -236,7 +236,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
 
   protected async evaluateRequest(
     response: DebugProtocol.EvaluateResponse,
-    args: DebugProtocol.EvaluateArguments
+    args: DebugProtocol.EvaluateArguments,
   ): Promise<void> {
     let reply: string | undefined;
     let rv: RuntimeVariable | undefined;
@@ -334,7 +334,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
   protected async variablesRequest(
     response: DebugProtocol.VariablesResponse,
     args: DebugProtocol.VariablesArguments,
-    request?: DebugProtocol.Request
+    request?: DebugProtocol.Request,
   ): Promise<void> {
     let vs: RuntimeVariable[] = [];
 
@@ -376,7 +376,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
 
   protected async setVariableRequest(
     response: DebugProtocol.SetVariableResponse,
-    args: DebugProtocol.SetVariableArguments
+    args: DebugProtocol.SetVariableArguments,
   ): Promise<void> {
     const container = this._variableHandles.get(args.variablesReference);
 
@@ -416,7 +416,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
    */
   protected configurationDoneRequest(
     response: DebugProtocol.ConfigurationDoneResponse,
-    args: DebugProtocol.ConfigurationDoneArguments
+    args: DebugProtocol.ConfigurationDoneArguments,
   ): void {
     super.configurationDoneRequest(response, args);
 
@@ -532,7 +532,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
         this.setDebuggerColumnsStartAt1(false);
         outputLogger.debug("Line numbers set to 0-based");
       }
-    } catch (error) {
+    } catch {
       this.sendErrorResponse(response, {
         id: 3,
         format: "Error: Failed to verify Amalgam binary version.",
@@ -583,7 +583,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
 
   protected disconnectRequest(
     response: DebugProtocol.DisconnectResponse,
-    args: DebugProtocol.DisconnectArguments
+    args: DebugProtocol.DisconnectArguments,
   ): void {
     if (args.terminateDebuggee) {
       this.runtime?.terminate();
@@ -594,7 +594,7 @@ export class AmalgamDebugSession extends LoggingDebugSession {
     const threadIds = await this.runtime.getThreadIds();
     if (threadIds.length > 0) {
       response.body = {
-        threads: threadIds.map((threadId) => new Thread(parseInt(threadId), `thread ${threadId}`)),
+        threads: threadIds.map((threadId) => new Thread(threadId, `thread 0x${threadId.toString(16)}`)),
       };
     } else {
       response.body = {

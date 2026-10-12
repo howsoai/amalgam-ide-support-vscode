@@ -11,14 +11,14 @@ export function activateLanguage(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.languages.registerDocumentSymbolProvider(
       { scheme: "file", language: "amalgam" },
-      new AmalgamDocumentSymbolProvider()
-    )
+      new AmalgamDocumentSymbolProvider(),
+    ),
   );
 
   context.subscriptions.push(
     vscode.languages.registerDefinitionProvider(
       { scheme: "file", language: "amalgam" },
-      new AmalgamDefinitionProvider()
-    )
+      new AmalgamDefinitionProvider(),
+    ),
   );
 }

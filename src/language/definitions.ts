@@ -8,7 +8,7 @@ export class AmalgamDefinitionProvider implements vscode.DefinitionProvider {
   async provideDefinition(
     document: vscode.TextDocument,
     position: vscode.Position,
-    token: vscode.CancellationToken
+    token: vscode.CancellationToken,
   ): Promise<vscode.Definition | vscode.LocationLink[] | undefined> {
     const wordRange = document.getWordRangeAtPosition(position);
     if (!wordRange) {
@@ -37,7 +37,7 @@ export class AmalgamDefinitionProvider implements vscode.DefinitionProvider {
       new vscode.RelativePattern(workspaceFolder.uri, "**/**.amlg"),
       undefined,
       undefined,
-      token
+      token,
     );
 
     const locations: vscode.Location[] = [];
@@ -56,7 +56,7 @@ export class AmalgamDefinitionProvider implements vscode.DefinitionProvider {
     file: vscode.TextDocument,
     pattern: RegExp,
     token: vscode.CancellationToken,
-    locations: vscode.Location[]
+    locations: vscode.Location[],
   ): void {
     let state: "seeking" | "in-assoc" | "none" | "done" = "seeking";
     let depth = 0;

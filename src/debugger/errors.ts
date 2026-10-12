@@ -1,5 +1,8 @@
 export class RuntimeError extends Error {
-  constructor(public readonly reason: string, message?: string) {
+  constructor(
+    public readonly reason: string,
+    message?: string,
+  ) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype); // restore prototype chain
   }

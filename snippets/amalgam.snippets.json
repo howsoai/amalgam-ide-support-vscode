@@ -3469,8 +3469,8 @@
                     "output": "[\"c\"]"
                 },
                 {
-                    "example": "(sort\n\t(keep\n\t\t(associate\n\t\t\t\"a\"\n\t\t\t1\n\t\t\t\"b\"\n\t\t\t2\n\t\t\t\"c\"\n\t\t\t3\n\t\t\t4\n\t\t\t\"d\"\n\t\t)\n\t\t[4 \"a\"]\n\t)\n)",
-                    "output": "[1 \"d\"]"
+                    "example": "(keep\n\t(associate\n\t\t\"a\"\n\t\t1\n\t\t\"b\"\n\t\t2\n\t\t\"c\"\n\t\t3\n\t\t4\n\t\t\"d\"\n\t)\n\t[4 \"a\"]\n)",
+                    "output": "{a 1 4 \"d\"}"
                 },
                 {
                     "example": "(keep\n\t[\n\t\t\"a\"\n\t\t1\n\t\t\"b\"\n\t\t2\n\t\t\"c\"\n\t\t3\n\t\t4\n\t\t\"d\"\n\t]\n\t[4 \"a\"]\n)",
@@ -4986,7 +4986,7 @@
             "examples": [
                 {
                     "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{object 1 x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{object 1 x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{object 1 x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{object 1 x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{object 2 x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{object 2 x 2 y 1}\n\t)\n\t[\n\t\t(compute_on_contained_entities\n\t\t\t(query_nearest_generalized_distance\n\t\t\t\t3\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t[1 2]\n\t\t\t\t2\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t1\n\t\t\t\t.null\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t\t(compute_on_contained_entities\n\t\t\t(query_nearest_generalized_distance\n\t\t\t\t[0.2 4]\n\t\t\t\t[\"x\" \"y\"]\n\t\t\t\t[1 2]\n\t\t\t\t2\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t.null\n\t\t\t\t1\n\t\t\t\t.null\n\t\t\t\t\"random seed 1234\"\n\t\t\t)\n\t\t)\n\t]\n)",
-                    "output": "[\n\t\t{vert2 1 vert3 1.4142135623730951 vert5 1.4142135623730951}\n\t\t{\n\t\t\t\tvert2 1\n\t\t\t\tvert5 1.4142135623730951\n\t\t\t\tvert3 1.4142135623730951\n\t\t\t\tvert4 1.5811388300841898\n\t\t}\n]"
+                    "output": "[\n\t\t{vert2 1 vert5 1.4142135623730951 vert3 1.4142135623730951}\n\t\t{\n\t\t\t\tvert2 1\n\t\t\t\tvert5 1.4142135623730951\n\t\t\t\tvert3 1.4142135623730951\n\t\t\t\tvert4 1.5811388300841898\n\t\t}\n]"
                 },
                 {
                     "example": "(seq\n\t(create_entities\n\t\t\"vert0\"\n\t\t{x 0 y 0}\n\t)\n\t(create_entities\n\t\t\"vert1\"\n\t\t{x 1 y 0}\n\t)\n\t(create_entities\n\t\t\"vert2\"\n\t\t{x 1 y 1}\n\t)\n\t(create_entities\n\t\t\"vert3\"\n\t\t{x 0 y 1}\n\t)\n\t(create_entities\n\t\t\"vert4\"\n\t\t{x 0.5 y 0.5}\n\t)\n\t(create_entities\n\t\t\"vert5\"\n\t\t{x 2 y 1}\n\t)\n\n\t(compute_on_contained_entities\n\t\t(query_nearest_generalized_distance\n\t\t\t3\n\t\t\t[\"x\" \"y\"]\n\t\t\t[1 2]\n\t\t\t1\n\t\t\t.null\n\t\t\t{\n\t\t\t\tx\n\t\t\t\t{\n\t\t\t\t\tdifference_type \"continuous\"\n\t\t\t\t\tdata_type \"number\"\n\t\t\t\t}\n\t\t\t\ty\n\t\t\t\t{\n\t\t\t\t\tdifference_type \"continuous\"\n\t\t\t\t\tdata_type \"number\"\n\t\t\t\t\tcall_entity\n\t\t\t\t\t(lambda \n\t\t\t\t\t\t(call_on_entity\n\t\t\t\t\t\t\t.null \n\t\t\t\t\t\t\t(* y to_multiply)\n\t\t\t\t\t\t\t{to_multiply 10}\n\t\t\t\t\t\t\t20\n\t\t\t\t\t\t)\n\t\t\t\t\t)\n\t\t\t\t}\n\t\t\t}\n\t\t\t.null\n\t\t\t.null\n\t\t\t.null\n\t\t\t1\n\t\t\t.null\n\t\t\t\"random seed 1234\"\n\t\t)\n\t)\n)",
@@ -5453,16 +5453,16 @@
             "allows_concurrency": false,
             "examples": [
                 {
-                    "example": "(sort\n\t(remove\n\t\t(associate\n\t\t\t\"a\"\n\t\t\t1\n\t\t\t\"b\"\n\t\t\t2\n\t\t\t\"c\"\n\t\t\t3\n\t\t\t4\n\t\t\t\"d\"\n\t\t)\n\t\t4\n\t)\n)",
-                    "output": "[1 2 3]"
+                    "example": "(remove\n\t(associate\n\t\t\"a\"\n\t\t1\n\t\t\"b\"\n\t\t2\n\t\t\"c\"\n\t\t3\n\t\t4\n\t\t\"d\"\n\t)\n\t4\n)",
+                    "output": "{a 1 b 2 c 3}"
                 },
                 {
                     "example": "(remove\n\t[\n\t\t\"a\"\n\t\t1\n\t\t\"b\"\n\t\t2\n\t\t\"c\"\n\t\t3\n\t\t4\n\t\t\"d\"\n\t]\n\t4\n)",
                     "output": "[\n\t\"a\"\n\t1\n\t\"b\"\n\t2\n\t3\n\t4\n\t\"d\"\n]"
                 },
                 {
-                    "example": "(sort\n\t(remove\n\t\t(associate\n\t\t\t\"a\"\n\t\t\t1\n\t\t\t\"b\"\n\t\t\t2\n\t\t\t\"c\"\n\t\t\t3\n\t\t\t4\n\t\t\t\"d\"\n\t\t)\n\t\t[4 \"a\"]\n\t)\n)",
-                    "output": "[2 3]"
+                    "example": "(remove\n\t(associate\n\t\t\"a\"\n\t\t1\n\t\t\"b\"\n\t\t2\n\t\t\"c\"\n\t\t3\n\t\t4\n\t\t\"d\"\n\t)\n\t[4 \"a\"]\n)",
+                    "output": "{b 2 c 3}"
                 },
                 {
                     "example": "(remove\n\t[\n\t\t\"a\"\n\t\t1\n\t\t\"b\"\n\t\t2\n\t\t\"c\"\n\t\t3\n\t\t4\n\t\t\"d\"\n\t]\n\t[4]\n)",
@@ -5624,13 +5624,17 @@
         "body": [
             "(reverse"
         ],
-        "description": "list collection || Returns a new list containing the `collection` with its elements in reversed order.",
+        "description": "list|assoc collection || Returns a new list or assoc containing the `collection` with its elements in reversed order.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
                 {
                     "example": "(reverse\n\t[1 2 3 4 5]\n)",
                     "output": "[5 4 3 2 1]"
+                },
+                {
+                    "example": "(reverse\n\t{a 1 b 2 c 3 d 4 e 5}\n)",
+                    "output": "{\n\t\te 5\n\t\td 4\n\t\tc 3\n\t\tb 2\n\t\ta 1\n}"
                 }
             ],
             "frequency_per_10000_opcodes": 0.5,
@@ -5639,7 +5643,7 @@
             "opcode_group": "Iteration and Container Transform",
             "permissions": "none",
             "requires_entity": false,
-            "returns": "list",
+            "returns": "list|assoc",
             "value_newness": "partial"
         }
     },
@@ -6500,7 +6504,7 @@
         "body": [
             "(sort"
         ],
-        "description": "[any function] list|assoc collection [number k] || Returns a new list containing the elements from `collection` sorted in increasing order, regardless of whether `collection` is an assoc or list.  If `function` is null or true it sorts ascending, if false it sorts descending, and if any other value it pushes a pair of new scope onto the stack with `(current_value)` and `(current_value 1)` accessing a pair of elements from the list, and evaluates `function`.  The function should return a number, positive if `(current_value)` is greater meaning that `(current_value)` should come after `(current_value 1)`, negative if `(current_value 1)` is greater and should come after `(current_value)`, or 0 if equal.  If `k` is specified in addition to `function` and not null, then it will only return the `k` smallest values sorted in order, or, if `k` is negative, it will return the highest `k` values using the absolute value of `k`.",
+        "description": "[any function] list|assoc collection [number k] || Returns a new list or assoc containing the elements from `collection` sorted in increasing order by value, regardless of whether `collection` is an assoc or list.  If `function` is null or true it sorts ascending, if false it sorts descending, and if any other value it pushes a pair of new scope onto the stack with `(current_value)` and `(current_value 1)` accessing a pair of elements from the list, and evaluates `function`.  The function should return a number, positive if `(current_value)` is greater meaning that `(current_value)` should come after `(current_value 1)`, negative if `(current_value 1)` is greater and should come after `(current_value)`, or 0 if equal.  If `k` is specified in addition to `function` and not null, then it will only return the `k` smallest values sorted in order, or, if `k` is negative, it will return the highest `k` values using the absolute value of `k`.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
@@ -6510,7 +6514,7 @@
                 },
                 {
                     "example": "(sort\n\t{\n\t\ta 4\n\t\tb 9\n\t\tc 3\n\t\td 5\n\t\te 1\n\t}\n)",
-                    "output": "[1 3 4 5 9]"
+                    "output": "{\n\t\te 1\n\t\tc 3\n\t\ta 4\n\t\td 5\n\t\tb 9\n}"
                 },
                 {
                     "example": "(sort\n\t[\n\t\t\"n\"\n\t\t\"b\"\n\t\t\"hello\"\n\t\t\"soy\"\n\t\t4\n\t\t1\n\t\t3.2\n\t\t[1 2 3]\n\t]\n)",
@@ -6530,7 +6534,7 @@
                 },
                 {
                     "example": "(sort\n\t(lambda\n\t\t(- (rand) (rand))\n\t)\n\t(range 0 10)\n)",
-                    "output": "[\n\t8\n\t10\n\t6\n\t9\n\t7\n\t5\n\t1\n\t0\n\t2\n\t4\n\t3\n]"
+                    "output": "[\n\t\t10\n\t\t8\n\t\t9\n\t\t1\n\t\t6\n\t\t4\n\t\t7\n\t\t5\n\t\t3\n\t\t2\n\t\t0\n]"
                 },
                 {
                     "example": "(sort\n\t[\n\t\t\"2020-06-08 lunes 11.33.36\"\n\t\t\"2020-06-08 lunes 11.32.47\"\n\t\t\"2020-06-08 lunes 11.32.49\"\n\t\t\"2020-06-08 lunes 11.32.37\"\n\t\t\"2020-06-08 lunes 11.33.48\"\n\t\t\"2020-06-08 lunes 11.33.40\"\n\t\t\"2020-06-08 lunes 11.33.45\"\n\t\t\"2020-06-08 lunes 11.33.42\"\n\t\t\"2020-06-08 lunes 11.33.47\"\n\t\t\"2020-06-08 lunes 11.33.43\"\n\t\t\"2020-06-08 lunes 11.33.38\"\n\t\t\"2020-06-08 lunes 11.33.39\"\n\t\t\"2020-06-08 lunes 11.32.36\"\n\t\t\"2020-06-08 lunes 11.32.38\"\n\t\t\"2020-06-08 lunes 11.33.37\"\n\t\t\"2020-06-08 lunes 11.32.58\"\n\t\t\"2020-06-08 lunes 11.33.44\"\n\t\t\"2020-06-08 lunes 11.32.48\"\n\t\t\"2020-06-08 lunes 11.32.46\"\n\t\t\"2020-06-08 lunes 11.32.57\"\n\t\t\"2020-06-08 lunes 11.33.41\"\n\t\t\"2020-06-08 lunes 11.32.39\"\n\t\t\"2020-06-08 lunes 11.32.59\"\n\t\t\"2020-06-08 lunes 11.32.56\"\n\t\t\"2020-06-08 lunes 11.33.46\"\n\t]\n)",
@@ -6550,7 +6554,11 @@
                 },
                 {
                     "example": "(sort\n\t(lambda\n\t\t(-\n\t\t\t(current_value)\n\t\t\t(current_value 1)\n\t\t)\n\t)\n\t[4 9 3 5 1]\n\t-2\n)",
-                    "output": "[9 5]"
+                    "output": "[5 9]"
+                },
+                {
+                    "example": "(sort\n\t(lambda\n\t\t(-\n\t\t\t(current_value)\n\t\t\t(current_value 1)\n\t\t)\n\t)\n\t{c 4 e 9 b 3 d 5 a 1}\n\t-2\n)",
+                    "output": "{d 5 e 9}"
                 }
             ],
             "frequency_per_10000_opcodes": 3,
@@ -6559,7 +6567,7 @@
             "opcode_group": "Iteration and Container Transform",
             "permissions": "none",
             "requires_entity": false,
-            "returns": "list",
+            "returns": "list|assoc",
             "value_newness": "partial"
         }
     },
@@ -6884,7 +6892,7 @@
         "body": [
             "(system"
         ],
-        "description": "string command [any parameter] || Executes system command specified by `command` passing in `parameter` if appropriate.  The available system commands are as follows:\n - exit:                Exits the application.\n - readline:            Reads a line of input from the terminal and returns the string.\n - printline:           Prints a line of string output of the `parameter` directly to the terminal and returns null.\n - cwd:                 If no additional parameter is specified, returns the current working directory. If `parameter` is specified, it attempts to change the current working directory to that `parameter`, returning true on success and false on failure.\n - system:              Executes the the `parameter` as a system command (i.e., a string that would normally be run on the command line). Returns `.null` if the command was not found. If found, it returns a list, where the first value is the exit code and the second value is a string containing everything printed to stdout.\n - os:                  Returns a string describing the operating system.\n - sleep:               Sleeps for the amount of seconds specified by the `parameter`.\n - version:             Returns a string representing the current Amalgam version.\n - est_mem_reserved:    Returns data involving the estimated memory reserved.\n - est_mem_used:        Returns data involving the estimated memory used (excluding memory management overhead, caching, etc.).\n - mem_diagnostics:     Returns data involving memory diagnostics.\n - rand:                Returns the number of bytes specified by the additional parameter of secure random data intended for cryptographic use.\n - sign_key_pair:       Returns a list of two values, first a public key and second a secret key, for use with cryptographic signatures using the Ed25519 algorithm, generated via securely generated random numbers.\n - encrypt_key_pair:    Returns a list of two values, first a public key and second a secret key, for use with cryptographic encryption using the XSalsa20 and Curve25519 algorithms, generated via securely generated random numbers.\n - debugging_info:      Returns a list of two values. The first is true if a debugger is present, false if it is not. The second is true if debugging sources is enabled, which means that source code location information is prepended to opcodes comments for any opcodes loaded from a file.\n - get_max_num_threads: Returns the current maximum number of threads.\n - set_max_num_threads: Attempts to set the current maximum number of threads to `parameter`, where 0 means to use the number of processor cores reported by the operating system. Returns the maximum number of threads after it has been set.\n - built_in_data:       Returns built-in data compiled along with the version information.",
+        "description": "string command [any parameter] || Executes system command specified by `command` passing in `parameter` if appropriate.  The available system commands are as follows:\n - exit:                Exits the application.\n - readline:            Reads a line of input from the terminal and returns the string.\n - printline:           Prints a line of string output of the `parameter` directly to the terminal and returns null.\n - cwd:                 If no additional parameter is specified, returns the current working directory. If `parameter` is specified, it attempts to change the current working directory to that `parameter`, returning true on success and false on failure.\n - system:              Executes the the `parameter` as a system command (i.e., a string that would normally be run on the command line). Returns `.null` if the command was not found. If found, it returns a list, where the first value is the exit code and the second value is a string containing everything printed to stdout.\n - os:                  Returns a string describing the operating system.\n - sleep:               Sleeps for the amount of seconds specified by the `parameter`.\n - version:             Returns a string representing the current Amalgam version.\n - est_mem_reserved:    Returns data involving the estimated memory reserved.\n - est_mem_used:        Returns data involving the estimated memory used (excluding memory management overhead, caching, etc.).\n - mem_diagnostics:     Returns data involving memory diagnostics.\n - rand:                Returns the number of bytes specified by the additional parameter of secure random data intended for cryptographic use.\n - sign_key_pair:       Returns a list of two values, first a public key and second a secret key, for use with cryptographic signatures using the Ed25519 algorithm, generated via securely generated random numbers.\n - encrypt_key_pair:    Returns a list of two values, first a public key and second a secret key, for use with cryptographic encryption using the XSalsa20 and Curve25519 algorithms, generated via securely generated random numbers.\n - debugging_info:      Returns a list of two values. The first is true if a debugger is present, false if it is not. The second is true if debugging sources is enabled, which means that source code location information is prepended to opcodes comments for any opcodes loaded from a file.\n - get_max_num_threads: Returns the current maximum number of threads.\n - set_max_num_threads: Attempts to set the current maximum number of threads to `parameter`, where 0 means to use the number of processor cores reported by the operating system. Returns the maximum number of threads after it has been set.\n - get_gc_params:       Returns a data structure with the global parameters for garbage collection.\n - set_gc_params:       Sets the garbage collection parameters specified by `parameter`, which should be in the same format as the value returned by `get_gc_params`.\n - built_in_data:       Returns built-in data compiled along with the version information.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
@@ -7712,7 +7720,7 @@
         "body": [
             "(zip"
         ],
-        "description": "[any function] list indices [any values] || Evaluates to a new assoc where `indices` are the keys and `values` are the values, with corresponding positions in the list matched.  If the `values` is omitted and only one parameter is specified, then it will use nulls for each of the values.  If `values` is not a list, then all of the values in the assoc returned are set to the same value.  When two parameters are specified, it is the `indices` and `values`.  When three values are specified, it is the `function`, indices, and values.  The parameter `values` defaults to null and `function` defaults to `(lambda (current_value))`.  When there is a collision of indices, `function` is called with a of new target scope pushed onto the stack, so that `(current_value)` accesses a list of elements from the list, `(current_index)` accesses the list or assoc index if it is not already reduced, and `(target)` represents the original list or assoc.  When evaluating `function`, existing indices will be overwritten.",
+        "description": "[any function] list indices [any values] || Evaluates to a new assoc where `indices` are the keys and `values` are the values, with corresponding positions in the list matched.  If the `values` is omitted and only one parameter is specified, then it will use nulls for each of the values.  If `values` is not a list, then all of the values in the assoc returned are set to the same value.  When two parameters are specified, it is the `indices` and `values`.  When three values are specified, it is the `function`, indices, and values.  The parameter `values` defaults to null and `function` defaults to `(lambda (current_value))`.  When there is a collision of indices, `function` is called with a of new target scope pushed onto the stack, so that `(current_value)` accesses a list of elements from the list, `(current_index)` accesses the list or assoc index if it is not already reduced, and `(target)` represents the original list or assoc.  When evaluating `function`, existing indices will be overwritten.  If `function` is a simple sum of values, i.e. `(lambda (+ (current_value) (current_value 1))), it will use an accelerated path and return a list of uniquely referenced accumulated numbers.",
         "$doc": {
             "allows_concurrency": false,
             "examples": [
@@ -7738,7 +7746,7 @@
                 },
                 {
                     "example": "(unparse\n\t(zip\n\t\t(lambda\n\t\t\t(+\n\t\t\t\t(current_value 1)\n\t\t\t\t(current_value)\n\t\t\t)\n\t\t)\n\t\t[\"a\" \"b\" \"c\" \"d\" \"a\"]\n\t\t1\n\t)\n)",
-                    "output": "\"{a 2 b 1 c (target .true \\\"b\\\") d (target .true \\\"b\\\")}\""
+                    "output": "\"{a 2 b 1 c 1 d 1}\""
                 }
             ],
             "frequency_per_10000_opcodes": 18,

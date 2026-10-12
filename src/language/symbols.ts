@@ -4,7 +4,7 @@ import { getDepthChange } from "./util";
 export class AmalgamDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
   public provideDocumentSymbols(
     document: vscode.TextDocument,
-    token: vscode.CancellationToken
+    token: vscode.CancellationToken,
   ): vscode.ProviderResult<vscode.DocumentSymbol[]> {
     return new Promise((resolve, reject) => {
       const symbols: vscode.DocumentSymbol[] = [];
@@ -118,6 +118,7 @@ export class AmalgamDocumentSymbolProvider implements vscode.DocumentSymbolProvi
         depth = nextDepth;
         lastContentLine = i; // update after finalizePrevSymbol so it reflects the previous symbol's last line
         if (depth <= 0) {
+          // eslint-disable-next-line no-useless-assignment
           state = "done";
           break;
         }

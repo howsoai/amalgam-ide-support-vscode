@@ -17,7 +17,7 @@ export class InlineDebugAdapterFactory implements vscode.DebugAdapterDescriptorF
 export class ExternalDebugAdapterFactory implements vscode.DebugAdapterDescriptorFactory {
   createDebugAdapterDescriptor(
     session: vscode.DebugSession,
-    executable: vscode.DebugAdapterExecutable | undefined
+    executable: vscode.DebugAdapterExecutable | undefined,
   ): vscode.ProviderResult<vscode.DebugAdapterDescriptor> {
     // If the executable specified in the package.json does not exist, use the system default
     if (!executable) {

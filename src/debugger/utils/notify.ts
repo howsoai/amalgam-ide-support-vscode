@@ -5,7 +5,11 @@ export class NotifyWaiter<T = unknown> {
   private timeout?: NodeJS.Timeout;
   private _resolved = false;
 
-  public constructor(private resolveFunc: (value?: T) => void, private cancelFunc: () => void, timeout?: number) {
+  public constructor(
+    private resolveFunc: (value?: T) => void,
+    private cancelFunc: () => void,
+    timeout?: number,
+  ) {
     if (timeout != null) {
       this.timeout = setTimeout(() => this.resolve(undefined), timeout);
     }
@@ -63,7 +67,7 @@ export class NotifySubject<T = unknown> {
           this.remove(waiter);
           reject("cancelled");
         },
-        timeout
+        timeout,
       );
       this.waiters.push(waiter);
     });
